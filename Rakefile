@@ -2,8 +2,8 @@ require 'rake/testtask'
 
 Rake::TestTask.new do |test|
   test.verbose = true
-  test.libs << "test"
-  test.test_files = FileList['test/**/*_test.rb']
+  test.libs << "spec"
+  test.test_files = FileList['spec/**/*_spec.rb']
 end
 
 task default: :test

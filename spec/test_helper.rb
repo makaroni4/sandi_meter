@@ -1,4 +1,4 @@
-require 'minitest/autorun'
+require 'rspec/autorun'
 
 def test_file_path(file_name)
   File.join(
