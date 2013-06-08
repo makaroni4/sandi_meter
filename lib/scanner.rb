@@ -1,3 +1,5 @@
+require_relative 'analyzer'
+
 class FileScanner
   def scan(path)
     if File.directory?(path)
@@ -8,8 +10,8 @@ class FileScanner
   end
 
   private
-  def scan_dir
-    Dir["#{@path}/**/*.rb"].each do |file|
+  def scan_dir(path)
+    Dir["#{path}/**/*.rb"].each do |file|
       scan_file(file)
     end
   end

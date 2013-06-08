@@ -1,5 +1,6 @@
 require 'ripper'
 require_relative 'warning_scanner'
+require_relative 'loc_checker'
 
 class Analyzer
   attr_reader :classes, :missindented_classes, :methods, :missindented_methods
@@ -13,13 +14,29 @@ class Analyzer
 
   def analyze(file_path)
     @file_body = File.read(file_path)
+    @file_lines = @file_body.split(/$/).map { |l| l.gsub("\n", '')}
     @indentation_warnings = indentation_warnings
 
     sexp = Ripper.sexp(@file_body)
     scan_sexp(sexp)
+
+    check_loc
   end
 
   private
+  def check_loc
+    loc_checker = LOCChecker.new(@file_lines)
+    @classes.each do |klass_params|
+      puts "#{klass_params.first} breaks first rule" unless loc_checker.check(klass_params, 'class')
+    end
+
+    @methods.each_pair do |klass, methods|
+      methods.each do |method_params|
+        puts "#{klass}##{method_params.first} breakes second rule" unless loc_checker.check(method_params, 'def')
+      end
+    end
+  end
+
   def find_class_params(sexp, current_namespace)
     flat_sexp = sexp[1].flatten
     const_indexes = flat_sexp.each_index.select{ |i| flat_sexp[i] == :@const }
@@ -39,9 +56,10 @@ class Analyzer
   def find_last_line(params, token = 'class')
     token_name, line = params
 
-    lines = @file_body.split("\n")
-    token_indentation = lines[line - 1].index(token)
-    last_line = lines[line..-1].index { |l| l =~ %r(^\s{#{token_indentation}}end$) }
+    token_indentation = @file_lines[line - 1].index(token)
+    # TODO
+    # add check for trailing spaces
+    last_line = @file_lines[line..-1].index { |l| l =~ %r(\A\s{#{token_indentation}}end\s*\z) }
 
     last_line ? last_line + line + 1 : nil
   end
@@ -62,7 +80,9 @@ class Analyzer
         @missindented_classes << class_params
       else
         class_params += [find_last_line(class_params)]
-        @classes << class_params
+
+        # in case of one liner class last line will be nil
+        (class_params.last == nil ? @missindented_classes : @classes) << class_params
       end
 
       current_namespace = class_params.first

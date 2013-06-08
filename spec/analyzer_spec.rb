@@ -68,8 +68,8 @@ describe Analyzer do
     end
 
     it 'finds classes' do
-      analyzer.classes.should eq([["OneLinerClass", 1, nil]])
-      analyzer.missindented_classes.should be_empty
+      analyzer.missindented_classes.should eq([["OneLinerClass", 1, nil]])
+      analyzer.classes.should be_empty
     end
 
     it 'finds methods' do
@@ -95,6 +95,26 @@ describe Analyzer do
       analyzer.methods["MyApp::Blah"].should eq([["module_meth", 2, 3]])
       analyzer.methods["MyApp::Blah::User"].should eq([["class_meth", 6, 7]])
       analyzer.methods["MyApp::Blah::User::SubUser"].should eq([["sub_meth", 10, 11]])
+      analyzer.missindented_methods.should be_empty
+    end
+  end
+
+  describe 'finds class and methods with private methods' do
+    let(:test_class) { test_file_path(8) }
+
+    before do
+      analyzer.analyze(test_class)
+    end
+
+    it 'finds class and subclass' do
+      analyzer.classes.should include(["RailsController", 1, 12])
+      analyzer.missindented_classes.should be_empty
+    end
+
+    it 'finds methods' do
+      analyzer.methods["RailsController"].should include(["index", 2, 3])
+      analyzer.methods["RailsController"].should include(["destroy", 5, 6])
+      analyzer.methods["RailsController"].should include(["private_meth", 9, 10])
       analyzer.missindented_methods.should be_empty
     end
   end
