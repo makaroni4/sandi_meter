@@ -26,7 +26,7 @@ describe 'Analyzer' do
 
     it 'finds indentation warnings for method' do
       analyzer.classes.must_equal []
-      analyzer.missindented_classes.must_equal [["TestClass", 1]]
+      analyzer.missindented_classes.must_equal [["TestClass", 2]]
     end
   end
 

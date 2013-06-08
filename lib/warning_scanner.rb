@@ -3,7 +3,7 @@ require 'open3'
 class WarningScanner
   attr_reader :indentation_warnings
 
-  INDENTATION_WARNING_REGEXP = /at 'end' with '(def|class)' at (\d+)\z/
+  INDENTATION_WARNING_REGEXP = /at 'end' with '(def|class|module)' at (\d+)\z/
 
   def scan(source)
     status, @warnings, process = if defined? Bundler
@@ -30,13 +30,13 @@ class WarningScanner
   def check_token_lines(token, line_num, end_line_num)
     raise 'No valid end line number' unless end_line_num =~ /^\d+$/
     raise 'No valid line number' unless line_num =~ /^\d+$/
-    raise 'No valid token ("def" or "class")' unless token =~ /^def|class$/
+    raise 'No valid token ("def" or "class")' unless token =~ /^def|class|module$/
   end
 
   def extract_indentation_mismatch(warning_line)
     _, end_line_num, warning_type, warning_body = warning_line.split(':').map(&:strip)
     return nil unless warning_type == 'warning'
-    return nil unless warning_body =~ /at 'end' with '(def|class)' at (\d+)\z/
+    return nil unless warning_body =~ /at 'end' with '(def|class|module)' at (\d+)\z/
 
     res = warning_body.match(INDENTATION_WARNING_REGEXP)[1..2] << end_line_num
     check_token_lines(*res)

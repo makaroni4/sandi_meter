@@ -7,6 +7,7 @@ class Analyzer
   def initialize
     @classes = []
     @missindented_classes = []
+    @current_namespace = ''
   end
 
   def analyze(file_path)
@@ -42,7 +43,14 @@ class Analyzer
     sexp.each do |element|
       next unless element.kind_of?(Array)
 
-      if element.first == :class
+      case element.first
+      when :defn
+
+      when :module
+        # TODO
+        # get module name and add it to current namespace
+        find_class_sexps(element)
+      when :class
         class_params = find_class_params(element)
 
         if @indentation_warnings['class'] && @indentation_warnings['class'].any? { |first_line, last_line| first_line == class_params.last }

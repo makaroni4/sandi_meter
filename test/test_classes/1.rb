@@ -1,4 +1,6 @@
-  class TestClass
-    def blah
-      end
-end
+module MyApp
+    class TestClass
+      def blah
+        end
+  end
+  end
