@@ -49,6 +49,15 @@ class Analyzer
     [class_name, line_number]
   end
 
+  # MOVE
+  # to method scanner class
+  def number_of_arguments(method_sexp)
+    arguments = method_sexp[2]
+    arguments = arguments[1] if arguments.first == :paren
+
+    arguments[1] == nil ? 0 : arguments[1].size
+  end
+
   def find_method_params(sexp)
     sexp[1].flatten[1,2]
   end
@@ -99,10 +108,12 @@ class Analyzer
         method_params = find_method_params(element)
         if @indentation_warnings['def'] && @indentation_warnings['def'].any? { |first_line, last_line| first_line == method_params.last }
           method_params << nil
+          method_params << number_of_arguments(element)
           @missindented_methods[current_namespace] ||= []
           @missindented_methods[current_namespace] << method_params
         else
           method_params += [find_last_line(method_params, 'def')]
+          method_params << number_of_arguments(element)
           @methods[current_namespace] ||= []
           @methods[current_namespace] << method_params
         end

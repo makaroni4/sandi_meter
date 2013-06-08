@@ -17,7 +17,7 @@ describe Analyzer do
     end
 
     it 'finds methods' do
-      analyzer.methods.should eq({"TestClass"=>[["blah", 2, 3]]})
+      analyzer.methods.should eq({"TestClass"=>[["blah", 2, 3, 0]]})
       analyzer.missindented_methods.should be_empty
     end
   end
@@ -36,7 +36,7 @@ describe Analyzer do
 
     it 'finds methods' do
       analyzer.methods.should be_empty
-      analyzer.missindented_methods.should eq({"MyApp::TestClass"=>[["blah", 3, nil]]})
+      analyzer.missindented_methods.should eq({"MyApp::TestClass"=>[["blah", 3, nil, 0]]})
     end
   end
 
@@ -54,8 +54,8 @@ describe Analyzer do
     end
 
     it 'finds methods' do
-      analyzer.methods["FirstTestClass"].should eq([["first_meth", 2, 3]])
-      analyzer.methods["SecondTestClass"].should eq([["second_meth", 7, 8]])
+      analyzer.methods["FirstTestClass"].should eq([["first_meth", 2, 3, 1]])
+      analyzer.methods["SecondTestClass"].should eq([["second_meth", 7, 8, 1]])
       analyzer.missindented_methods.should be_empty
     end
   end
@@ -92,9 +92,9 @@ describe Analyzer do
     end
 
     it 'finds methods' do
-      analyzer.methods["MyApp::Blah"].should eq([["module_meth", 2, 3]])
-      analyzer.methods["MyApp::Blah::User"].should eq([["class_meth", 6, 7]])
-      analyzer.methods["MyApp::Blah::User::SubUser"].should eq([["sub_meth", 10, 11]])
+      analyzer.methods["MyApp::Blah"].should eq([["module_meth", 2, 3, 0]])
+      analyzer.methods["MyApp::Blah::User"].should eq([["class_meth", 6, 7, 0]])
+      analyzer.methods["MyApp::Blah::User::SubUser"].should eq([["sub_meth", 10, 11, 0]])
       analyzer.missindented_methods.should be_empty
     end
   end
@@ -112,9 +112,9 @@ describe Analyzer do
     end
 
     it 'finds methods' do
-      analyzer.methods["RailsController"].should include(["index", 2, 3])
-      analyzer.methods["RailsController"].should include(["destroy", 5, 6])
-      analyzer.methods["RailsController"].should include(["private_meth", 9, 10])
+      analyzer.methods["RailsController"].should include(["index", 2, 3, 0])
+      analyzer.methods["RailsController"].should include(["destroy", 5, 6, 0])
+      analyzer.methods["RailsController"].should include(["private_meth", 9, 10, 0])
       analyzer.missindented_methods.should be_empty
     end
   end
