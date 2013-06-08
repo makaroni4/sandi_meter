@@ -24,17 +24,19 @@ class Analyzer
     const_indexes = flat_sexp.each_index.select{ |i| flat_sexp[i] == :@const }
 
     line_number = flat_sexp[const_indexes.first + 2]
-    class_name = const_indexes.map { |i| flat_sexp[i + 1] }.join('::')
+    class_tokens = const_indexes.map { |i| flat_sexp[i + 1] }
+    class_tokens.insert(0, @current_namespace) unless @current_namespace.empty?
+    class_name = class_tokens.join('::')
 
     [class_name, line_number]
   end
 
-  def find_last_line(class_params)
-    class_name, line = class_params
+  def find_last_line(params, token = 'class')
+    token_name, line = params
 
     lines = @file_body.split("\n")
-    class_indentation = lines[line - 1].index('class')
-    last_line = lines[line..-1].index { |l| l =~ %r(^\s{#{class_indentation}}end$) }
+    token_indentation = lines[line - 1].index(token)
+    last_line = lines[line..-1].index { |l| l =~ %r(^\s{#{token_indentation}}end$) }
 
     last_line ? last_line + line + 1 : nil
   end
@@ -47,8 +49,9 @@ class Analyzer
       when :defn
 
       when :module
-        # TODO
-        # get module name and add it to current namespace
+        module_params = find_class_params(element)
+        module_params += [find_last_line(module_params)]
+        @current_namespace << module_params.first
         find_class_sexps(element)
       when :class
         class_params = find_class_params(element)
