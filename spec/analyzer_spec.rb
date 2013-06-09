@@ -12,13 +12,17 @@ describe Analyzer do
     end
 
     it 'finds indentation warnings for method' do
-      analyzer.classes.should eq([["TestClass", 1, 4]])
+      analyzer.classes.should eq([["TestClass", 1, 5]])
       analyzer.missindented_classes.should be_empty
     end
 
     it 'finds methods' do
-      analyzer.methods.should eq({"TestClass"=>[["blah", 2, 3, 0]]})
+      analyzer.methods.should eq({"TestClass"=>[["blah", 2, 4, 0]]})
       analyzer.missindented_methods.should be_empty
+    end
+
+    it 'finds method calls that brakes third rule' do
+      analyzer.method_calls.should eq([[3]])
     end
   end
 

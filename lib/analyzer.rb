@@ -3,13 +3,14 @@ require_relative 'warning_scanner'
 require_relative 'loc_checker'
 
 class Analyzer
-  attr_reader :classes, :missindented_classes, :methods, :missindented_methods
+  attr_reader :classes, :missindented_classes, :methods, :missindented_methods, :method_calls
 
   def initialize
     @classes = []
     @missindented_classes = []
     @missindented_methods = {}
     @methods = {}
+    @method_calls = []
   end
 
   def analyze(file_path)
@@ -99,6 +100,25 @@ class Analyzer
     end
   end
 
+  def find_args_add_block(method_call_sexp)
+    return unless method_call_sexp.kind_of?(Array)
+
+    method_call_sexp.each do |sexp|
+      next unless sexp.kind_of?(Array)
+
+      if sexp.first == :args_add_block
+        if sexp[1].size > 4
+          argument_lines = sexp[1].map(&:last).map(&:first).uniq.sort
+          @method_calls << argument_lines
+        end
+
+        find_args_add_block(sexp)
+      else
+        find_args_add_block(sexp)
+      end
+    end
+  end
+
   def scan_sexp(sexp, current_namespace = '')
     sexp.each do |element|
       next unless element.kind_of?(Array)
@@ -117,6 +137,7 @@ class Analyzer
           @methods[current_namespace] ||= []
           @methods[current_namespace] << method_params
         end
+        find_args_add_block(element)
       when :module, :class
         scan_class_sexp(element, current_namespace)
       else
