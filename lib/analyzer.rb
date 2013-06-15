@@ -3,7 +3,7 @@ require_relative 'warning_scanner'
 require_relative 'loc_checker'
 
 class Analyzer
-  attr_reader :classes, :missindented_classes, :methods, :missindented_methods, :method_calls
+  attr_reader :classes, :missindented_classes, :methods, :missindented_methods, :method_calls, :instance_variables
 
   def initialize
     @classes = []
@@ -11,9 +11,11 @@ class Analyzer
     @missindented_methods = {}
     @methods = {}
     @method_calls = []
+    @instance_variables = {}
   end
 
   def analyze(file_path)
+    @file_path = file_path
     @file_body = File.read(file_path)
     @file_lines = @file_body.split(/$/).map { |l| l.gsub("\n", '')}
     @indentation_warnings = indentation_warnings
@@ -119,6 +121,22 @@ class Analyzer
     end
   end
 
+  def scan_def_for_ivars(current_namespace, method_name, method_sexp)
+    return unless method_sexp.kind_of?(Array)
+
+    method_sexp.each do |sexp|
+      next unless sexp.kind_of?(Array)
+
+      if sexp.first == :assign
+        @instance_variables[current_namespace] ||= {}
+        @instance_variables[current_namespace][method_name] ||= []
+        @instance_variables[current_namespace][method_name] << sexp[1][1][1]
+      else
+        scan_def_for_ivars(current_namespace, method_name, sexp)
+      end
+    end
+  end
+
   def scan_sexp(sexp, current_namespace = '')
     sexp.each do |element|
       next unless element.kind_of?(Array)
@@ -137,6 +155,7 @@ class Analyzer
           @methods[current_namespace] ||= []
           @methods[current_namespace] << method_params
         end
+        scan_def_for_ivars(current_namespace, method_params.first, element) if controller?(current_namespace)
         find_args_add_block(element)
       when :module, :class
         scan_class_sexp(element, current_namespace)
@@ -149,5 +168,9 @@ class Analyzer
   def indentation_warnings
     warning_scanner = WarningScanner.new
     warning_scanner.scan(@file_body)
+  end
+
+  def controller?(class_name)
+    !!(File.basename(@file_path) =~ /_controller.rb$/) && !!(class_name =~ /Controller$/)
   end
 end

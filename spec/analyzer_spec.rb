@@ -122,4 +122,30 @@ describe Analyzer do
       analyzer.missindented_methods.should be_empty
     end
   end
+
+  describe 'instance variables in methods' do
+    context 'in controller class' do
+      let(:test_class) { test_file_path('9_controller') }
+
+      before do
+        analyzer.analyze(test_class)
+      end
+
+      it 'finds instance variable' do
+        analyzer.instance_variables.should eq({"UsersController"=>{"index"=>["@users"]}})
+      end
+    end
+
+    context 'not in controller class' do
+      let(:test_class) { test_file_path(10) }
+
+      before do
+        analyzer.analyze(test_class)
+      end
+
+      it 'does not find instance variable' do
+        analyzer.instance_variables.should be_empty
+      end
+    end
+  end
 end
