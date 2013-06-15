@@ -23,11 +23,11 @@ class Analyzer
     sexp = Ripper.sexp(@file_body)
     scan_sexp(sexp)
 
-    check_loc
+    output
   end
 
   private
-  def check_loc
+  def output
     loc_checker = LOCChecker.new(@file_lines)
     @classes.each do |klass_params|
       puts "#{klass_params.first} breaks first rule" unless loc_checker.check(klass_params, 'class')
@@ -36,6 +36,13 @@ class Analyzer
     @methods.each_pair do |klass, methods|
       methods.each do |method_params|
         puts "#{klass}##{method_params.first} breakes second rule" unless loc_checker.check(method_params, 'def')
+        puts "#{klass}##{method_params.first} breakes third rule" if method_params.last > 4
+      end
+    end
+
+    @instance_variables.each_pair do |klass, methods|
+      methods.each_pair do |method, instance_variables|
+        puts "#{klass}##{method} breakes fourth rule" if instance_variables.size > 1
       end
     end
   end
@@ -108,6 +115,9 @@ class Analyzer
     method_call_sexp.each do |sexp|
       next unless sexp.kind_of?(Array)
 
+      # TODO
+      # count params with hashes
+      # Example: meth(1,2, foo: :bar)
       if sexp.first == :args_add_block
         if sexp[1].size > 4
           argument_lines = sexp[1].map(&:last).map(&:first).uniq.sort
