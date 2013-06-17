@@ -22,7 +22,7 @@ describe Analyzer do
     end
 
     it 'finds method calls that brakes third rule' do
-      analyzer.method_calls.should eq([[3]])
+      analyzer.method_calls.should eq([[5,3]])
     end
   end
 
@@ -146,6 +146,18 @@ describe Analyzer do
       it 'does not find instance variable' do
         analyzer.instance_variables.should be_empty
       end
+    end
+  end
+
+  describe 'hash method arguments' do
+    let(:test_class) { test_file_path(11) }
+
+    before do
+      analyzer.analyze(test_class)
+    end
+
+    it 'counts arguments' do
+      analyzer.method_calls.should eq([[5, 3]])
     end
   end
 end

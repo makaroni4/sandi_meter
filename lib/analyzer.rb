@@ -1,6 +1,8 @@
 require 'ripper'
+require 'pp'
 require_relative 'warning_scanner'
 require_relative 'loc_checker'
+require_relative 'method_arguments_counter'
 
 class Analyzer
   attr_reader :classes, :missindented_classes, :methods, :missindented_methods, :method_calls, :instance_variables
@@ -115,14 +117,11 @@ class Analyzer
     method_call_sexp.each do |sexp|
       next unless sexp.kind_of?(Array)
 
-      # TODO
-      # count params with hashes
-      # Example: meth(1,2, foo: :bar)
       if sexp.first == :args_add_block
-        if sexp[1].size > 4
-          argument_lines = sexp[1].map(&:last).map(&:first).uniq.sort
-          @method_calls << argument_lines
-        end
+        counter = MethodArgumentsCounter.new
+        arguments_count, line = counter.count(sexp)
+
+        @method_calls << [arguments_count, line]
 
         find_args_add_block(sexp)
       else
