@@ -19,7 +19,7 @@ class Analyzer
   def analyze(file_path)
     @file_path = file_path
     @file_body = File.read(file_path)
-    @file_lines = @file_body.split(/$/).map { |l| l.gsub("\n", '')}
+    @file_lines = @file_body.split(/$/).map { |l| l.gsub("\n", '') }
     @indentation_warnings = indentation_warnings
 
     sexp = Ripper.sexp(@file_body)
@@ -31,22 +31,25 @@ class Analyzer
   private
   def output
     loc_checker = LOCChecker.new(@file_lines)
-    @classes.each do |klass_params|
-      puts "#{klass_params.first} breaks first rule" unless loc_checker.check(klass_params, 'class')
+
+    @classes.map! do |klass_params|
+      klass_params << loc_checker.check(klass_params, 'class')
     end
 
     @methods.each_pair do |klass, methods|
       methods.each do |method_params|
-        puts "#{klass}##{method_params.first} breakes second rule" unless loc_checker.check(method_params, 'def')
-        puts "#{klass}##{method_params.first} breakes third rule" if method_params.last > 4
+        method_params << loc_checker.check(method_params, 'def')
       end
     end
 
-    @instance_variables.each_pair do |klass, methods|
-      methods.each_pair do |method, instance_variables|
-        puts "#{klass}##{method} breakes fourth rule" if instance_variables.size > 1
-      end
-    end
+    {
+      classes: @classes,
+      missindented_classes: @missindented_classes,
+      methods: @methods,
+      missindented_methods: @missindented_methods,
+      method_calls: @method_calls,
+      instance_variables: @instance_variables
+    }
   end
 
   def find_class_params(sexp, current_namespace)

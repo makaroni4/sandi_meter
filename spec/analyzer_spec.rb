@@ -12,12 +12,12 @@ describe Analyzer do
     end
 
     it 'finds indentation warnings for method' do
-      analyzer.classes.should eq([["TestClass", 1, 5]])
+      analyzer.classes.should eq([["TestClass", 1, 5, true]])
       analyzer.missindented_classes.should be_empty
     end
 
     it 'finds methods' do
-      analyzer.methods.should eq({"TestClass"=>[["blah", 2, 4, 0]]})
+      analyzer.methods.should eq({"TestClass"=>[["blah", 2, 4, 0, true]]})
       analyzer.missindented_methods.should be_empty
     end
 
@@ -52,14 +52,14 @@ describe Analyzer do
     end
 
     it 'finds classes' do
-      analyzer.classes.should include(["FirstTestClass", 1, 4])
-      analyzer.classes.should include(["SecondTestClass", 6, 9])
+      analyzer.classes.should include(["FirstTestClass", 1, 4, true])
+      analyzer.classes.should include(["SecondTestClass", 6, 9, true])
       analyzer.missindented_classes.should be_empty
     end
 
     it 'finds methods' do
-      analyzer.methods["FirstTestClass"].should eq([["first_meth", 2, 3, 1]])
-      analyzer.methods["SecondTestClass"].should eq([["second_meth", 7, 8, 1]])
+      analyzer.methods["FirstTestClass"].should eq([["first_meth", 2, 3, 1, true]])
+      analyzer.methods["SecondTestClass"].should eq([["second_meth", 7, 8, 1, true]])
       analyzer.missindented_methods.should be_empty
     end
   end
@@ -90,15 +90,15 @@ describe Analyzer do
     end
 
     it 'finds class and subclass' do
-      analyzer.classes.should include(["MyApp::Blah::User", 5, 13])
-      analyzer.classes.should include(["MyApp::Blah::User::SubUser", 9, 12])
+      analyzer.classes.should include(["MyApp::Blah::User", 5, 13, true])
+      analyzer.classes.should include(["MyApp::Blah::User::SubUser", 9, 12, true])
       analyzer.missindented_classes.should be_empty
     end
 
     it 'finds methods' do
-      analyzer.methods["MyApp::Blah"].should eq([["module_meth", 2, 3, 0]])
-      analyzer.methods["MyApp::Blah::User"].should eq([["class_meth", 6, 7, 0]])
-      analyzer.methods["MyApp::Blah::User::SubUser"].should eq([["sub_meth", 10, 11, 0]])
+      analyzer.methods["MyApp::Blah"].should eq([["module_meth", 2, 3, 0, true]])
+      analyzer.methods["MyApp::Blah::User"].should eq([["class_meth", 6, 7, 0, true]])
+      analyzer.methods["MyApp::Blah::User::SubUser"].should eq([["sub_meth", 10, 11, 0, true]])
       analyzer.missindented_methods.should be_empty
     end
   end
@@ -111,14 +111,14 @@ describe Analyzer do
     end
 
     it 'finds class and subclass' do
-      analyzer.classes.should include(["RailsController", 1, 12])
+      analyzer.classes.should include(["RailsController", 1, 12, true])
       analyzer.missindented_classes.should be_empty
     end
 
     it 'finds methods' do
-      analyzer.methods["RailsController"].should include(["index", 2, 3, 0])
-      analyzer.methods["RailsController"].should include(["destroy", 5, 6, 0])
-      analyzer.methods["RailsController"].should include(["private_meth", 9, 10, 0])
+      analyzer.methods["RailsController"].should include(["index", 2, 3, 0, true])
+      analyzer.methods["RailsController"].should include(["destroy", 5, 6, 0, true])
+      analyzer.methods["RailsController"].should include(["private_meth", 9, 10, 0, true])
       analyzer.missindented_methods.should be_empty
     end
   end
