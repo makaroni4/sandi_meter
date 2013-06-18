@@ -46,4 +46,14 @@ describe MethodArgumentsCounter do
       analyzer.count(code_4).should eq([4, 1])
     end
   end
+
+  context 'when argument with default value' do
+    let(:code_1) { load_args_block('blah arg_1 = "blah"') }
+    let(:code_2) { load_args_block('blah(arg_1 = "blah")') }
+
+    it 'counts arguments' do
+      analyzer.count(code_1).should eq([1, 1])
+      analyzer.count(code_2).should eq([1, 1])
+    end
+  end
 end
