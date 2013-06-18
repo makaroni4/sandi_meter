@@ -1,7 +1,4 @@
-class Formatter
-  def initialize
-  end
-
+class Formatter < Struct.new(:calculator)
   def output
   end
 end

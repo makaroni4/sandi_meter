@@ -1,5 +1,6 @@
 require_relative 'analyzer'
 require_relative 'calculator'
+require_relative 'formatter'
 
 class FileScanner
   def initialize
@@ -13,11 +14,14 @@ class FileScanner
       scan_file(path)
     end
 
+    @calculator.calculate!
     output
   end
 
   private
   def output
+    formatter = Formatter.new(@calculator)
+    formatter.output
   end
 
   def scan_dir(path)
