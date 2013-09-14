@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require 'sandi_meter'
+
+scanner = FileScanner.new
+scanner.scan(ARGV[0])

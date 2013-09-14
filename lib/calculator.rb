@@ -61,8 +61,9 @@ class Calculator
       sum
     end
 
+    missindented_methods_amount = 0
     @data[:missindented_methods].each_pair do |klass, methods|
-      missindented_classes_amount += methods.size
+      missindented_methods_amount += methods.size
     end
 
     [proper_method_calls, total_method_calls]

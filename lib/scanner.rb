@@ -31,8 +31,13 @@ class FileScanner
   end
 
   def scan_file(path)
-    analyzer = Analyzer.new
-    data = analyzer.analyze(path)
-    @calculator.push(data)
+    begin
+      analyzer = Analyzer.new
+      data = analyzer.analyze(path)
+      @calculator.push(data)
+    rescue Exception => e
+      puts path
+      puts "ERROR: #{e.message}"
+    end
   end
 end
