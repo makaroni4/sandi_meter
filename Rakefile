@@ -1,4 +1,7 @@
 require 'rake/testtask'
+require 'bundler'
+
+Bundler::GemHelper.install_tasks
 
 Rake::TestTask.new do |test|
   test.verbose = true
