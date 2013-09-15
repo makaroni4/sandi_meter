@@ -16,10 +16,10 @@ class Calculator
   end
 
   def calculate!
-    p check_first_rule
-    p check_second_rule
-    p check_third_rule
-    p check_fourth_rule
+    check_first_rule
+    check_second_rule
+    check_third_rule
+    check_fourth_rule
   end
 
   private
@@ -31,7 +31,13 @@ class Calculator
     end
     missindented_classes_amount = @data[:missindented_classes].size
 
-    [small_classes_amount, total_classes_amount, missindented_classes_amount]
+    puts "#{small_classes_amount * 100/ total_classes_amount}% of classes are under 100 lines."
+
+    # TODO uncomment when missindented location will be implemented
+    #
+    # if missindented_classes_amount > 0
+    #   puts "Pay attention to #{missindented_classes_amount} missindented classes."
+    # end
   end
 
   def check_second_rule
@@ -48,7 +54,13 @@ class Calculator
       missindented_methods_amount += methods.size
     end
 
-    [small_methods_amount, total_methods_amount, missindented_methods_amount]
+    puts "#{small_methods_amount * 100 / total_methods_amount}% of methods are under 5 lines."
+
+    # TODO uncomment when missindented location will be implemented
+    #
+    # if missindented_methods_amount > 0
+    #   puts "Pay attention to #{missindented_methods_amount} missindented methods."
+    # end
   end
 
   # TODO
@@ -66,7 +78,11 @@ class Calculator
       missindented_methods_amount += methods.size
     end
 
-    [proper_method_calls, total_method_calls]
+    if total_method_calls > 0
+      puts "#{proper_method_calls * 100 / total_method_calls}% of methods calls accepts are less than 4 parameters."
+    else
+      puts "Seems like there no method calls. WAT?!"
+    end
   end
 
   def check_fourth_rule
@@ -78,6 +94,10 @@ class Calculator
       proper_controllers_amount += 1 unless methods.values.map(&:size).any? { |v| v > 1 }
     end
 
-    [proper_controllers_amount, total_controllers_amount]
+    if total_controllers_amount > 0
+      puts "#{proper_controllers_amount * 100 / total_controllers_amount}% of controllers have one instance varible per action."
+    else
+      puts "Seems like there are no controllers :)"
+    end
   end
 end

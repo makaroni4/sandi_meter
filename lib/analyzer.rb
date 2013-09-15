@@ -1,5 +1,4 @@
 require 'ripper'
-require 'pp'
 require_relative 'warning_scanner'
 require_relative 'loc_checker'
 require_relative 'method_arguments_counter'
@@ -21,6 +20,9 @@ class Analyzer
     @file_body = File.read(file_path)
     @file_lines = @file_body.split(/$/).map { |l| l.gsub("\n", '') }
     @indentation_warnings = indentation_warnings
+    # TODO
+    # add better determination wheter file is controller
+    @scan_instance_variables = !!(file_path =~ /\w+_controller.rb$/)
 
     sexp = Ripper.sexp(@file_body)
     scan_sexp(sexp)
@@ -167,7 +169,7 @@ class Analyzer
           @methods[current_namespace] ||= []
           @methods[current_namespace] << method_params
         end
-        scan_def_for_ivars(current_namespace, method_params.first, element) if controller?(current_namespace)
+        scan_def_for_ivars(current_namespace, method_params.first, element) if @scan_instance_variables
         find_args_add_block(element)
       when :module, :class
         scan_class_sexp(element, current_namespace)
@@ -180,9 +182,5 @@ class Analyzer
   def indentation_warnings
     warning_scanner = WarningScanner.new
     warning_scanner.scan(@file_body)
-  end
-
-  def controller?(class_name)
-    !!(File.basename(@file_path) =~ /_controller.rb$/) && !!(class_name =~ /Controller$/)
   end
 end

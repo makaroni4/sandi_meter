@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require 'sandi_meter'
+require_relative '../lib/file_scanner'
 
-scanner = FileScanner.new
+scanner = FileScanner.new(ARGV[1] == "--log")
 scanner.scan(ARGV[0])

@@ -1,5 +1,3 @@
-require 'pp'
-
 class MethodArgumentsCounter
   def initialize
     reset!

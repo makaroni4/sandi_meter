@@ -1,9 +1,9 @@
 require_relative 'analyzer'
 require_relative 'calculator'
-require_relative 'formatter'
 
 class FileScanner
-  def initialize
+  def initialize(log_errors = false)
+    @log_errors = log_errors
     @calculator = Calculator.new
   end
 
@@ -15,15 +15,9 @@ class FileScanner
     end
 
     @calculator.calculate!
-    output
   end
 
   private
-  def output
-    formatter = Formatter.new(@calculator)
-    formatter.output
-  end
-
   def scan_dir(path)
     Dir["#{path}/**/*.rb"].each do |file|
       scan_file(file)
@@ -36,8 +30,10 @@ class FileScanner
       data = analyzer.analyze(path)
       @calculator.push(data)
     rescue Exception => e
-      puts path
-      puts "ERROR: #{e.message}"
+      if @log_errors
+        puts "Checkout #{path} for:"
+        puts "\t#{e.message}"
+      end
     end
   end
 end

@@ -1,29 +1,15 @@
 # SandiMeter
 
-TODO: Write a gem description
+Static analysis tool for checking your Ruby code for [Sandi Metz' for rules](http://robots.thoughtbot.com/post/50655960596/sandi-metz-rules-for-developers).
 
-## Installation
+* 100 lines per class
+* 5 lines per method
+* 4 params per method call (and don't even try cheating with hash params)
+* 2 instance variables per controller' action
 
-Add this line to your application's Gemfile:
+## As simple as
 
-    gem 'sandi_meter'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install sandi_meter
-
-## Usage
-
-TODO: Write usage instructions here
-
-## Contributing
-
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+~~~
+gem install sandi_meter
+sandi_meter ~/your/ruby/or/rails/project
+~~~
