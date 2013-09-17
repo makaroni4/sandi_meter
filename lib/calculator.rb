@@ -95,7 +95,7 @@ class Calculator
     end
 
     if total_controllers_amount > 0
-      puts "#{proper_controllers_amount * 100 / total_controllers_amount}% of controllers have one instance varible per action."
+      puts "#{proper_controllers_amount * 100 / total_controllers_amount}% of controllers have one instance variable per action."
     else
       puts "Seems like there are no controllers :)"
     end
