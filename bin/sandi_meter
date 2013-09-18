@@ -1,6 +1,10 @@
 #!/usr/bin/env ruby
 
 require_relative '../lib/file_scanner'
+require_relative '../lib/formatter'
 
 scanner = SandiMeter::FileScanner.new(ARGV[1] == "--log")
-scanner.scan(ARGV[0])
+data = scanner.scan(ARGV[0])
+formatter = SandiMeter::Formatter.new
+
+formatter.print_data(data)

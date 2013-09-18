@@ -2,6 +2,7 @@ module SandiMeter
   class Calculator
     def initialize
       @data = {}
+      @output = {}
     end
 
     def push(data)
@@ -21,6 +22,8 @@ module SandiMeter
       check_second_rule
       check_third_rule
       check_fourth_rule
+
+      @output
     end
 
     private
@@ -32,13 +35,10 @@ module SandiMeter
       end
       missindented_classes_amount = @data[:missindented_classes].size
 
-      puts "#{small_classes_amount * 100/ total_classes_amount}% of classes are under 100 lines."
-
-      # TODO uncomment when missindented location will be implemented
-      #
-      # if missindented_classes_amount > 0
-      #   puts "Pay attention to #{missindented_classes_amount} missindented classes."
-      # end
+      @output[:first_rule] ||= {}
+      @output[:first_rule][:small_classes_amount] = small_classes_amount
+      @output[:first_rule][:total_classes_amount] = total_classes_amount
+      @output[:first_rule][:missindented_classes_amount] = missindented_classes_amount
     end
 
     def check_second_rule
@@ -55,13 +55,10 @@ module SandiMeter
         missindented_methods_amount += methods.size
       end
 
-      puts "#{small_methods_amount * 100 / total_methods_amount}% of methods are under 5 lines."
-
-      # TODO uncomment when missindented location will be implemented
-      #
-      # if missindented_methods_amount > 0
-      #   puts "Pay attention to #{missindented_methods_amount} missindented methods."
-      # end
+      @output[:second_rule] ||= {}
+      @output[:second_rule][:small_methods_amount] = small_methods_amount
+      @output[:second_rule][:total_methods_amount] = total_methods_amount
+      @output[:second_rule][:missindented_methods_amount] = missindented_methods_amount
     end
 
     # TODO
@@ -74,16 +71,9 @@ module SandiMeter
         sum
       end
 
-      missindented_methods_amount = 0
-      @data[:missindented_methods].each_pair do |klass, methods|
-        missindented_methods_amount += methods.size
-      end
-
-      if total_method_calls > 0
-        puts "#{proper_method_calls * 100 / total_method_calls}% of methods calls accepts are less than 4 parameters."
-      else
-        puts "Seems like there no method calls. WAT?!"
-      end
+      @output[:third_rule] ||= {}
+      @output[:third_rule][:proper_method_calls] = proper_method_calls
+      @output[:third_rule][:total_method_calls] = total_method_calls
     end
 
     def check_fourth_rule
@@ -95,11 +85,9 @@ module SandiMeter
         proper_controllers_amount += 1 unless methods.values.map(&:size).any? { |v| v > 1 }
       end
 
-      if total_controllers_amount > 0
-        puts "#{proper_controllers_amount * 100 / total_controllers_amount}% of controllers have one instance variable per action."
-      else
-        puts "Seems like there are no controllers :)"
-      end
+      @output[:fourth_rule] ||= {}
+      @output[:fourth_rule][:proper_controllers_amount] = proper_controllers_amount
+      @output[:fourth_rule][:total_controllers_amount] = total_controllers_amount
     end
   end
 end
