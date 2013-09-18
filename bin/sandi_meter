@@ -2,5 +2,5 @@
 
 require_relative '../lib/file_scanner'
 
-scanner = FileScanner.new(ARGV[1] == "--log")
+scanner = SandiMeter::FileScanner.new(ARGV[1] == "--log")
 scanner.scan(ARGV[0])

@@ -1,9 +1,9 @@
 require 'test_helper'
 require_relative '../lib/method_arguments_counter'
 
-describe MethodArgumentsCounter do
-  let(:test_loader) { ArgsLoader.new }
-  let(:analyzer) { MethodArgumentsCounter.new }
+describe SandiMeter::MethodArgumentsCounter do
+  let(:test_loader) { SandiMeter::ArgsLoader.new }
+  let(:analyzer) { SandiMeter::MethodArgumentsCounter.new }
 
   context 'when variable/method arguments' do
     let(:args_add_block_1) { load_args_block('blah arg1, arg2')}

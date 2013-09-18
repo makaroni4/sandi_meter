@@ -1,8 +1,8 @@
 require 'test_helper'
 require_relative '../lib/analyzer'
 
-describe Analyzer do
-  let(:analyzer) { Analyzer.new }
+describe SandiMeter::Analyzer do
+  let(:analyzer) { SandiMeter::Analyzer.new }
 
   describe 'finds properly indended classes with lines' do
     let(:test_class) { test_file_path(3) }

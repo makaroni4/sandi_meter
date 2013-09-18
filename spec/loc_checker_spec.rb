@@ -1,13 +1,13 @@
 require 'test_helper'
 require_relative '../lib/loc_checker'
 
-describe LOCChecker do
-  let(:checker) { LOCChecker.new([]) }
+describe SandiMeter::LOCChecker do
+  let(:checker) { SandiMeter::LOCChecker.new([]) }
 
   describe '#check' do
     context 'for short code' do
       before do
-        stub_const('LOCChecker::MAX_LOC', { 'blah' => 10 })
+        stub_const('SandiMeter::LOCChecker::MAX_LOC', { 'blah' => 10 })
         checker.stub(:locs_size).and_return(rand(0..10))
       end
 
@@ -20,7 +20,7 @@ describe LOCChecker do
 
     context 'for large code' do
       before do
-        stub_const('LOCChecker::MAX_LOC', { 'blah' => 10 })
+        stub_const('SandiMeter::LOCChecker::MAX_LOC', { 'blah' => 10 })
         checker.stub(:locs_size).and_return(rand(11..100))
       end
 

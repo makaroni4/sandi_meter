@@ -1,8 +1,8 @@
 require 'test_helper'
 require_relative '../lib/warning_scanner'
 
-describe WarningScanner do
-  let(:scanner) { WarningScanner.new }
+describe SandiMeter::WarningScanner do
+  let(:scanner) { SandiMeter::WarningScanner.new }
 
   describe 'scanning class with indentation warnings' do
     let(:test_class) { read_test_file(1) }
