@@ -8,7 +8,9 @@ class FileScanner
   end
 
   def scan(path)
-    if File.directory?(path)
+    if path.nil?
+      scan_dir('.')
+    elsif File.directory?(path)
       scan_dir(path)
     else
       scan_file(path)
