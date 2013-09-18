@@ -1,5 +1,5 @@
 require 'test_helper'
-require_relative '../lib/loc_checker'
+require_relative '../lib/sandi_meter/loc_checker'
 
 describe SandiMeter::LOCChecker do
   let(:checker) { SandiMeter::LOCChecker.new([]) }

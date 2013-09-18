@@ -1,5 +1,5 @@
 require 'test_helper'
-require_relative '../lib/analyzer'
+require_relative '../lib/sandi_meter/analyzer'
 
 describe SandiMeter::Analyzer do
   let(:analyzer) { SandiMeter::Analyzer.new }

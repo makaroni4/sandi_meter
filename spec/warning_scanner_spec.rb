@@ -1,5 +1,5 @@
 require 'test_helper'
-require_relative '../lib/warning_scanner'
+require_relative '../lib/sandi_meter/warning_scanner'
 
 describe SandiMeter::WarningScanner do
   let(:scanner) { SandiMeter::WarningScanner.new }

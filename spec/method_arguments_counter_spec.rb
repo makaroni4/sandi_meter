@@ -1,5 +1,5 @@
 require 'test_helper'
-require_relative '../lib/method_arguments_counter'
+require_relative '../lib/sandi_meter/method_arguments_counter'
 
 describe SandiMeter::MethodArgumentsCounter do
   let(:test_loader) { SandiMeter::ArgsLoader.new }
