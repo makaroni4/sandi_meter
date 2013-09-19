@@ -1,6 +1,6 @@
 # SandiMeter
 
-Static analysis tool for checking your Ruby code for [Sandi Metz' for rules](http://robots.thoughtbot.com/post/50655960596/sandi-metz-rules-for-developers).
+Static analysis tool for checking your Ruby code for [Sandi Metz' four rules](http://robots.thoughtbot.com/post/50655960596/sandi-metz-rules-for-developers).
 
 * 100 lines per class
 * 5 lines per method
