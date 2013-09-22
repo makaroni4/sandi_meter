@@ -4,7 +4,7 @@ require_relative '../lib/sandi_meter/analyzer'
 describe SandiMeter::Analyzer do
   let(:analyzer) { SandiMeter::Analyzer.new }
 
-  describe 'finds properly indended classes with lines' do
+  describe 'finds properly indented classes with lines' do
     let(:test_class) { test_file_path(3) }
 
     before do
@@ -44,7 +44,7 @@ describe SandiMeter::Analyzer do
     end
   end
 
-  describe 'finds properly indended classes in one file' do
+  describe 'finds properly indented classes in one file' do
     let(:test_class) { test_file_path(4) }
 
     before do
