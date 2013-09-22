@@ -160,4 +160,20 @@ describe SandiMeter::Analyzer do
       analyzer.method_calls.should eq([[5, 3]])
     end
   end
+
+  describe 'empty lines inside class' do
+    let(:test_class) { test_file_path(12) }
+
+    before do
+      analyzer.analyze(test_class)
+    end
+
+    it 'are count for class definition' do
+      analyzer.classes.should eq([["Valera", 1, 109, false]])
+    end
+
+    it 'are count for method definition' do
+      analyzer.methods.should eq({"Valera"=>[["doodle", 2, 9, 0, false]]})
+    end
+  end
 end
