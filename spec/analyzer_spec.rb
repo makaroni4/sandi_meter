@@ -176,4 +176,16 @@ describe SandiMeter::Analyzer do
       analyzer.methods.should eq({"Valera"=>[["doodle", 2, 9, 0, false]]})
     end
   end
+
+  describe 'inline code in class definition' do
+    let(:test_class) { test_file_path(13) }
+
+    before do
+      analyzer.analyze(test_class)
+    end
+
+    it 'is not scanned' do
+      analyzer.method_calls.should be_empty
+    end
+  end
 end
