@@ -11,7 +11,14 @@ Static analysis tool for checking your Ruby code for [Sandi Metz' four rules](ht
 
 ~~~
 gem install sandi_meter
-sandi_meter ~/your/ruby/or/rails/project
+
+sandi_meter --help
+-l, --log                        Show syntax error and indentation log output
+-p, --path PATH                  Path to folder or file to analyze
+-r, --rules                      Show rules
+-h, --help                       Help
+
+sandi_meter -p ~/your/ruby/or/rails/project
 
 1. 94% of classes are under 100 lines.
 2. 53% of methods are under 5 lines.
