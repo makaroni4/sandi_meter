@@ -1,10 +1,55 @@
 #!/usr/bin/env ruby
 
+require 'mixlib/cli'
 require_relative '../lib/sandi_meter/file_scanner'
 require_relative '../lib/sandi_meter/formatter'
 
-scanner = SandiMeter::FileScanner.new(ARGV[1] == "--log")
-data = scanner.scan(ARGV[0])
+class MyCLI
+  include Mixlib::CLI
+
+  option :path,
+    short: "-p PATH",
+    long: "--path PATH",
+    description: "Path to folder or file to analyze",
+    default: "."
+
+  option :log,
+    short: "-l",
+    long: "--log",
+    description: "Show syntax error and indentation log output",
+    boolean: true
+
+  option :help,
+    short: "-h",
+    long: "--help",
+    description: "Help",
+    on: :tail,
+    boolean: true,
+    show_options: true,
+    exit: 0
+
+  option :rules,
+    short: "-r",
+    long: "--rules",
+    description: "Show rules",
+    boolean: 0
+end
+
+cli = MyCLI.new
+cli.parse_options
+
+if cli.config[:rules]
+  puts %(
+    1. 100 lines per class
+    2. 5 lines per method
+    3. 4 params per method call (and don't even try cheating with hash params)
+    4. 1 instance variables per controller' action
+  )
+  exit 0
+end
+
+scanner = SandiMeter::FileScanner.new(cli.config[:log])
+data = scanner.scan(cli.config[:path])
 formatter = SandiMeter::Formatter.new
 
 formatter.print_data(data)
