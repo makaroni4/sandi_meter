@@ -13,6 +13,7 @@ Gem::Specification.new do |spec|
   spec.license       = "MIT"
 
   spec.files = %w(LICENSE README.md Rakefile sandi_meter.gemspec)
+  spec.files += Dir.glob("html/*")
   spec.files += Dir.glob("lib/**/*.rb")
   spec.files += Dir.glob("bin/**/*")
   spec.files += Dir.glob("spec/**/*")

@@ -1,3 +1,6 @@
 .DS_Store
 
 pkg
+
+sandi_meter/*
+sandi_meter/*.log

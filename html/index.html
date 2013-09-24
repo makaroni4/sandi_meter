@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sandi Chart</title>
+  <link rel="stylesheet" href="assets/morris.css">
+  <link rel="stylesheet" href="assets/style.css">
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="assets/chart.js"></script>
+  <script src="assets/script.js"></script>
+  <script type="text/javascript">
+    var data = <% plot_data %>;
+  </script>
+</head>
+<body>
+  <a href="https://github.com/makaroni4/sandi_meter"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_green_007200.png" alt="Fork me on GitHub"></a>
+  <h1>Sandi Metz rules</h1>
+  <h2 class="report_date"></h2>
+  <div id="pie1" class="pie"></div>
+  <div id="pie2" class="pie"></div>
+  <div id="pie3" class="pie"></div>
+  <div id="pie4" class="pie"></div>
+  <div class="clr"></div>
+  <div class="graph-container-row">
+    <div class="graph-container left-graph">
+      <div class="label">First rule</div>
+      <div class="caption">Number of 100 line classes vs time</div>
+      <div id="plot1" class="graph"></div>
+    </div>
+    <div class="graph-container right-graph">
+    <div class="label">Second rule</div>
+      <div class="caption">Number of 5 line methods vs time</div>
+      <div id="plot2" class="graph"></div>
+    </div>
+  </div>
+  <div class="clr"></div>
+  <div class="graph-container-row">
+    <div class="graph-container left-graph">
+      <div class="label">Third rule</div>
+      <div class="caption">Number of methods calls with 4 params vs time</div>
+      <div id="plot3" class="graph"></div>
+    </div>
+    <div class="graph-container right-graph">
+    <div class="label">Fourth rule</div>
+      <div class="caption">Number of controllers with 1 instance variable vs time</div>
+      <div id="plot4" class="graph"></div>
+    </div>
+  </div>
+  <div class="clr"></div>
+  <div class="footer">
+    Scanned with love by <a href="https://github.com/makaroni4/sandi_meter">sandi_meter</a> gem. Please, <a href="https://github.com/makaroni4/sandi_meter/issues/new">leave an issue</a> or <a href="email:makaroni4@gmail.com">email</a> some feedback!
+  </div>
+</body>
+</html>

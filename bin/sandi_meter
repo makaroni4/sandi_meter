@@ -4,6 +4,7 @@ require 'mixlib/cli'
 require_relative '../lib/sandi_meter/file_scanner'
 require_relative '../lib/sandi_meter/formatter'
 require_relative '../lib/sandi_meter/logger'
+require_relative '../lib/sandi_meter/html_generator'
 
 class MyCLI
   include Mixlib::CLI
@@ -64,4 +65,8 @@ formatter.print_data(data)
 if cli.config[:graph]
   logger = SandiMeter::Logger.new
   logger.log!(cli.config[:path], data)
+
+  html_generator = SandiMeter::HtmlGenerator.new
+  html_generator.copy_assets!(cli.config[:path])
+  html_generator.generate_data!(cli.config[:path])
 end
