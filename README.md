@@ -15,6 +15,7 @@ Static analysis tool for checking your Ruby code for [Sandi Metz' four rules](ht
 gem install sandi_meter
 
 sandi_meter --help
+-g, --graph                      Create folder and log data to graph
 -l, --log                        Show syntax error and indentation log output
 -p, --path PATH                  Path to folder or file to analyze
 -r, --rules                      Show rules
@@ -27,6 +28,12 @@ sandi_meter -p ~/your/ruby/or/rails/project
 3. 98% of methods calls accepts are less than 4 parameters.
 4. 21% of controllers have one instance variable per action.
 ~~~
+
+## HTML mode
+
+Try using gem with `-g (--graph)` option, so it will create a folder with beautiful html output and log file with results of any scan.
+
+![SandiMeter HTML mode](http://cs411325.vk.me/v411325401/6089/OnVtBiuCrRQ.jpg)
 
 ## Ruby script mode
 
