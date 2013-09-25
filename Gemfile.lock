@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     sandi_meter (0.0.4)
+      mixlib-cli
 
 GEM
   remote: https://rubygems.org/
