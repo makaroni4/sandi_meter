@@ -14,7 +14,7 @@ module SandiMeter
       end
 
       if data[:third_rule][:total_method_calls] > 0
-        puts "3. #{data[:third_rule][:proper_method_calls] * 100 / data[:third_rule][:total_method_calls]}% of methods calls accepts are less than 4 parameters."
+        puts "3. #{data[:third_rule][:proper_method_calls] * 100 / data[:third_rule][:total_method_calls]}% of method calls accepted are less than 4 parameters."
       else
         puts "3. No method calls to analyze."
       end
