@@ -33,7 +33,7 @@ sandi_meter -p ~/your/ruby/or/rails/project
 
 Try using gem with `-g (--graph)` option, so it will create a folder with beautiful html output and log file with results of any scan.
 
-![SandiMeter HTML mode](http://cs411325.vk.me/v411325401/6089/OnVtBiuCrRQ.jpg)
+![SandiMeter HTML mode](http://img545.imageshack.us/img545/5601/t8qk.png)
 
 ## Ruby script mode
 
