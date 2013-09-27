@@ -33,12 +33,12 @@ module SandiMeter
         sum += 1 if class_params.last == true
         sum
       end
-      missindented_classes_amount = @data[:missindented_classes].size
+      misindented_classes_amount = @data[:misindented_classes].size
 
       @output[:first_rule] ||= {}
       @output[:first_rule][:small_classes_amount] = small_classes_amount
       @output[:first_rule][:total_classes_amount] = total_classes_amount
-      @output[:first_rule][:missindented_classes_amount] = missindented_classes_amount
+      @output[:first_rule][:misindented_classes_amount] = misindented_classes_amount
     end
 
     def check_second_rule
@@ -50,15 +50,15 @@ module SandiMeter
         total_methods_amount += methods.size
       end
 
-      missindented_methods_amount = 0
-      @data[:missindented_methods].each_pair do |klass, methods|
-        missindented_methods_amount += methods.size
+      misindented_methods_amount = 0
+      @data[:misindented_methods].each_pair do |klass, methods|
+        misindented_methods_amount += methods.size
       end
 
       @output[:second_rule] ||= {}
       @output[:second_rule][:small_methods_amount] = small_methods_amount
       @output[:second_rule][:total_methods_amount] = total_methods_amount
-      @output[:second_rule][:missindented_methods_amount] = missindented_methods_amount
+      @output[:second_rule][:misindented_methods_amount] = misindented_methods_amount
     end
 
     # TODO
