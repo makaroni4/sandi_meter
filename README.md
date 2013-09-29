@@ -47,11 +47,11 @@ pp data
 # {:first_rule=>
 #   {:small_classes_amount=>916,
 #    :total_classes_amount=>937,
-#    :missindented_classes_amount=>1},
+#    :misindented_classes_amount=>1},
 #  :second_rule=>
 #   {:small_methods_amount=>1144,
 #    :total_methods_amount=>1833,
-#    :missindented_methods_amount=>0},
+#    :misindented_methods_amount=>0},
 #  :third_rule=>{:proper_method_calls=>5857, :total_method_calls=>5894},
 #  :fourth_rule=>{:proper_controllers_amount=>17, :total_controllers_amount=>94}}
 ~~~

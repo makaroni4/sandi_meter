@@ -5,12 +5,12 @@ require_relative 'method_arguments_counter'
 
 module SandiMeter
   class Analyzer
-    attr_reader :classes, :missindented_classes, :methods, :missindented_methods, :method_calls, :instance_variables
+    attr_reader :classes, :misindented_classes, :methods, :misindented_methods, :method_calls, :instance_variables
 
     def initialize
       @classes = []
-      @missindented_classes = []
-      @missindented_methods = {}
+      @misindented_classes = []
+      @misindented_methods = {}
       @methods = {}
       @method_calls = []
       @instance_variables = {}
@@ -40,7 +40,7 @@ module SandiMeter
         klass_params << @file_path
       end
 
-      @missindented_classes.map! do |klass_params|
+      @misindented_classes.map! do |klass_params|
         klass_params << @file_path
       end
 
@@ -52,9 +52,9 @@ module SandiMeter
 
       {
         classes: @classes,
-        missindented_classes: @missindented_classes,
+        misindented_classes: @misindented_classes,
         methods: @methods,
-        missindented_methods: @missindented_methods,
+        misindented_methods: @misindented_methods,
         method_calls: @method_calls,
         instance_variables: @instance_variables
       }
@@ -109,12 +109,12 @@ module SandiMeter
 
         if @indentation_warnings['class'] && @indentation_warnings['class'].any? { |first_line, last_line| first_line == class_params.last }
           class_params << nil
-          @missindented_classes << class_params
+          @misindented_classes << class_params
         else
           class_params += [find_last_line(class_params)]
 
           # in case of one liner class last line will be nil
-          (class_params.last == nil ? @missindented_classes : @classes) << class_params
+          (class_params.last == nil ? @misindented_classes : @classes) << class_params
         end
 
         current_namespace = class_params.first
@@ -167,8 +167,8 @@ module SandiMeter
           if @indentation_warnings['def'] && @indentation_warnings['def'].any? { |first_line, last_line| first_line == method_params.last }
             method_params << nil
             method_params << number_of_arguments(element)
-            @missindented_methods[current_namespace] ||= []
-            @missindented_methods[current_namespace] << method_params
+            @misindented_methods[current_namespace] ||= []
+            @misindented_methods[current_namespace] << method_params
           else
             method_params += [find_last_line(method_params, 'def')]
             method_params << number_of_arguments(element)
