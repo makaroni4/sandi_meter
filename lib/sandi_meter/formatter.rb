@@ -25,10 +25,12 @@ module SandiMeter
         puts "4. No controllers to analyze."
       end
 
-      print_log(data) if data[:first_rule][:log]
+      print_log(data)
     end
 
     def print_log(data)
+      return unless data[:first_rule][:log] || data[:second_rule][:log] || data[:fourth_rule][:log]
+
       if data[:first_rule][:log][:classes].any?
         puts "\nClasses with 100+ lines"
         print_array_of_arrays data[:first_rule][:log][:classes]
@@ -48,9 +50,16 @@ module SandiMeter
         puts "\nMissindented methods"
         print_array_of_arrays data[:second_rule][:log][:misindented_methods]
       end
+
+      if data[:fourth_rule][:log][:controllers].any?
+        puts "\nControllers with 1+ instance variables"
+        print_array_of_arrays data[:fourth_rule][:log][:controllers]
+      end
     end
 
     private
+    # TODO
+    # sort output by number of lines or any param
     def print_array_of_arrays(nested_array)
       nested_sizes = nested_array.map do |row|
         row.map { |element| element.to_s.size }
@@ -60,7 +69,8 @@ module SandiMeter
 
       nested_array.each do |row|
         line_elements = row.each_with_index.map do |element, index|
-          element.to_s.ljust(sizes[index] + 1, ' ')
+          element_string = element.kind_of?(Array) ? element.join(', ') : element.to_s
+          element_string.ljust(sizes[index] + 1, ' ')
         end
 
         puts line_elements.join(' | ').prepend("  ")

@@ -74,6 +74,19 @@ module SandiMeter
       end
     end
 
+    def log_fourth_rule
+      @output[:fourth_rule][:log] ||={}
+      @output[:fourth_rule][:log][:controllers] ||= []
+
+      @data[:instance_variables].each_pair do |controller, methods|
+        methods.each_pair do |method, instance_variables|
+          if instance_variables.size > 1
+            @output[:fourth_rule][:log][:controllers] << [controller, method, instance_variables]
+          end
+        end
+      end
+    end
+
     def check_first_rule
       total_classes_amount = @data[:classes].size
       small_classes_amount = @data[:classes].inject(0) do |sum, class_params|
@@ -140,6 +153,8 @@ module SandiMeter
       @output[:fourth_rule] ||= {}
       @output[:fourth_rule][:proper_controllers_amount] = proper_controllers_amount
       @output[:fourth_rule][:total_controllers_amount] = total_controllers_amount
+
+      log_fourth_rule if @store_details
     end
   end
 end
