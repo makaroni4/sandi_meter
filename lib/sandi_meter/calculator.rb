@@ -74,6 +74,17 @@ module SandiMeter
       end
     end
 
+    def log_third_rule
+      @output[:third_rule][:log] ||={}
+      @output[:third_rule][:log][:method_calls] ||= []
+
+      # TODO
+      # add name of method being called
+      proper_method_calls = @data[:method_calls].inject(0) do |sum, params|
+        @output[:third_rule][:log][:method_calls] << params if params.first > 4
+      end
+    end
+
     def log_fourth_rule
       @output[:fourth_rule][:log] ||={}
       @output[:fourth_rule][:log][:controllers] ||= []
@@ -139,6 +150,8 @@ module SandiMeter
       @output[:third_rule] ||= {}
       @output[:third_rule][:proper_method_calls] = proper_method_calls
       @output[:third_rule][:total_method_calls] = total_method_calls
+
+      log_third_rule if @store_details
     end
 
     def check_fourth_rule

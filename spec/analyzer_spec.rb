@@ -22,7 +22,7 @@ describe SandiMeter::Analyzer do
     end
 
     it 'finds method calls that brakes third rule' do
-      analyzer.method_calls.should eq([[5,3]])
+      analyzer.method_calls.should eq([[5, 3, test_file_path(3)]])
     end
   end
 
@@ -157,7 +157,7 @@ describe SandiMeter::Analyzer do
     end
 
     it 'counts arguments' do
-      analyzer.method_calls.should eq([[5, 3]])
+      analyzer.method_calls.should eq([[5, 3, test_file_path(11)]])
     end
   end
 

@@ -139,7 +139,7 @@ module SandiMeter
           counter = SandiMeter::MethodArgumentsCounter.new
           arguments_count, line = counter.count(sexp)
 
-          @method_calls << [arguments_count, line]
+          @method_calls << [arguments_count, line, @file_path]
 
           find_args_add_block(sexp)
         else

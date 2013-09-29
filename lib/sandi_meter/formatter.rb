@@ -25,6 +25,9 @@ module SandiMeter
         puts "4. No controllers to analyze."
       end
 
+      # TODO
+      # append line number to path like this:
+      # ~/file.rb:777
       print_log(data)
     end
 
@@ -33,27 +36,32 @@ module SandiMeter
 
       if data[:first_rule][:log][:classes].any?
         puts "\nClasses with 100+ lines"
-        print_array_of_arrays data[:first_rule][:log][:classes]
+        print_array_of_arrays [["Class name", "# of lines", "Path"]] + data[:first_rule][:log][:classes]
       end
 
       if data[:first_rule][:log][:misindented_classes].any?
         puts "\nMissindented classes"
-        print_array_of_arrays data[:first_rule][:log][:misindented_classes]
+        print_array_of_arrays [["Class name", "Path"]] + data[:first_rule][:log][:misindented_classes]
       end
 
       if data[:second_rule][:log][:methods].any?
         puts "\nMethods with 5+ lines"
-        print_array_of_arrays data[:second_rule][:log][:methods]
+        print_array_of_arrays [["Class name", "Method name", "# of lines", "Path"]] + data[:second_rule][:log][:methods]
       end
 
       if data[:second_rule][:log][:misindented_methods].any?
         puts "\nMissindented methods"
-        print_array_of_arrays data[:second_rule][:log][:misindented_methods]
+        print_array_of_arrays [["Class name", "Method name", "Line", "Path"]] + data[:second_rule][:log][:misindented_methods]
+      end
+
+      if data[:third_rule][:log][:method_calls].any?
+        puts "\nMethod calls with 4+ arguments"
+        print_array_of_arrays [["# of arguments", "Line", "Path"]] + data[:third_rule][:log][:method_calls]
       end
 
       if data[:fourth_rule][:log][:controllers].any?
         puts "\nControllers with 1+ instance variables"
-        print_array_of_arrays data[:fourth_rule][:log][:controllers]
+        print_array_of_arrays [["Controller name", "Action name", "Instance variables"]] + data[:fourth_rule][:log][:controllers]
       end
     end
 
