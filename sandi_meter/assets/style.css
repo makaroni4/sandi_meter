@@ -1,0 +1,71 @@
+body {
+  font-family: "Gill Sans", sans-serif;
+}
+
+.container {
+  width: 960px;
+  margin: 0 auto;
+}
+
+.clearfix {
+  clear: both;
+}
+
+.main-title {
+  font-size: 38px;
+  text-align: center;
+}
+
+.main-description {
+  font-size: 23px;
+  text-align: center;
+}
+
+.main-footer {
+  text-align: center;
+  padding: 20px 0 30px;
+}
+
+.main-footer a {
+  color: rgb(65, 131, 196);
+}
+
+.pie-charts-item {
+  float: left;
+  width: 25%;
+}
+
+.plot-charts-item {
+  width: 480px;
+  float: left;
+  height: 298px;
+  margin-bottom: 40px;
+}
+
+.plot-charts-item-caption {
+  font-size: 16px;
+  line-height: 18px;
+  text-align: center;
+}
+
+.plot-charts-item-graph {
+  height: 280px;
+}
+
+.details {
+  display: none;
+}
+
+.toggle_report.current_tab {
+  text-decoration: none;
+  cursor: default;
+  pointer-events: none;
+}
+
+.details_table td {
+  border-spacing: 5px;
+}
+
+.details_table th {
+  font-weight: bold;
+}

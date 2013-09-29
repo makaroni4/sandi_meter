@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sandi Chart</title>
+  <link rel="stylesheet" href="assets/normalize.css">
+  <link rel="stylesheet" href="assets/morris.css">
+  <link rel="stylesheet" href="assets/style.css">
+  <script src="assets/jquery.js"></script>
+  <script src="assets/chart.js"></script>
+  <script src="assets/script.js"></script>
+  <script type="text/javascript">
+    var data = [{"r10":22,"r11":2,"r20":28,"r21":31,"r30":249,"r31":2,"r40":1,"r41":0,"timestamp":1380193279000},{"r10":22,"r11":2,"r20":28,"r21":31,"r30":249,"r31":2,"r40":1,"r41":0,"timestamp":1380193302000},{"r10":21,"r11":3,"r20":28,"r21":35,"r30":326,"r31":2,"r40":1,"r41":0,"timestamp":1380470879000},{"r10":22,"r11":3,"r20":29,"r21":36,"r30":351,"r31":2,"r40":1,"r41":1,"timestamp":1380472574000},{"r10":22,"r11":3,"r20":29,"r21":36,"r30":351,"r31":2,"r40":1,"r41":1,"timestamp":1380472603000},{"r10":22,"r11":3,"r20":29,"r21":36,"r30":351,"r31":2,"r40":1,"r41":1,"timestamp":1380472612000},{"r10":22,"r11":3,"r20":29,"r21":37,"r30":369,"r31":2,"r40":1,"r41":1,"timestamp":1380474396000},{"r10":22,"r11":3,"r20":29,"r21":37,"r30":369,"r31":2,"r40":1,"r41":1,"timestamp":1380475916000},{"r10":22,"r11":3,"r20":29,"r21":38,"r30":418,"r31":2,"r40":1,"r41":1,"timestamp":1380476524000},{"r10":22,"r11":3,"r20":31,"r21":39,"r30":389,"r31":2,"r40":1,"r41":1,"timestamp":1380477084000},{"r10":22,"r11":3,"r20":31,"r21":39,"r30":391,"r31":2,"r40":1,"r41":1,"timestamp":1380477117000},{"r10":22,"r11":3,"r20":31,"r21":39,"r30":393,"r31":2,"r40":1,"r41":1,"timestamp":1380477134000},{"r10":22,"r11":3,"r20":31,"r21":39,"r30":391,"r31":2,"r40":1,"r41":1,"timestamp":1380477263000},{"r10":22,"r11":3,"r20":31,"r21":39,"r30":391,"r31":2,"r40":1,"r41":1,"timestamp":1380477290000},{"r10":22,"r11":3,"r20":31,"r21":39,"r30":391,"r31":2,"r40":1,"r41":1,"timestamp":1380477354000},{"r10":22,"r11":3,"r20":31,"r21":39,"r30":391,"r31":2,"r40":1,"r41":1,"timestamp":1380477364000},{"r10":22,"r11":3,"r20":31,"r21":39,"r30":389,"r31":2,"r40":1,"r41":1,"timestamp":1380477437000},{"r10":22,"r11":3,"r20":31,"r21":39,"r30":391,"r31":2,"r40":1,"r41":1,"timestamp":1380477478000},{"r10":22,"r11":3,"r20":31,"r21":39,"r30":392,"r31":2,"r40":1,"r41":1,"timestamp":1380477618000},{"r10":22,"r11":3,"r20":31,"r21":39,"r30":392,"r31":2,"r40":1,"r41":1,"timestamp":1380477636000},{"r10":22,"r11":3,"r20":31,"r21":39,"r30":392,"r31":2,"r40":1,"r41":1,"timestamp":1380477674000},{"r10":22,"r11":3,"r20":31,"r21":39,"r30":392,"r31":2,"r40":1,"r41":1,"timestamp":1380477712000},{"r10":22,"r11":3,"r20":31,"r21":39,"r30":392,"r31":2,"r40":1,"r41":1,"timestamp":1380477782000},{"r10":22,"r11":3,"r20":31,"r21":39,"r30":394,"r31":2,"r40":1,"r41":1,"timestamp":1380477891000},{"r10":22,"r11":3,"r20":31,"r21":39,"r30":394,"r31":2,"r40":1,"r41":1,"timestamp":1380478008000},{"r10":22,"r11":3,"r20":31,"r21":39,"r30":393,"r31":2,"r40":1,"r41":1,"timestamp":1380478065000},{"r10":21,"r11":4,"r20":31,"r21":39,"r30":401,"r31":2,"r40":1,"r41":1,"timestamp":1380478123000},{"r10":21,"r11":4,"r20":31,"r21":39,"r30":433,"r31":2,"r40":1,"r41":1,"timestamp":1380478285000},{"r10":21,"r11":4,"r20":31,"r21":39,"r30":433,"r31":2,"r40":1,"r41":1,"timestamp":1380478371000},{"r10":21,"r11":4,"r20":31,"r21":39,"r30":433,"r31":2,"r40":1,"r41":1,"timestamp":1380478460000},{"r10":21,"r11":4,"r20":31,"r21":39,"r30":433,"r31":2,"r40":1,"r41":1,"timestamp":1380478621000},{"r10":21,"r11":4,"r20":31,"r21":39,"r30":433,"r31":2,"r40":1,"r41":1,"timestamp":1380478692000},{"r10":21,"r11":4,"r20":31,"r21":39,"r30":433,"r31":2,"r40":1,"r41":1,"timestamp":1380478784000},{"r10":21,"r11":4,"r20":31,"r21":39,"r30":433,"r31":2,"r40":1,"r41":1,"timestamp":1380478796000},{"r10":21,"r11":4,"r20":32,"r21":39,"r30":435,"r31":2,"r40":1,"r41":1,"timestamp":1380478855000},{"r10":21,"r11":4,"r20":32,"r21":39,"r30":436,"r31":2,"r40":1,"r41":1,"timestamp":1380478872000}];
+  </script>
+</head>
+<body>
+  <a href="https://github.com/makaroni4/sandi_meter"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_green_007200.png" alt="Fork me on GitHub"></a>
+  <div class="container">
+    <header>
+      <h1 class="main-title">Sandi Metz rules</h1>
+      <h2 class="main-description js-report-date"></h2>
+      <a href="#report" class="toggle_report current_tab" data-tab_class=".plot-charts">Charts</a>
+      <a href="#details" class="toggle_report" data-tab_class=".details">Details</a>
+    </header>
+    <section class="pie-charts">
+      <div id="pie1" class="pie-charts-item"></div>
+      <div id="pie2" class="pie-charts-item"></div>
+      <div id="pie3" class="pie-charts-item"></div>
+      <div id="pie4" class="pie-charts-item"></div>
+      <div class="clearfix"></div>
+    </section>
+    <section class="plot-charts">
+      <div class="plot-charts-item">
+        <div class="plot-charts-item-caption">Number of 100 line classes vs time</div>
+        <div class="plot-charts-item-graph" id="plot1"></div>
+      </div>
+      <div class="plot-charts-item">
+        <div class="plot-charts-item-caption">Number of 5 line methods vs time</div>
+        <div class="plot-charts-item-graph" id="plot2"></div>
+      </div>
+      <div class="clearfix"></div>
+      <div class="plot-charts-item">
+        <div class="plot-charts-item-caption">Number of methods calls with 4 params vs time</div>
+        <div class="plot-charts-item-graph" id="plot3"></div>
+      </div>
+      <div class="plot-charts-item">
+        <div class="plot-charts-item-caption">Number of controllers with 1 instance variable vs time</div>
+        <div class="plot-charts-item-graph" id="plot4"></div>
+      </div>
+      <div class="clearfix"></div>
+    </section>
+    <section class="details">
+      <h2>Classes with 100+ lines</h2>
+<table class="details_table" cellpadding="4">
+  <thead>
+    <tr>
+<th>Class name</th>
+<th># of lines</th>
+<th>Path</th>
+</tr>
+
+  </thead>
+  <tbody>
+    <tr>
+<td>SandiMeter::Analyzer</td>
+<td>./lib/sandi_meter/analyzer.rb</td>
+<td>199</td>
+</tr>
+<tr>
+<td>SandiMeter::Calculator</td>
+<td>./lib/sandi_meter/calculator.rb</td>
+<td>172</td>
+</tr>
+<tr>
+<td>SandiMeter::HtmlGenerator</td>
+<td>./lib/sandi_meter/html_generator.rb</td>
+<td>122</td>
+</tr>
+<tr>
+<td>Valera</td>
+<td>./spec/test_classes/12.rb</td>
+<td>109</td>
+</tr>
+
+  </tbody>
+</table>
+<h2>Missindented classes</h2>
+<table class="details_table" cellpadding="4">
+  <thead>
+    <tr>
+<th>Class name</th>
+<th>Path</th>
+</tr>
+
+  </thead>
+  <tbody>
+    <tr>
+<td>MyApp::TestClass</td>
+<td>./spec/test_classes/1.rb</td>
+</tr>
+<tr>
+<td>OneLinerClass</td>
+<td>./spec/test_classes/5.rb</td>
+</tr>
+
+  </tbody>
+</table>
+<h2>Methods with 5+ lines</h2>
+<table class="details_table" cellpadding="4">
+  <thead>
+    <tr>
+<th>Class name</th>
+<th>Method name</th>
+<th># of lines</th>
+<th>Path</th>
+</tr>
+
+  </thead>
+  <tbody>
+    <tr>
+<td>SandiMeter::Analyzer</td>
+<td>initialize</td>
+<td>7</td>
+<td>./lib/sandi_meter/analyzer.rb</td>
+</tr>
+<tr>
+<td>SandiMeter::Analyzer</td>
+<td>analyze</td>
+<td>13</td>
+<td>./lib/sandi_meter/analyzer.rb</td>
+</tr>
+<tr>
+<td>SandiMeter::Analyzer</td>
+<td>output</td>
+<td>33</td>
+<td>./lib/sandi_meter/analyzer.rb</td>
+</tr>
+<tr>
+<td>SandiMeter::Analyzer</td>
+<td>find_class_params</td>
+<td>10</td>
+<td>./lib/sandi_meter/analyzer.rb</td>
+</tr>
+<tr>
+<td>SandiMeter::Analyzer</td>
+<td>number_of_arguments</td>
+<td>5</td>
+<td>./lib/sandi_meter/analyzer.rb</td>
+</tr>
+<tr>
+<td>SandiMeter::Analyzer</td>
+<td>find_last_line</td>
+<td>9</td>
+<td>./lib/sandi_meter/analyzer.rb</td>
+</tr>
+<tr>
+<td>SandiMeter::Analyzer</td>
+<td>scan_class_sexp</td>
+<td>24</td>
+<td>./lib/sandi_meter/analyzer.rb</td>
+</tr>
+<tr>
+<td>SandiMeter::Analyzer</td>
+<td>find_args_add_block</td>
+<td>17</td>
+<td>./lib/sandi_meter/analyzer.rb</td>
+</tr>
+<tr>
+<td>SandiMeter::Analyzer</td>
+<td>scan_def_for_ivars</td>
+<td>14</td>
+<td>./lib/sandi_meter/analyzer.rb</td>
+</tr>
+<tr>
+<td>SandiMeter::Analyzer</td>
+<td>scan_sexp</td>
+<td>26</td>
+<td>./lib/sandi_meter/analyzer.rb</td>
+</tr>
+<tr>
+<td>SandiMeter::Calculator</td>
+<td>push</td>
+<td>10</td>
+<td>./lib/sandi_meter/calculator.rb</td>
+</tr>
+<tr>
+<td>SandiMeter::Calculator</td>
+<td>calculate!</td>
+<td>9</td>
+<td>./lib/sandi_meter/calculator.rb</td>
+</tr>
+<tr>
+<td>SandiMeter::Calculator</td>
+<td>log_first_rule</td>
+<td>14</td>
+<td>./lib/sandi_meter/calculator.rb</td>
+</tr>
+<tr>
+<td>SandiMeter::Calculator</td>
+<td>log_second_rule</td>
+<td>27</td>
+<td>./lib/sandi_meter/calculator.rb</td>
+</tr>
+<tr>
+<td>SandiMeter::Calculator</td>
+<td>log_third_rule</td>
+<td>9</td>
+<td>./lib/sandi_meter/calculator.rb</td>
+</tr>
+<tr>
+<td>SandiMeter::Calculator</td>
+<td>log_fourth_rule</td>
+<td>11</td>
+<td>./lib/sandi_meter/calculator.rb</td>
+</tr>
+<tr>
+<td>SandiMeter::Calculator</td>
+<td>check_first_rule</td>
+<td>15</td>
+<td>./lib/sandi_meter/calculator.rb</td>
+</tr>
+<tr>
+<td>SandiMeter::Calculator</td>
+<td>check_second_rule</td>
+<td>20</td>
+<td>./lib/sandi_meter/calculator.rb</td>
+</tr>
+<tr>
+<td>SandiMeter::Calculator</td>
+<td>check_third_rule</td>
+<td>13</td>
+<td>./lib/sandi_meter/calculator.rb</td>
+</tr>
+<tr>
+<td>SandiMeter::Calculator</td>
+<td>check_fourth_rule</td>
+<td>14</td>
+<td>./lib/sandi_meter/calculator.rb</td>
+</tr>
+<tr>
+<td>SandiMeter::FileScanner</td>
+<td>scan</td>
+<td>8</td>
+<td>./lib/sandi_meter/file_scanner.rb</td>
+</tr>
+<tr>
+<td>SandiMeter::FileScanner</td>
+<td>scan_file</td>
+<td>11</td>
+<td>./lib/sandi_meter/file_scanner.rb</td>
+</tr>
+<tr>
+<td>SandiMeter::Formatter</td>
+<td>print_data</td>
+<td>29</td>
+<td>./lib/sandi_meter/formatter.rb</td>
+</tr>
+<tr>
+<td>SandiMeter::Formatter</td>
+<td>print_log</td>
+<td>32</td>
+<td>./lib/sandi_meter/formatter.rb</td>
+</tr>
+<tr>
+<td>SandiMeter::Formatter</td>
+<td>print_array_of_arrays</td>
+<td>15</td>
+<td>./lib/sandi_meter/formatter.rb</td>
+</tr>
+<tr>
+<td>SandiMeter::HtmlGenerator</td>
+<td>copy_assets!</td>
+<td>10</td>
+<td>./lib/sandi_meter/html_generator.rb</td>
+</tr>
+<tr>
+<td>SandiMeter::HtmlGenerator</td>
+<td>generate_data!</td>
+<td>23</td>
+<td>./lib/sandi_meter/html_generator.rb</td>
+</tr>
+<tr>
+<td>SandiMeter::HtmlGenerator</td>
+<td>generate_details!</td>
+<td>58</td>
+<td>./lib/sandi_meter/html_generator.rb</td>
+</tr>
+<tr>
+<td>SandiMeter::HtmlGenerator</td>
+<td>generate_details_block</td>
+<td>5</td>
+<td>./lib/sandi_meter/html_generator.rb</td>
+</tr>
+<tr>
+<td>SandiMeter::Logger</td>
+<td>log!</td>
+<td>7</td>
+<td>./lib/sandi_meter/logger.rb</td>
+</tr>
+<tr>
+<td>SandiMeter::Logger</td>
+<td>log_line</td>
+<td>17</td>
+<td>./lib/sandi_meter/logger.rb</td>
+</tr>
+<tr>
+<td>SandiMeter::MethodArgumentsCounter</td>
+<td>count</td>
+<td>8</td>
+<td>./lib/sandi_meter/method_arguments_counter.rb</td>
+</tr>
+<tr>
+<td>SandiMeter::MethodArgumentsCounter</td>
+<td>bypass_sexp</td>
+<td>13</td>
+<td>./lib/sandi_meter/method_arguments_counter.rb</td>
+</tr>
+<tr>
+<td>SandiMeter::WarningScanner</td>
+<td>scan</td>
+<td>11</td>
+<td>./lib/sandi_meter/warning_scanner.rb</td>
+</tr>
+<tr>
+<td>SandiMeter::WarningScanner</td>
+<td>extract_indentation_mismatch</td>
+<td>9</td>
+<td>./lib/sandi_meter/warning_scanner.rb</td>
+</tr>
+<tr>
+<td>SandiMeter::WarningScanner</td>
+<td>parse_warnings</td>
+<td>7</td>
+<td>./lib/sandi_meter/warning_scanner.rb</td>
+</tr>
+<tr>
+<td>Valera</td>
+<td>doodle</td>
+<td>7</td>
+<td>./spec/test_classes/12.rb</td>
+</tr>
+<tr>
+<td></td>
+<td>test_file_path</td>
+<td>5</td>
+<td>./spec/test_helper.rb</td>
+</tr>
+<tr>
+<td>ArgsLoader</td>
+<td>load_method_add_arg</td>
+<td>14</td>
+<td>./spec/test_helper.rb</td>
+</tr>
+
+  </tbody>
+</table>
+<h2>Missindented methods</h2>
+<table class="details_table" cellpadding="4">
+  <thead>
+    <tr>
+<th>Class name</th>
+<th>Method name</th>
+<th>Line</th>
+<th>Path</th>
+</tr>
+
+  </thead>
+  <tbody>
+    <tr>
+<td>MyApp::TestClass</td>
+<td>blah</td>
+<td>3</td>
+<td>./spec/test_classes/1.rb</td>
+</tr>
+
+  </tbody>
+</table>
+<h2>Method calls with 4+ arguments</h2>
+<table class="details_table" cellpadding="4">
+  <thead>
+    <tr>
+<th># of arguments</th>
+<th>Line</th>
+<th>Path</th>
+</tr>
+
+  </thead>
+  <tbody>
+    <tr>
+<td>5</td>
+<td>3</td>
+<td>./spec/test_classes/11.rb</td>
+</tr>
+<tr>
+<td>5</td>
+<td>3</td>
+<td>./spec/test_classes/3.rb</td>
+</tr>
+
+  </tbody>
+</table>
+<h2>Controllers with 1+ instance variables</h2>
+<table class="details_table" cellpadding="4">
+  <thead>
+    <tr>
+<th>Controller name</th>
+<th>Action name</th>
+<th>Instance variables</th>
+</tr>
+
+  </thead>
+  <tbody>
+    <tr>
+<td>AnotherUsersController</td>
+<td>index</td>
+<td>@users, @excess_variable</td>
+</tr>
+
+  </tbody>
+</table>
+
+    </section>
+    <footer class="main-footer">
+      Scanned with love by <a href="https://github.com/makaroni4/sandi_meter">sandi_meter</a> gem.
+      Please, <a href="https://github.com/makaroni4/sandi_meter/issues/new">leave an issue</a> or
+      <a href="mailto:makaroni4@gmail.com">email</a> some feedback!
+    </footer>
+  </div>
+</body>
+</html>
