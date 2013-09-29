@@ -24,6 +24,33 @@ module SandiMeter
       else
         puts "4. No controllers to analize."
       end
+
+      print_log(data)
+    end
+
+    def print_log(data)
+      puts "\nClasses with 100+ lines"
+      print_array_of_arrays data[:first_rule][:log][:classes]
+
+      puts "\nMissindented classes"
+      print_array_of_arrays data[:first_rule][:log][:missindented_classes]
+    end
+
+    private
+    def print_array_of_arrays(nested_array)
+      nested_sizes = nested_array.map do |row|
+        row.map { |element| element.to_s.size }
+      end
+
+      sizes = nested_sizes.transpose.map { |row| row.max }
+
+      nested_array.each do |row|
+        line_elements = row.each_with_index.map do |element, index|
+          element.to_s.ljust(sizes[index] + 1, ' ')
+        end
+
+        puts line_elements.join(' | ').prepend("  ")
+      end
     end
   end
 end

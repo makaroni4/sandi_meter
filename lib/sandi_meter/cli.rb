@@ -20,6 +20,12 @@ module SandiMeter
       description: "Show syntax error and indentation log output",
       boolean: true
 
+    option :details,
+      short: "-d",
+      long: "--details",
+      description: "Show details (path, line number)",
+      boolean: true
+
     option :graph,
       short: "-g",
       long: "--graph",
@@ -53,7 +59,7 @@ module SandiMeter
       end
 
       scanner = SandiMeter::FileScanner.new(cli.config[:log])
-      data = scanner.scan(cli.config[:path])
+      data = scanner.scan(cli.config[:path], cli.config[:details])
       formatter = SandiMeter::Formatter.new
 
       formatter.print_data(data)

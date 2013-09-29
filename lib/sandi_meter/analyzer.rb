@@ -37,6 +37,11 @@ module SandiMeter
 
       @classes.map! do |klass_params|
         klass_params << loc_checker.check(klass_params, 'class')
+        klass_params << @file_path
+      end
+
+      @missindented_classes.map! do |klass_params|
+        klass_params << @file_path
       end
 
       @methods.each_pair do |klass, methods|

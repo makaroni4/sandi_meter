@@ -12,7 +12,7 @@ describe SandiMeter::Analyzer do
     end
 
     it 'finds indentation warnings for method' do
-      analyzer.classes.should eq([["TestClass", 1, 5, true]])
+      analyzer.classes.should eq([["TestClass", 1, 5, true, test_file_path(3)]])
       analyzer.missindented_classes.should be_empty
     end
 
@@ -35,7 +35,7 @@ describe SandiMeter::Analyzer do
 
     it 'finds indentation warnings for method' do
       analyzer.classes.should be_empty
-      analyzer.missindented_classes.should eq([["MyApp::TestClass", 2, nil]])
+      analyzer.missindented_classes.should eq([["MyApp::TestClass", 2, nil, test_file_path(1)]])
     end
 
     it 'finds methods' do
@@ -52,8 +52,8 @@ describe SandiMeter::Analyzer do
     end
 
     it 'finds classes' do
-      analyzer.classes.should include(["FirstTestClass", 1, 4, true])
-      analyzer.classes.should include(["SecondTestClass", 6, 9, true])
+      analyzer.classes.should include(["FirstTestClass", 1, 4, true, test_file_path(4)])
+      analyzer.classes.should include(["SecondTestClass", 6, 9, true, test_file_path(4)])
       analyzer.missindented_classes.should be_empty
     end
 
@@ -72,7 +72,7 @@ describe SandiMeter::Analyzer do
     end
 
     it 'finds classes' do
-      analyzer.missindented_classes.should eq([["OneLinerClass", 1, nil]])
+      analyzer.missindented_classes.should eq([["OneLinerClass", 1, nil, test_file_path(5)]])
       analyzer.classes.should be_empty
     end
 
@@ -90,8 +90,8 @@ describe SandiMeter::Analyzer do
     end
 
     it 'finds class and subclass' do
-      analyzer.classes.should include(["MyApp::Blah::User", 5, 13, true])
-      analyzer.classes.should include(["MyApp::Blah::User::SubUser", 9, 12, true])
+      analyzer.classes.should include(["MyApp::Blah::User", 5, 13, true, test_file_path(7)])
+      analyzer.classes.should include(["MyApp::Blah::User::SubUser", 9, 12, true, test_file_path(7)])
       analyzer.missindented_classes.should be_empty
     end
 
@@ -111,7 +111,7 @@ describe SandiMeter::Analyzer do
     end
 
     it 'finds class and subclass' do
-      analyzer.classes.should include(["RailsController", 1, 12, true])
+      analyzer.classes.should include(["RailsController", 1, 12, true, test_file_path(8)])
       analyzer.missindented_classes.should be_empty
     end
 
@@ -169,7 +169,7 @@ describe SandiMeter::Analyzer do
     end
 
     it 'are count for class definition' do
-      analyzer.classes.should eq([["Valera", 1, 109, false]])
+      analyzer.classes.should eq([["Valera", 1, 109, false, test_file_path(12)]])
     end
 
     it 'are count for method definition' do
