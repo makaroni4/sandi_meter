@@ -51,3 +51,21 @@ body {
 .plot-charts-item-graph {
   height: 280px;
 }
+
+.details {
+  display: none;
+}
+
+.toggle_report.current_tab {
+  text-decoration: none;
+  cursor: default;
+  pointer-events: none;
+}
+
+.details_table td {
+  border-spacing: 5px;
+}
+
+.details_table th {
+  font-weight: bold;
+}

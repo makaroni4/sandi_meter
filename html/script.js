@@ -61,4 +61,11 @@ $(document).ready(function(){
   plotLine('plot2', data, ['r20', 'r21'], ['under 5 lines', 'more than 5 lines']);
   plotLine('plot3', data, ['r30', 'r31'], ['less than 4 params', 'more than 4 params']);
   plotLine('plot4', data, ['r40', 'r41'], ['one instance variable', 'many instance variables']);
+
+  $('.toggle_report').on('click', function(){
+    $($('.toggle_report.current_tab').data('tab_class')).hide();
+    $('.toggle_report').toggleClass('current_tab');
+
+    $($('.toggle_report.current_tab').data('tab_class')).show();
+  })
 })

@@ -59,7 +59,8 @@ module SandiMeter
       end
 
       scanner = SandiMeter::FileScanner.new(cli.config[:log])
-      data = scanner.scan(cli.config[:path], cli.config[:details])
+      data = scanner.scan(cli.config[:path], cli.config[:details] || cli.config[:graph])
+
       formatter = SandiMeter::Formatter.new
 
       formatter.print_data(data)
@@ -71,6 +72,7 @@ module SandiMeter
         html_generator = SandiMeter::HtmlGenerator.new
         html_generator.copy_assets!(cli.config[:path])
         html_generator.generate_data!(cli.config[:path])
+        html_generator.generate_details!(cli.config[:path], data)
 
         system "open sandi_meter/index.html"
       end
