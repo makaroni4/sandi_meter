@@ -71,6 +71,8 @@ module SandiMeter
         html_generator = SandiMeter::HtmlGenerator.new
         html_generator.copy_assets!(cli.config[:path])
         html_generator.generate_data!(cli.config[:path])
+
+        system "open sandi_meter/index.html"
       end
     end
 
