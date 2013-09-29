@@ -45,6 +45,35 @@ module SandiMeter
       end
     end
 
+    def log_second_rule
+      @output[:second_rule][:log] ||= {}
+      @output[:second_rule][:log][:methods] ||= []
+      @output[:second_rule][:log][:misindented_methods] ||= []
+
+      @data[:methods].each_pair do |klass, methods|
+        methods.select { |m| m[-2] == false }.each do |method_params|
+          params = [klass, method_params.first]
+          # TODO
+          # wrap method param to method class so method_params[1] becomes method.first_line
+          # and method_params[2] method.last_line
+          params << method_params[2] - method_params[1]
+          params << method_params.last
+
+          @output[:second_rule][:log][:methods] << params
+        end
+      end
+
+      @data[:misindented_methods].each_pair do |klass, methods|
+        methods.each do |method_params|
+          params = [klass, method_params.first]
+          params << method_params[1]
+          params << method_params.last
+
+          @output[:second_rule][:log][:misindented_methods] << params
+        end
+      end
+    end
+
     def check_first_rule
       total_classes_amount = @data[:classes].size
       small_classes_amount = @data[:classes].inject(0) do |sum, class_params|
@@ -67,7 +96,7 @@ module SandiMeter
       small_methods_amount = 0
 
       @data[:methods].each_pair do |klass, methods|
-        small_methods_amount += methods.select { |m| m.last == true }.size
+        small_methods_amount += methods.select { |m| m[-2] == true }.size
         total_methods_amount += methods.size
       end
 
@@ -80,6 +109,8 @@ module SandiMeter
       @output[:second_rule][:small_methods_amount] = small_methods_amount
       @output[:second_rule][:total_methods_amount] = total_methods_amount
       @output[:second_rule][:misindented_methods_amount] = misindented_methods_amount
+
+      log_second_rule if @store_details
     end
 
     # TODO

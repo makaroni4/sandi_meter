@@ -17,7 +17,7 @@ describe SandiMeter::Analyzer do
     end
 
     it 'finds methods' do
-      analyzer.methods.should eq({"TestClass"=>[["blah", 2, 4, 0, true]]})
+      analyzer.methods.should eq({"TestClass"=>[["blah", 2, 4, 0, true, test_file_path(3)]]})
       analyzer.misindented_methods.should be_empty
     end
 
@@ -40,7 +40,7 @@ describe SandiMeter::Analyzer do
 
     it 'finds methods' do
       analyzer.methods.should be_empty
-      analyzer.misindented_methods.should eq({"MyApp::TestClass"=>[["blah", 3, nil, 0]]})
+      analyzer.misindented_methods.should eq({"MyApp::TestClass"=>[["blah", 3, nil, 0, test_file_path(1)]]})
     end
   end
 
@@ -58,8 +58,8 @@ describe SandiMeter::Analyzer do
     end
 
     it 'finds methods' do
-      analyzer.methods["FirstTestClass"].should eq([["first_meth", 2, 3, 1, true]])
-      analyzer.methods["SecondTestClass"].should eq([["second_meth", 7, 8, 1, true]])
+      analyzer.methods["FirstTestClass"].should eq([["first_meth", 2, 3, 1, true, test_file_path(4)]])
+      analyzer.methods["SecondTestClass"].should eq([["second_meth", 7, 8, 1, true, test_file_path(4)]])
       analyzer.misindented_methods.should be_empty
     end
   end
@@ -96,9 +96,9 @@ describe SandiMeter::Analyzer do
     end
 
     it 'finds methods' do
-      analyzer.methods["MyApp::Blah"].should eq([["module_meth", 2, 3, 0, true]])
-      analyzer.methods["MyApp::Blah::User"].should eq([["class_meth", 6, 7, 0, true]])
-      analyzer.methods["MyApp::Blah::User::SubUser"].should eq([["sub_meth", 10, 11, 0, true]])
+      analyzer.methods["MyApp::Blah"].should eq([["module_meth", 2, 3, 0, true, test_file_path(7)]])
+      analyzer.methods["MyApp::Blah::User"].should eq([["class_meth", 6, 7, 0, true, test_file_path(7)]])
+      analyzer.methods["MyApp::Blah::User::SubUser"].should eq([["sub_meth", 10, 11, 0, true, test_file_path(7)]])
       analyzer.misindented_methods.should be_empty
     end
   end
@@ -116,9 +116,9 @@ describe SandiMeter::Analyzer do
     end
 
     it 'finds methods' do
-      analyzer.methods["RailsController"].should include(["index", 2, 3, 0, true])
-      analyzer.methods["RailsController"].should include(["destroy", 5, 6, 0, true])
-      analyzer.methods["RailsController"].should include(["private_meth", 9, 10, 0, true])
+      analyzer.methods["RailsController"].should include(["index", 2, 3, 0, true, test_file_path(8)])
+      analyzer.methods["RailsController"].should include(["destroy", 5, 6, 0, true, test_file_path(8)])
+      analyzer.methods["RailsController"].should include(["private_meth", 9, 10, 0, true, test_file_path(8)])
       analyzer.misindented_methods.should be_empty
     end
   end
@@ -173,7 +173,7 @@ describe SandiMeter::Analyzer do
     end
 
     it 'are count for method definition' do
-      analyzer.methods.should eq({"Valera"=>[["doodle", 2, 9, 0, false]]})
+      analyzer.methods.should eq({"Valera"=>[["doodle", 2, 9, 0, false, test_file_path(12)]]})
     end
   end
 

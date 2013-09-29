@@ -47,6 +47,13 @@ module SandiMeter
       @methods.each_pair do |klass, methods|
         methods.each do |method_params|
           method_params << loc_checker.check(method_params, 'def')
+          method_params << @file_path
+        end
+      end
+
+      @misindented_methods.each_pair do |klass, methods|
+        methods.each do |method_params|
+          method_params << @file_path
         end
       end
 

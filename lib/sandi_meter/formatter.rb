@@ -29,11 +29,25 @@ module SandiMeter
     end
 
     def print_log(data)
-      puts "\nClasses with 100+ lines"
-      print_array_of_arrays data[:first_rule][:log][:classes]
+      if data[:first_rule][:log][:classes].any?
+        puts "\nClasses with 100+ lines"
+        print_array_of_arrays data[:first_rule][:log][:classes]
+      end
 
-      puts "\nMissindented classes"
-      print_array_of_arrays data[:first_rule][:log][:misindented_classes]
+      if data[:first_rule][:log][:misindented_classes].any?
+        puts "\nMissindented classes"
+        print_array_of_arrays data[:first_rule][:log][:misindented_classes]
+      end
+
+      if data[:second_rule][:log][:methods].any?
+        puts "\nMethods with 5+ lines"
+        print_array_of_arrays data[:second_rule][:log][:methods]
+      end
+
+      if data[:second_rule][:log][:misindented_methods].any?
+        puts "\nMissindented methods"
+        print_array_of_arrays data[:second_rule][:log][:misindented_methods]
+      end
     end
 
     private
