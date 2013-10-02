@@ -25,9 +25,6 @@ module SandiMeter
         puts "4. No controllers to analyze."
       end
 
-      # TODO
-      # append line number to path like this:
-      # ~/file.rb:777
       print_log(data)
     end
 
@@ -36,27 +33,27 @@ module SandiMeter
 
       if data[:first_rule][:log][:classes].any?
         puts "\nClasses with 100+ lines"
-        print_array_of_arrays [["Class name", "# of lines", "Path"]] + data[:first_rule][:log][:classes]
+        print_array_of_arrays [["Class name", "Size", "Path"]] + data[:first_rule][:log][:classes]
       end
 
       if data[:first_rule][:log][:misindented_classes].any?
         puts "\nMissindented classes"
-        print_array_of_arrays [["Class name", "Path"]] + data[:first_rule][:log][:misindented_classes]
+        print_array_of_arrays [["Class name", "Path"]] + data[:first_rule][:log][:misindented_classes].map { |row| row.delete_at(1); row } # 1 – size, which nil for misindented_classes
       end
 
       if data[:second_rule][:log][:methods].any?
         puts "\nMethods with 5+ lines"
-        print_array_of_arrays [["Class name", "Method name", "# of lines", "Path"]] + data[:second_rule][:log][:methods]
+        print_array_of_arrays [["Class name", "Method name", "Size", "Path"]] + data[:second_rule][:log][:methods]
       end
 
       if data[:second_rule][:log][:misindented_methods].any?
         puts "\nMissindented methods"
-        print_array_of_arrays [["Class name", "Method name", "Line", "Path"]] + data[:second_rule][:log][:misindented_methods]
+        print_array_of_arrays [["Class name", "Method name", "Path"]] + data[:second_rule][:log][:misindented_methods].map { |row| row.delete_at(2); row } # 2 – size, which nil for misindented_methods
       end
 
       if data[:third_rule][:log][:method_calls].any?
         puts "\nMethod calls with 4+ arguments"
-        print_array_of_arrays [["# of arguments", "Line", "Path"]] + data[:third_rule][:log][:method_calls]
+        print_array_of_arrays [["# of arguments", "Path"]] + data[:third_rule][:log][:method_calls]
       end
 
       if data[:fourth_rule][:log][:controllers].any?

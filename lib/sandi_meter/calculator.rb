@@ -35,12 +35,12 @@ module SandiMeter
         # TODO
         # wrap each class params into class and get params with
         # verbose name instead of array keys (class_params[2] should be klass.line_count)
-        log << [class_params.first, class_params.last, class_params[2]] if class_params[-2] == false
+        log << [class_params.first, class_params[2], class_params.last] if class_params[-2] == false
         log
       end
 
       @output[:first_rule][:log][:misindented_classes] = @data[:misindented_classes].inject([]) do |log, class_params|
-        log << [class_params.first, class_params.last]
+        log << [class_params.first, nil, class_params.last]
         log
       end
     end
@@ -66,7 +66,7 @@ module SandiMeter
       @data[:misindented_methods].each_pair do |klass, methods|
         methods.each do |method_params|
           params = [klass, method_params.first]
-          params << method_params[1]
+          params << nil
           params << method_params.last
 
           @output[:second_rule][:log][:misindented_methods] << params

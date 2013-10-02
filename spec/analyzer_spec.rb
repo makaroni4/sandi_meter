@@ -12,17 +12,17 @@ describe SandiMeter::Analyzer do
     end
 
     it 'finds indentation warnings for method' do
-      analyzer.classes.should eq([["TestClass", 1, 5, true, test_file_path(3)]])
+      analyzer.classes.should eq([["TestClass", 1, 5, true, "#{test_file_path(3)}:1"]])
       analyzer.misindented_classes.should be_empty
     end
 
     it 'finds methods' do
-      analyzer.methods.should eq({"TestClass"=>[["blah", 2, 4, 0, true, test_file_path(3)]]})
+      analyzer.methods.should eq({"TestClass"=>[["blah", 2, 4, 0, true, "#{test_file_path(3)}:2"]]})
       analyzer.misindented_methods.should be_empty
     end
 
     it 'finds method calls that brakes third rule' do
-      analyzer.method_calls.should eq([[5, 3, test_file_path(3)]])
+      analyzer.method_calls.should eq([[5, "#{test_file_path(3)}:3"]])
     end
   end
 
@@ -35,12 +35,12 @@ describe SandiMeter::Analyzer do
 
     it 'finds indentation warnings for method' do
       analyzer.classes.should be_empty
-      analyzer.misindented_classes.should eq([["MyApp::TestClass", 2, nil, test_file_path(1)]])
+      analyzer.misindented_classes.should eq([["MyApp::TestClass", 2, nil, "#{test_file_path(1)}:2"]])
     end
 
     it 'finds methods' do
       analyzer.methods.should be_empty
-      analyzer.misindented_methods.should eq({"MyApp::TestClass"=>[["blah", 3, nil, 0, test_file_path(1)]]})
+      analyzer.misindented_methods.should eq({"MyApp::TestClass"=>[["blah", 3, nil, 0, "#{test_file_path(1)}:3"]]})
     end
   end
 
@@ -52,14 +52,14 @@ describe SandiMeter::Analyzer do
     end
 
     it 'finds classes' do
-      analyzer.classes.should include(["FirstTestClass", 1, 4, true, test_file_path(4)])
-      analyzer.classes.should include(["SecondTestClass", 6, 9, true, test_file_path(4)])
+      analyzer.classes.should include(["FirstTestClass", 1, 4, true, "#{test_file_path(4)}:1"])
+      analyzer.classes.should include(["SecondTestClass", 6, 9, true, "#{test_file_path(4)}:6"])
       analyzer.misindented_classes.should be_empty
     end
 
     it 'finds methods' do
-      analyzer.methods["FirstTestClass"].should eq([["first_meth", 2, 3, 1, true, test_file_path(4)]])
-      analyzer.methods["SecondTestClass"].should eq([["second_meth", 7, 8, 1, true, test_file_path(4)]])
+      analyzer.methods["FirstTestClass"].should eq([["first_meth", 2, 3, 1, true, "#{test_file_path(4)}:2"]])
+      analyzer.methods["SecondTestClass"].should eq([["second_meth", 7, 8, 1, true, "#{test_file_path(4)}:7"]])
       analyzer.misindented_methods.should be_empty
     end
   end
@@ -72,7 +72,7 @@ describe SandiMeter::Analyzer do
     end
 
     it 'finds classes' do
-      analyzer.misindented_classes.should eq([["OneLinerClass", 1, nil, test_file_path(5)]])
+      analyzer.misindented_classes.should eq([["OneLinerClass", 1, nil, "#{test_file_path(5)}:1"]])
       analyzer.classes.should be_empty
     end
 
@@ -90,15 +90,15 @@ describe SandiMeter::Analyzer do
     end
 
     it 'finds class and subclass' do
-      analyzer.classes.should include(["MyApp::Blah::User", 5, 13, true, test_file_path(7)])
-      analyzer.classes.should include(["MyApp::Blah::User::SubUser", 9, 12, true, test_file_path(7)])
+      analyzer.classes.should include(["MyApp::Blah::User", 5, 13, true, "#{test_file_path(7)}:5"])
+      analyzer.classes.should include(["MyApp::Blah::User::SubUser", 9, 12, true, "#{test_file_path(7)}:9"])
       analyzer.misindented_classes.should be_empty
     end
 
     it 'finds methods' do
-      analyzer.methods["MyApp::Blah"].should eq([["module_meth", 2, 3, 0, true, test_file_path(7)]])
-      analyzer.methods["MyApp::Blah::User"].should eq([["class_meth", 6, 7, 0, true, test_file_path(7)]])
-      analyzer.methods["MyApp::Blah::User::SubUser"].should eq([["sub_meth", 10, 11, 0, true, test_file_path(7)]])
+      analyzer.methods["MyApp::Blah"].should eq([["module_meth", 2, 3, 0, true, "#{test_file_path(7)}:2"]])
+      analyzer.methods["MyApp::Blah::User"].should eq([["class_meth", 6, 7, 0, true, "#{test_file_path(7)}:6"]])
+      analyzer.methods["MyApp::Blah::User::SubUser"].should eq([["sub_meth", 10, 11, 0, true, "#{test_file_path(7)}:10"]])
       analyzer.misindented_methods.should be_empty
     end
   end
@@ -111,14 +111,14 @@ describe SandiMeter::Analyzer do
     end
 
     it 'finds class and subclass' do
-      analyzer.classes.should include(["RailsController", 1, 12, true, test_file_path(8)])
+      analyzer.classes.should include(["RailsController", 1, 12, true, "#{test_file_path(8)}:1"])
       analyzer.misindented_classes.should be_empty
     end
 
     it 'finds methods' do
-      analyzer.methods["RailsController"].should include(["index", 2, 3, 0, true, test_file_path(8)])
-      analyzer.methods["RailsController"].should include(["destroy", 5, 6, 0, true, test_file_path(8)])
-      analyzer.methods["RailsController"].should include(["private_meth", 9, 10, 0, true, test_file_path(8)])
+      analyzer.methods["RailsController"].should include(["index", 2, 3, 0, true, "#{test_file_path(8)}:2"])
+      analyzer.methods["RailsController"].should include(["destroy", 5, 6, 0, true, "#{test_file_path(8)}:5"])
+      analyzer.methods["RailsController"].should include(["private_meth", 9, 10, 0, true, "#{test_file_path(8)}:9"])
       analyzer.misindented_methods.should be_empty
     end
   end
@@ -157,7 +157,7 @@ describe SandiMeter::Analyzer do
     end
 
     it 'counts arguments' do
-      analyzer.method_calls.should eq([[5, 3, test_file_path(11)]])
+      analyzer.method_calls.should eq([[5, "#{test_file_path(11)}:3"]])
     end
   end
 
@@ -169,11 +169,11 @@ describe SandiMeter::Analyzer do
     end
 
     it 'are count for class definition' do
-      analyzer.classes.should eq([["Valera", 1, 109, false, test_file_path(12)]])
+      analyzer.classes.should eq([["Valera", 1, 109, false, "#{test_file_path(12)}:1"]])
     end
 
     it 'are count for method definition' do
-      analyzer.methods.should eq({"Valera"=>[["doodle", 2, 9, 0, false, test_file_path(12)]]})
+      analyzer.methods.should eq({"Valera"=>[["doodle", 2, 9, 0, false, "#{test_file_path(12)}:2"]]})
     end
   end
 

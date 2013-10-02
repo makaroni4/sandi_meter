@@ -44,9 +44,11 @@ module SandiMeter
       details = ""
 
       if data[:first_rule][:log][:classes].any?
+        data[:first_rule][:log][:misindented_classes] ||= []
+
         details << string_to_h2("Classes with 100+ lines")
         details << generate_details_block(
-          ["Class name", "# of lines", "Path"],
+          ["Class name", "Size", "Path"],
           proper_data: data[:first_rule][:log][:classes],
           warning_data: data[:first_rule][:log][:misindented_classes],
           warning_message: 'Misindented classes'
@@ -54,9 +56,11 @@ module SandiMeter
       end
 
       if data[:second_rule][:log][:methods].any?
+        data[:second_rule][:log][:misindented_methods] ||= []
+
         details << string_to_h2("Methods with 5+ lines")
         details << generate_details_block(
-          ["Class name", "Method name", "# of lines", "Path"],
+          ["Class name", "Method name", "Size", "Path"],
           proper_data: data[:second_rule][:log][:methods].sort_by { |a| -a[2].to_i },
           warning_data: data[:second_rule][:log][:misindented_methods].sort_by { |a| -a[1].to_i },
           warning_message: 'Misindented methods'
@@ -66,7 +70,7 @@ module SandiMeter
       if data[:third_rule][:log][:method_calls].any?
         details << string_to_h2("Method calls with 4+ arguments")
         details << generate_details_block(
-          ["# of arguments", "Lines", "Path"],
+          ["# of arguments", "Path"],
           proper_data: data[:third_rule][:log][:method_calls]
         )
       end

@@ -37,23 +37,23 @@ module SandiMeter
 
       @classes.map! do |klass_params|
         klass_params << loc_checker.check(klass_params, 'class')
-        klass_params << @file_path
+        klass_params << "#{@file_path}:#{klass_params[1]}"
       end
 
       @misindented_classes.map! do |klass_params|
-        klass_params << @file_path
+        klass_params << "#{@file_path}:#{klass_params[1]}"
       end
 
       @methods.each_pair do |klass, methods|
         methods.each do |method_params|
           method_params << loc_checker.check(method_params, 'def')
-          method_params << @file_path
+          method_params << "#{@file_path}:#{method_params[1]}"
         end
       end
 
       @misindented_methods.each_pair do |klass, methods|
         methods.each do |method_params|
-          method_params << @file_path
+          method_params << "#{@file_path}:#{method_params[1]}"
         end
       end
 
@@ -139,7 +139,7 @@ module SandiMeter
           counter = SandiMeter::MethodArgumentsCounter.new
           arguments_count, line = counter.count(sexp)
 
-          @method_calls << [arguments_count, line, @file_path]
+          @method_calls << [arguments_count, "#{@file_path}:#{line}"]
 
           find_args_add_block(sexp)
         else

@@ -66,15 +66,19 @@ module SandiMeter
       formatter.print_data(data)
 
       if cli.config[:graph]
-        logger = SandiMeter::Logger.new
-        logger.log!(cli.config[:path], data)
+        if File.directory?(cli.config[:path])
+          logger = SandiMeter::Logger.new
+          logger.log!(cli.config[:path], data)
 
-        html_generator = SandiMeter::HtmlGenerator.new
-        html_generator.copy_assets!(cli.config[:path])
-        html_generator.generate_data!(cli.config[:path])
-        html_generator.generate_details!(cli.config[:path], data)
+          html_generator = SandiMeter::HtmlGenerator.new
+          html_generator.copy_assets!(cli.config[:path])
+          html_generator.generate_data!(cli.config[:path])
+          html_generator.generate_details!(cli.config[:path], data)
 
-        system "open sandi_meter/index.html"
+          system "open sandi_meter/index.html"
+        else
+          puts "WARNING!!! HTML mode works only if you scan folder."
+        end
       end
     end
 
