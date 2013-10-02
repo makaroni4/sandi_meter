@@ -76,6 +76,9 @@ body {
   line-height: 18px;
 }
 
+.details-stats td.warning {
+  color: red;
+}
 
 .main-menu {
   margin-bottom: 30px;
