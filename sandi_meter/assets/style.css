@@ -52,20 +52,67 @@ body {
   height: 280px;
 }
 
-.details {
-  display: none;
-}
-
 .toggle_report.current_tab {
   text-decoration: none;
   cursor: default;
   pointer-events: none;
 }
 
-.details_table td {
-  border-spacing: 5px;
+.details {
+  display: none;
 }
 
-.details_table th {
-  font-weight: bold;
+.details h2 {
+  margin: 0 0 14px;
+}
+
+.details-stats {
+  font-family: monospace;
+  margin-bottom: 40px;
+}
+
+.details-stats td {
+  padding-right: 20px;
+  line-height: 18px;
+}
+
+
+.main-menu {
+  margin-bottom: 30px;
+}
+
+.main-menu {
+  text-align: center;
+}
+
+.main-menu a {
+  display: inline-block;
+  padding: 4px 16px;
+  font-size: 18px;
+  text-decoration: none;
+  color: black;
+  border: 1px solid rgb(158, 158, 158);
+}
+
+.main-menu a:hover {
+  color: rgb(65, 131, 196);;
+}
+
+.main-menu a:first-child {
+  border-right: none;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.main-menu a:last-child {
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.main-menu-active {
+  background: rgb(240, 240, 240);
+}
+
+.main-menu .main-menu-active:hover {
+  color: black;
 }
