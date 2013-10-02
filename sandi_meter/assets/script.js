@@ -62,10 +62,14 @@ $(document).ready(function(){
   plotLine('plot3', data, ['r30', 'r31'], ['less than 4 params', 'more than 4 params']);
   plotLine('plot4', data, ['r40', 'r41'], ['one instance variable', 'many instance variables']);
 
-  $('.toggle_report').on('click', function(){
-    $($('.toggle_report.current_tab').data('tab_class')).hide();
-    $('.toggle_report').toggleClass('current_tab');
-
-    $($('.toggle_report.current_tab').data('tab_class')).show();
-  })
+  var $tabs = $(".js-tab-item");
+  var $menuItems = $(".js-menu-item")
+  $menuItems.on("click", function(e){
+    var rel = $(this).data("rel");
+    $tabs.hide();
+    $menuItems.removeClass("main-menu-active");
+    $(rel).show();
+    $(this).addClass("main-menu-active");
+    e.preventDefault();
+  });
 })
