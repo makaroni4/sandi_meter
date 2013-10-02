@@ -32,6 +32,8 @@ module SandiMeter
         @calculator.push(data)
       rescue Exception => e
         if @log_errors
+          # TODO
+          # add backtrace
           puts "Checkout #{path} for:"
           puts "\t#{e.message}"
         end

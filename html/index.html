@@ -13,13 +13,11 @@
   </script>
 </head>
 <body>
-  <a href="https://github.com/makaroni4/sandi_meter"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_green_007200.png" alt="Fork me on GitHub"></a>
+  <a href="https://github.com/makaroni4/sandi_meter"><img style="position: absolute; top: 0; left: 0; border: 0;" src="assets/forkme.png" alt="Fork me on GitHub"></a>
   <div class="container">
     <header>
       <h1 class="main-title">Sandi Metz rules</h1>
       <h2 class="main-description js-report-date"></h2>
-      <a href="#report" class="toggle_report current_tab" data-tab_class=".plot-charts">Charts</a>
-      <a href="#details" class="toggle_report" data-tab_class=".details">Details</a>
     </header>
     <section class="pie-charts">
       <div id="pie1" class="pie-charts-item"></div>
@@ -28,7 +26,10 @@
       <div id="pie4" class="pie-charts-item"></div>
       <div class="clearfix"></div>
     </section>
-    <section class="plot-charts">
+    <nav class="main-menu">
+      <a href="#" class="main-menu-active js-menu-item" data-rel=".js-charts">Charts</a><a href="#" class="js-menu-item" data-rel=".js-details">Details</a>
+    </nav>
+    <section class="plot-charts js-charts js-tab-item">
       <div class="plot-charts-item">
         <div class="plot-charts-item-caption">Number of 100 line classes vs time</div>
         <div class="plot-charts-item-graph" id="plot1"></div>
@@ -48,7 +49,7 @@
       </div>
       <div class="clearfix"></div>
     </section>
-    <section class="details">
+    <section class="details js-details js-tab-item">
       <% details %>
     </section>
     <footer class="main-footer">

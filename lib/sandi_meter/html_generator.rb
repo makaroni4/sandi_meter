@@ -8,7 +8,7 @@ module SandiMeter
       FileUtils.mkdir(asset_dir_path) unless Dir.exists?(asset_dir_path)
 
 
-      Dir[File.join(File.dirname(__FILE__), "../../html/*.{js,css}")].each do |file|
+      Dir[File.join(File.dirname(__FILE__), "../../html/*.{js,css,png}")].each do |file|
         FileUtils.cp file, File.join(asset_dir_path, File.basename(file))
       end
 
@@ -63,22 +63,22 @@ module SandiMeter
         details << string_to_h2("Methods with 5+ lines")
         details << generate_details_block(
           ["Class name", "Method name", "# of lines", "Path"],
-          data[:second_rule][:log][:methods]
+          data[:second_rule][:log][:methods].sort_by { |a| -a[2].to_i }
         )
       end
 
       if data[:second_rule][:log][:misindented_methods].any?
         details << string_to_h2("Missindented methods")
         details << generate_details_block(
-          ["Class name", "Method name", "Line", "Path"],
-          data[:second_rule][:log][:misindented_methods]
+          ["Method", "Lines", "Path"],
+          data[:second_rule][:log][:misindented_methods].sort_by { |a| -a[1].to_i }
         )
       end
 
       if data[:third_rule][:log][:method_calls].any?
         details << string_to_h2("Method calls with 4+ arguments")
         details << generate_details_block(
-          ["# of arguments", "Line", "Path"],
+          ["# of arguments", "Lines", "Path"],
           data[:third_rule][:log][:method_calls]
         )
       end
@@ -103,7 +103,7 @@ module SandiMeter
     private
     def generate_details_block(head_row, data_rows)
       block_partial = File.read File.join(File.dirname(__FILE__), "../../html", "_detail_block.html")
-      block_partial.gsub!('<% head %>', array_to_tr(head_row, "th"))
+      # block_partial.gsub!('<% head %>', array_to_tr(head_row, "th"))
       block_partial.gsub!('<% rows %>', data_rows.map { |row| array_to_tr(row) }.join(''))
       block_partial
     end
