@@ -136,6 +136,18 @@ describe SandiMeter::Analyzer do
       end
     end
 
+    context 'in controller class with non instance variables' do
+      let(:test_class) { test_file_path('14_controller') }
+
+      before do
+        analyzer.analyze(test_class)
+      end
+
+      it 'does not find instance variables' do
+        analyzer.instance_variables.should eq({"GuestController"=>{"create_guest_user"=>[]}})
+      end
+    end
+
     context 'not in controller class' do
       let(:test_class) { test_file_path(10) }
 

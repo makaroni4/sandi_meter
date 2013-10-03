@@ -157,7 +157,7 @@ module SandiMeter
         if sexp.first == :assign
           @instance_variables[current_namespace] ||= {}
           @instance_variables[current_namespace][method_name] ||= []
-          @instance_variables[current_namespace][method_name] << sexp[1][1][1]
+          @instance_variables[current_namespace][method_name] << sexp[1][1][1] if sexp[1][1][0] == :@ivar
         else
           scan_def_for_ivars(current_namespace, method_name, sexp)
         end
