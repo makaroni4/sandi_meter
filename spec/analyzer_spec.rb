@@ -159,6 +159,23 @@ describe SandiMeter::Analyzer do
         analyzer.instance_variables.should be_empty
       end
     end
+
+    context 'in controller class with private method' do
+      let(:test_class) { test_file_path("15_controller") }
+
+      before do
+        analyzer.analyze(test_class)
+      end
+
+      it 'does not scan private methods' do
+        # TODO fix this one
+        # right now it is
+        # {"UsersController"=>{"find_user"=>["@user"]}}
+        # but private method should not be scan as @severin mentioned in
+        # https://github.com/makaroni4/sandi_meter/issues/15
+        analyzer.instance_variables["UsersController"].should_not have_key("find_user")
+      end
+    end
   end
 
   describe 'hash method arguments' do
