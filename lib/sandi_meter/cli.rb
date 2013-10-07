@@ -20,6 +20,12 @@ module SandiMeter
       description: "Show syntax error and indentation log output",
       boolean: true
 
+    option :details,
+      short: "-d",
+      long: "--details",
+      description: "Show details (path, line number)",
+      boolean: true
+
     option :graph,
       short: "-g",
       long: "--graph",
@@ -53,18 +59,26 @@ module SandiMeter
       end
 
       scanner = SandiMeter::FileScanner.new(cli.config[:log])
-      data = scanner.scan(cli.config[:path])
+      data = scanner.scan(cli.config[:path], cli.config[:details] || cli.config[:graph])
+
       formatter = SandiMeter::Formatter.new
 
       formatter.print_data(data)
 
       if cli.config[:graph]
-        logger = SandiMeter::Logger.new
-        logger.log!(cli.config[:path], data)
+        if File.directory?(cli.config[:path])
+          logger = SandiMeter::Logger.new
+          logger.log!(cli.config[:path], data)
 
-        html_generator = SandiMeter::HtmlGenerator.new
-        html_generator.copy_assets!(cli.config[:path])
-        html_generator.generate_data!(cli.config[:path])
+          html_generator = SandiMeter::HtmlGenerator.new
+          html_generator.copy_assets!(cli.config[:path])
+          html_generator.generate_data!(cli.config[:path])
+          html_generator.generate_details!(cli.config[:path], data)
+
+          system "open sandi_meter/index.html"
+        else
+          puts "WARNING!!! HTML mode works only if you scan folder."
+        end
       end
     end
 
