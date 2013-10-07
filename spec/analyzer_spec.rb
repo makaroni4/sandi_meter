@@ -167,14 +167,23 @@ describe SandiMeter::Analyzer do
         analyzer.analyze(test_class)
       end
 
-      it 'does not scan private methods' do
-        # TODO fix this one
-        # right now it is
-        # {"UsersController"=>{"find_user"=>["@user"]}}
-        # but private method should not be scan as @severin mentioned in
-        # https://github.com/makaroni4/sandi_meter/issues/15
+      it 'finds method defined after public keyword' do
+        analyzer.instance_variables["UsersController"].should have_key("create")
+      end
+
+      it 'omits actions without instance variables' do
+        analyzer.instance_variables["UsersController"].should_not have_key("show")
+      end
+
+      it 'omits private methods' do
         analyzer.instance_variables["UsersController"].should_not have_key("find_user")
       end
+
+      it 'omits protected methods' do
+        analyzer.instance_variables["UsersController"].should_not have_key("protected_find_user")
+      end
+
+
     end
   end
 

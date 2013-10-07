@@ -8,4 +8,14 @@ class UsersController
   def find_user
     @user = User.find(params[:id])
   end
+
+  protected
+  def protected_find_user
+    @user = User.find(params[:id])
+  end
+
+  public
+  def create
+    @user = User.new(params[:user])
+  end
 end

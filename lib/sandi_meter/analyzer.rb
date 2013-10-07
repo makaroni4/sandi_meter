@@ -14,6 +14,9 @@ module SandiMeter
       @methods = {}
       @method_calls = []
       @instance_variables = {}
+
+      @parent_token = nil
+      @private_or_protected = false
     end
 
     def analyze(file_path)
@@ -168,6 +171,7 @@ module SandiMeter
       sexp.each do |element|
         next unless element.kind_of?(Array)
 
+        @parent_token = element.first
         case element.first
         when :def
           method_params = find_method_params(element)
@@ -182,10 +186,26 @@ module SandiMeter
             @methods[current_namespace] ||= []
             @methods[current_namespace] << method_params
           end
-          scan_def_for_ivars(current_namespace, method_params.first, element) if @scan_instance_variables
+          if @scan_instance_variables && !@private_or_protected
+            scan_def_for_ivars(current_namespace, method_params.first, element)
+          end
+
           find_args_add_block(element)
         when :module, :class
           scan_class_sexp(element, current_namespace)
+        when :vcall
+          if element[1].first == :@ident
+            case element[1][1]
+            when "private"
+              @private_or_protected = true
+            when "public"
+              @private_or_protected = false
+            else
+              scan_sexp(element, current_namespace)
+            end
+          else
+            scan_sexp(element, current_namespace)
+          end
         else
           scan_sexp(element, current_namespace)
         end
