@@ -45,6 +45,9 @@ module SandiMeter
 
       if data[:first_rule][:log][:classes].any?
         data[:first_rule][:log][:misindented_classes] ||= []
+        data[:first_rule][:log][:misindented_classes].each do |class_params|
+          class_params.insert(1, nil)
+        end
 
         details << string_to_h2("Classes with 100+ lines")
         details << generate_details_block(
@@ -57,6 +60,9 @@ module SandiMeter
 
       if data[:second_rule][:log][:methods].any?
         data[:second_rule][:log][:misindented_methods] ||= []
+        data[:second_rule][:log][:misindented_methods].each do |method_params|
+          method_params.insert(1, nil)
+        end
 
         details << string_to_h2("Methods with 5+ lines")
         details << generate_details_block(
