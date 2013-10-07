@@ -54,6 +54,7 @@ module SandiMeter
           ["Class name", "Size", "Path"],
           proper_data: data[:first_rule][:log][:classes],
           warning_data: data[:first_rule][:log][:misindented_classes],
+          hint: "NOTE: Red classes are misindented. Start improving your project by fixing them.",
           warning_message: 'Misindented classes'
         )
       end
@@ -61,7 +62,7 @@ module SandiMeter
       if data[:second_rule][:log][:methods].any?
         data[:second_rule][:log][:misindented_methods] ||= []
         data[:second_rule][:log][:misindented_methods].each do |method_params|
-          method_params.insert(1, nil)
+          method_params.insert(2, nil)
         end
 
         details << string_to_h2("Methods with 5+ lines")
@@ -69,6 +70,7 @@ module SandiMeter
           ["Class name", "Method name", "Size", "Path"],
           proper_data: data[:second_rule][:log][:methods].sort_by { |a| -a[2].to_i },
           warning_data: data[:second_rule][:log][:misindented_methods].sort_by { |a| -a[1].to_i },
+          hint: "NOTE: Red methods are misindented. Continue your way to perfect code by fixing them.",
           warning_message: 'Misindented methods'
         )
       end
@@ -110,7 +112,12 @@ module SandiMeter
       end
 
       block_partial.gsub!('<% rows %>', table_rows)
+      block_partial << hint(data[:hint]) if data[:hint]
       block_partial
+    end
+
+    def hint(string)
+      %(<div class="hint">#{string}</div>)
     end
 
     def string_to_h2(string)

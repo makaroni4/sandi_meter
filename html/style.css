@@ -119,3 +119,10 @@ body {
 .main-menu .main-menu-active:hover {
   color: black;
 }
+
+.hint {
+  margin: -40px 0 40px 0;
+  font-family: monospace;
+  font-style: italic;
+  font-weight: normal;
+}
