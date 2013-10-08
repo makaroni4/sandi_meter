@@ -23,13 +23,13 @@ module SandiMeter
     option :details,
       short: "-d",
       long: "--details",
-      description: "Show details (path, line number)",
+      description: "CLI mode. Show details (path, line number)",
       boolean: true
 
     option :graph,
       short: "-g",
       long: "--graph",
-      description: "Create folder and log data to graph",
+      description: "HTML mode. Create folder, log data and output stats to HTML file.",
       boolean: true
 
     option :help,

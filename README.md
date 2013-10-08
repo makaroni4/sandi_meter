@@ -15,25 +15,58 @@ Static analysis tool for checking your Ruby code for [Sandi Metz' four rules](ht
 gem install sandi_meter
 
 sandi_meter --help
--g, --graph                      Create folder and log data to graph
--l, --log                        Show syntax error and indentation log output
--p, --path PATH                  Path to folder or file to analyze
--r, --rules                      Show rules
--h, --help                       Help
+    -d, --details                    CLI mode. Show details (path, line number)
+    -g, --graph                      HTML mode. Create folder, log data and output stats to HTML file.
+    -l, --log                        Show syntax error and indentation log output
+    -p, --path PATH                  Path to folder or file to analyze (default is ".")
+    -r, --rules                      Show rules
+    -h, --help                       Help
 
-sandi_meter -p ~/your/ruby/or/rails/project
+cd ~/your/ruby/or/rails/project
+sandi_meter -d
 
-1. 94% of classes are under 100 lines.
-2. 53% of methods are under 5 lines.
-3. 98% of methods calls accepts are less than 4 parameters.
-4. 21% of controllers have one instance variable per action.
+1. 85% of classes are under 100 lines.
+2. 45% of methods are under 5 lines.
+3. 99% of method calls accepted are less than 4 parameters.
+4. 66% of controllers have one instance variable per action.
+
+Classes with 100+ lines
+  Class name                 | Size  | Path
+  SandiMeter::Analyzer       | 219   | ./lib/sandi_meter/analyzer.rb:7
+  SandiMeter::Calculator     | 172   | ./lib/sandi_meter/calculator.rb:2
+  SandiMeter::HtmlGenerator  | 135   | ./lib/sandi_meter/html_generator.rb:5
+  Valera                     | 109   | ./spec/test_classes/12.rb:1
+
+Missindented classes
+  Class name        | Path
+  MyApp::TestClass  | ./spec/test_classes/1.rb:2
+  OneLinerClass     | ./spec/test_classes/5.rb:1
+
+Methods with 5+ lines
+  Class name                          | Method name                   | Size  | Path
+  SandiMeter::Analyzer                | initialize                    | 10    | ./lib/sandi_meter/analyzer.rb:10
+  SandiMeter::Analyzer                | analyze                       | 13    | ./lib/sandi_meter/analyzer.rb:22
+
+Missindented methods
+  Class name        | Method name  | Path
+  MyApp::TestClass  | blah         | ./spec/test_classes/1.rb:3
+
+Method calls with 4+ arguments
+  # of arguments  | Path
+  5               | ./lib/sandi_meter/html_generator.rb:55
+  5               | ./lib/sandi_meter/html_generator.rb:71
+
+Controllers with 1+ instance variables
+  Controller name         | Action name  | Instance variables
+  AnotherUsersController  | index        | @users, @excess_variable
 ~~~
 
 ## HTML mode
 
 Try using gem with `-g (--graph)` option, so it will create a folder with beautiful html output and log file with results of any scan.
 
-![SandiMeter HTML mode](http://img545.imageshack.us/img545/5601/t8qk.png)
+![SandiMeter HTML mode pie charts](http://imageshack.us/a/img823/7653/hns3.png)
+![SandiMeter HTML mode details](http://imageshack.us/a/img820/8711/bygo.png)
 
 ## Ruby script mode
 
