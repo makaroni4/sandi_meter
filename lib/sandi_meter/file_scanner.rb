@@ -8,14 +8,14 @@ module SandiMeter
       @calculator = SandiMeter::Calculator.new
     end
 
-    def scan(path)
+    def scan(path, store_details = false)
       if File.directory?(path)
         scan_dir(path)
       else
         scan_file(path)
       end
 
-      @calculator.calculate!
+      @calculator.calculate!(store_details)
     end
 
     private
@@ -32,6 +32,8 @@ module SandiMeter
         @calculator.push(data)
       rescue Exception => e
         if @log_errors
+          # TODO
+          # add backtrace
           puts "Checkout #{path} for:"
           puts "\t#{e.message}"
         end
