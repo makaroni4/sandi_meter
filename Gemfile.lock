@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    sandi_meter (0.0.6)
+    sandi_meter (1.0.0)
       mixlib-cli
 
 GEM
