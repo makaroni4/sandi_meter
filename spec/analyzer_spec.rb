@@ -4,7 +4,7 @@ require_relative '../lib/sandi_meter/analyzer'
 describe SandiMeter::Analyzer do
   let(:analyzer) { SandiMeter::Analyzer.new }
 
-  describe 'finds properly indented classes with lines' do
+  describe 'properly indented classes with lines' do
     let(:test_class) { test_file_path(3) }
 
     before do
@@ -224,6 +224,27 @@ describe SandiMeter::Analyzer do
 
     it 'is not scanned' do
       analyzer.method_calls.should be_empty
+    end
+  end
+
+  describe 'analazing complex methods' do
+    let(:test_class) { test_file_path(14) }
+    let(:methods) { analyzer.methods["TestClass"] }
+
+    before do
+      analyzer.analyze(test_class)
+    end
+
+    it 'mark 4line methods good' do
+      methods.should include(["render4", 2, 7, 0, true, "#{test_file_path(14)}:2"])
+    end
+
+    it 'mark 5line methods good' do
+      methods.should include(["render5", 9, 15, 0, true, "#{test_file_path(14)}:9"])
+    end
+
+    it 'mark 6line methods bad' do
+      methods.should include(["render6", 17, 24, 0, false, "#{test_file_path(14)}:17"])
     end
   end
 end

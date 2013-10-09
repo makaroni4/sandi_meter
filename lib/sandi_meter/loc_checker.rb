@@ -13,7 +13,7 @@ module SandiMeter
 
     private
     def locs_size(first_line, last_line)
-      file_lines[first_line - 1..last_line - 1].size
+      last_line - first_line - 1
     end
   end
 end
