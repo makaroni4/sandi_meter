@@ -75,7 +75,8 @@ module SandiMeter
           html_generator.generate_data!(cli.config[:path])
           html_generator.generate_details!(cli.config[:path], data)
 
-          system "open sandi_meter/index.html"
+          index_html_path = File.join(cli.config[:path], 'sandi_meter/index.html')
+          system "open #{index_html_path}"
         else
           puts "WARNING!!! HTML mode works only if you scan folder."
         end
