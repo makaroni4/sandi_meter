@@ -1,7 +1,13 @@
 function plotDonut(value1, value2, label1, label2, id) {
   var data = [];
-  data.push({ value: value1, label: label1 }) if value1 > 0;
-  data.push({ value: value2, label: label2 }) if value2 > 0;
+
+  if(value1 > 0) {
+    data.push({ value: value1, label: label1 });
+  }
+
+  if(value2 > 0){
+    data.push({ value: value2, label: label2 });
+  }
 
   console.log(data);
   Morris.Donut({
