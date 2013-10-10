@@ -1,7 +1,9 @@
+# encoding: utf-8
 require 'mixlib/cli'
 require 'sandi_meter/file_scanner'
 require 'sandi_meter/formatter'
 require 'sandi_meter/logger'
+require 'sandi_meter/version'
 require 'sandi_meter/html_generator'
 
 module SandiMeter
@@ -32,6 +34,12 @@ module SandiMeter
       description: "HTML mode. Create folder, log data and output stats to HTML file.",
       boolean: true
 
+    option :version,
+      short: "-v",
+      long: "--version",
+      description: "Gem version",
+      boolean: true
+
     option :help,
       short: "-h",
       long: "--help",
@@ -52,6 +60,12 @@ module SandiMeter
     def self.execute
       cli = CommandParser.new
       cli.parse_options
+
+      if cli.config[:version]
+        # stolen from gem 'bubs' :)
+        puts "SandiMeter ".tr('A-Za-z1-90', 'Ⓐ-Ⓩⓐ-ⓩ①-⑨⓪').split('').join(' ') + SandiMeter::VERSION
+        exit 0
+      end
 
       if cli.config[:rules]
         show_sandi_rules
