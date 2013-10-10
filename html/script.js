@@ -5,7 +5,7 @@ function plotDonut(value1, value2, label1, label2, id) {
     data.push({ value: value1, label: label1 });
   }
 
-  if(value2 > 2){
+  if(value2 > 0){
     data.push({ value: value2, label: label2 });
   }
 

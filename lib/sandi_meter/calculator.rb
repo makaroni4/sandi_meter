@@ -35,7 +35,7 @@ module SandiMeter
         # TODO
         # wrap each class params into class and get params with
         # verbose name instead of array keys (class_params[2] should be klass.line_count)
-        log << [class_params.first, class_params[2], class_params.last] if class_params[-2] == false
+        log << [class_params.first, class_params[2] - class_params[1] - 1, class_params.last] if class_params[-2] == false
         log
       end
 
@@ -56,7 +56,7 @@ module SandiMeter
           # TODO
           # wrap method param to method class so method_params[1] becomes method.first_line
           # and method_params[2] method.last_line
-          params << method_params[2] - method_params[1]
+          params << method_params[2] - method_params[1] - 1
           params << method_params.last
 
           @output[:second_rule][:log][:methods] << params
