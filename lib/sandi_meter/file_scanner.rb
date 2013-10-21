@@ -9,6 +9,8 @@ module SandiMeter
     end
 
     def scan(path, store_details = false)
+      read_ignore_file(path) unless @exclude_patterns
+
       if File.directory?(path)
         scan_dir(path)
       else
@@ -20,8 +22,15 @@ module SandiMeter
 
     private
     def scan_dir(path)
-      Dir["#{path}/**/*.rb"].each do |file|
+      Dir["#{path}/**/*.rb"].reject { |f| @exclude_patterns && f =~ /#{@exclude_patterns}/ }.each do |file|
         scan_file(file)
+      end
+    end
+
+    def read_ignore_file(path)
+      ignore_file_path = File.join(path, 'sandi_meter', '.sandi_meter')
+      if File.exists?(ignore_file_path)
+        @exclude_patterns ||= File.read(ignore_file_path).split("\n").join("|")
       end
     end
 

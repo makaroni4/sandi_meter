@@ -89,6 +89,14 @@ module SandiMeter
           html_generator.generate_data!(cli.config[:path])
           html_generator.generate_details!(cli.config[:path], data)
 
+          # put ignore file
+          ignore_file_path = File.join(cli.config[:path], 'sandi_meter', '.sandi_meter')
+          if File.directory?(cli.config[:path]) && !File.exists?(ignore_file_path)
+            File.open(ignore_file_path, "w") do |file|
+              file.write %w(db vendor).join("\n")
+            end
+          end
+
           index_html_path = File.join(cli.config[:path], 'sandi_meter/index.html')
           system "open #{index_html_path}"
         else
