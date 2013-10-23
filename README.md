@@ -68,6 +68,8 @@ Try using gem with `-g (--graph)` option, so it will create a folder with beauti
 ![SandiMeter HTML mode pie charts](http://imageshack.us/a/img823/7653/hns3.png)
 ![SandiMeter HTML mode details](http://imageshack.us/a/img820/8711/bygo.png)
 
+Add ignore files and folders in `sandi_meter/.sandi_meter` file.
+
 ## Ruby script mode
 
 ~~~ruby
