@@ -12,17 +12,34 @@ describe SandiMeter::Analyzer do
     end
 
     it 'finds indentation warnings for method' do
-      analyzer.classes.should eq([["TestClass", 1, 5, true, "#{test_file_path(3)}:1"]])
-      analyzer.misindented_classes.should be_empty
+      klass = analyzer.classes.find { |c| c.name == "TestClass" }
+
+      klass.should have_attributes(
+        first_line: 1,
+        last_line: 5,
+        path: test_file_path(3)
+      )
     end
 
     it 'finds methods' do
-      analyzer.methods.should eq({"TestClass"=>[["blah", 2, 4, 0, true, "#{test_file_path(3)}:2"]]})
-      analyzer.misindented_methods.should be_empty
+      method = analyzer.methods["TestClass"].find { |m| m.name == "blah" }
+
+      method.should have_attributes(
+        first_line: 2,
+        last_line: 4,
+        number_of_arguments: 0,
+        path: test_file_path(3)
+      )
     end
 
     it 'finds method calls that brakes third rule' do
-      analyzer.method_calls.should eq([[5, "#{test_file_path(3)}:3"]])
+      method_call = analyzer.method_calls.first
+
+      method_call.should have_attributes(
+        first_line: 3,
+        number_of_arguments: 5,
+        path: test_file_path(3)
+      )
     end
   end
 
@@ -34,13 +51,24 @@ describe SandiMeter::Analyzer do
     end
 
     it 'finds indentation warnings for method' do
-      analyzer.classes.should be_empty
-      analyzer.misindented_classes.should eq([["MyApp::TestClass", 2, nil, "#{test_file_path(1)}:2"]])
+      klass = analyzer.classes.find { |c| c.name == "MyApp::TestClass" }
+
+      klass.should have_attributes(
+        first_line: 2,
+        last_line: nil,
+        path: test_file_path(1)
+      )
     end
 
     it 'finds methods' do
-      analyzer.methods.should be_empty
-      analyzer.misindented_methods.should eq({"MyApp::TestClass"=>[["blah", 3, nil, 0, "#{test_file_path(1)}:3"]]})
+      method = analyzer.methods["MyApp::TestClass"].find { |m| m.name == "blah" }
+
+      method.should have_attributes(
+        first_line: 3,
+        last_line: nil,
+        number_of_arguments: 0,
+        path: test_file_path(1)
+      )
     end
   end
 
@@ -52,15 +80,41 @@ describe SandiMeter::Analyzer do
     end
 
     it 'finds classes' do
-      analyzer.classes.should include(["FirstTestClass", 1, 4, true, "#{test_file_path(4)}:1"])
-      analyzer.classes.should include(["SecondTestClass", 6, 9, true, "#{test_file_path(4)}:6"])
-      analyzer.misindented_classes.should be_empty
+      klass = analyzer.classes.find { |c| c.name == "FirstTestClass" }
+
+      klass.should have_attributes(
+        first_line: 1,
+        last_line: 4,
+        path: test_file_path(4)
+      )
+
+      klass = analyzer.classes.find { |c| c.name == "SecondTestClass" }
+
+      klass.should have_attributes(
+        first_line: 6,
+        last_line: 9,
+        path: test_file_path(4)
+      )
     end
 
     it 'finds methods' do
-      analyzer.methods["FirstTestClass"].should eq([["first_meth", 2, 3, 1, true, "#{test_file_path(4)}:2"]])
-      analyzer.methods["SecondTestClass"].should eq([["second_meth", 7, 8, 1, true, "#{test_file_path(4)}:7"]])
-      analyzer.misindented_methods.should be_empty
+      method = analyzer.methods["FirstTestClass"].find { |m| m.name == "first_meth" }
+
+      method.should have_attributes(
+        first_line: 2,
+        last_line: 3,
+        number_of_arguments: 1,
+        path: test_file_path(4)
+      )
+
+      method = analyzer.methods["SecondTestClass"].find { |m| m.name == "second_meth" }
+
+      method.should have_attributes(
+        first_line: 7,
+        last_line: 8,
+        number_of_arguments: 1,
+        path: test_file_path(4)
+      )
     end
   end
 
@@ -72,13 +126,17 @@ describe SandiMeter::Analyzer do
     end
 
     it 'finds classes' do
-      analyzer.misindented_classes.should eq([["OneLinerClass", 1, nil, "#{test_file_path(5)}:1"]])
-      analyzer.classes.should be_empty
+      klass = analyzer.classes.find { |c| c.name == "OneLinerClass" }
+
+      klass.should have_attributes(
+        first_line: 1,
+        last_line: nil,
+        path: test_file_path(5)
+      )
     end
 
     it 'finds methods' do
       analyzer.methods.should be_empty
-      analyzer.misindented_methods.should be_empty
     end
   end
 
@@ -90,16 +148,45 @@ describe SandiMeter::Analyzer do
     end
 
     it 'finds class and subclass' do
-      analyzer.classes.should include(["MyApp::Blah::User", 5, 13, true, "#{test_file_path(7)}:5"])
-      analyzer.classes.should include(["MyApp::Blah::User::SubUser", 9, 12, true, "#{test_file_path(7)}:9"])
-      analyzer.misindented_classes.should be_empty
+      klass = analyzer.classes.find { |c| c.name == "MyApp::Blah::User" }
+      klass.should have_attributes(
+        first_line: 5,
+        last_line: 13,
+        path: test_file_path(7)
+      )
+
+      klass = analyzer.classes.find { |c| c.name == "MyApp::Blah::User::SubUser" }
+      klass.should have_attributes(
+        first_line: 9,
+        last_line: 12,
+        path: test_file_path(7)
+      )
     end
 
     it 'finds methods' do
-      analyzer.methods["MyApp::Blah"].should eq([["module_meth", 2, 3, 0, true, "#{test_file_path(7)}:2"]])
-      analyzer.methods["MyApp::Blah::User"].should eq([["class_meth", 6, 7, 0, true, "#{test_file_path(7)}:6"]])
-      analyzer.methods["MyApp::Blah::User::SubUser"].should eq([["sub_meth", 10, 11, 0, true, "#{test_file_path(7)}:10"]])
-      analyzer.misindented_methods.should be_empty
+      method = analyzer.methods["MyApp::Blah"].find { |m| m.name == "module_meth" }
+      method.should have_attributes(
+        first_line: 2,
+        last_line: 3,
+        number_of_arguments: 0,
+        path: test_file_path(7)
+      )
+
+      method = analyzer.methods["MyApp::Blah::User"].find { |m| m.name == "class_meth" }
+      method.should have_attributes(
+        first_line: 6,
+        last_line: 7,
+        number_of_arguments: 0,
+        path: test_file_path(7)
+      )
+
+      method = analyzer.methods["MyApp::Blah::User::SubUser"].find { |m| m.name == "sub_meth" }
+      method.should have_attributes(
+        first_line: 10,
+        last_line: 11,
+        number_of_arguments: 0,
+        path: test_file_path(7)
+      )
     end
   end
 
@@ -111,15 +198,33 @@ describe SandiMeter::Analyzer do
     end
 
     it 'finds class and subclass' do
-      analyzer.classes.should include(["RailsController", 1, 12, true, "#{test_file_path(8)}:1"])
-      analyzer.misindented_classes.should be_empty
+      klass = analyzer.classes.find { |c| c.name == "RailsController" }
+      klass.should have_attributes(
+        first_line: 1,
+        last_line: 12,
+        path: test_file_path(8)
+      )
     end
 
     it 'finds methods' do
-      analyzer.methods["RailsController"].should include(["index", 2, 3, 0, true, "#{test_file_path(8)}:2"])
-      analyzer.methods["RailsController"].should include(["destroy", 5, 6, 0, true, "#{test_file_path(8)}:5"])
-      analyzer.methods["RailsController"].should include(["private_meth", 9, 10, 0, true, "#{test_file_path(8)}:9"])
-      analyzer.misindented_methods.should be_empty
+      method = analyzer.methods["RailsController"].find { |m| m.name == "index" }
+      method.should have_attributes(
+        first_line: 2,
+        last_line: 3,
+        number_of_arguments: 0,
+        path: test_file_path(8)
+      )
+
+      method = analyzer.methods["RailsController"].find { |m| m.name == "destroy" }
+      method.should have_attributes(
+        first_line: 5,
+        last_line: 6,
+        number_of_arguments: 0,
+        path: test_file_path(8)
+      )
+
+      method = analyzer.methods["RailsController"].find { |m| m.name == "private_meth" }
+      method.should be_nil
     end
   end
 
@@ -132,7 +237,8 @@ describe SandiMeter::Analyzer do
       end
 
       it 'finds instance variable' do
-        analyzer.instance_variables.should eq({"UsersController"=>{"index"=>["@users"]}})
+        method = analyzer.methods["UsersController"].find { |m| m.name == "index" }
+        method.ivars.should eq(["@users"])
       end
     end
 
@@ -144,7 +250,8 @@ describe SandiMeter::Analyzer do
       end
 
       it 'does not find instance variables' do
-        analyzer.instance_variables.should eq({"GuestController"=>{"create_guest_user"=>[]}})
+        method = analyzer.methods["GuestController"].find { |m| m.name == "create_guest_user" }
+        method.ivars.should be_empty
       end
     end
 
@@ -156,7 +263,11 @@ describe SandiMeter::Analyzer do
       end
 
       it 'does not find instance variable' do
-        analyzer.instance_variables.should be_empty
+        method = analyzer.methods["User"].find { |m| m.name == "initialize" }
+        method.ivars.should be_empty
+
+        method = analyzer.methods["User"].find { |m| m.name == "hi" }
+        method.ivars.should be_empty
       end
     end
 
@@ -168,22 +279,24 @@ describe SandiMeter::Analyzer do
       end
 
       it 'finds method defined after public keyword' do
-        analyzer.instance_variables["UsersController"].should have_key("create")
+        method = analyzer.methods["UsersController"].find { |m| m.name == "create" }
+        method.ivars.should eq(["@user"])
       end
 
       it 'omits actions without instance variables' do
-        analyzer.instance_variables["UsersController"].should_not have_key("show")
+        method = analyzer.methods["UsersController"].find { |m| m.name == "show" }
+        method.ivars.should be_empty
       end
 
       it 'omits private methods' do
-        analyzer.instance_variables["UsersController"].should_not have_key("find_user")
+        method = analyzer.methods["UsersController"].find { |m| m.name == "find_user" }
+        method.should be_nil
       end
 
       it 'omits protected methods' do
-        analyzer.instance_variables["UsersController"].should_not have_key("protected_find_user")
+        method = analyzer.methods["UsersController"].find { |m| m.name == "protected_find_user" }
+        method.should be_nil
       end
-
-
     end
   end
 
@@ -195,7 +308,13 @@ describe SandiMeter::Analyzer do
     end
 
     it 'counts arguments' do
-      analyzer.method_calls.should eq([[5, "#{test_file_path(11)}:3"]])
+      method_call = analyzer.method_calls.first
+
+      method_call.should have_attributes(
+        first_line: 3,
+        number_of_arguments: 5,
+        path: test_file_path(11)
+      )
     end
   end
 
@@ -207,11 +326,24 @@ describe SandiMeter::Analyzer do
     end
 
     it 'are count for class definition' do
-      analyzer.classes.should eq([["Valera", 1, 109, false, "#{test_file_path(12)}:1"]])
+      klass = analyzer.classes.find { |c| c.name == "Valera" }
+
+      klass.should have_attributes(
+        first_line: 1,
+        last_line: 109,
+        path: test_file_path(12)
+      )
     end
 
     it 'are count for method definition' do
-      analyzer.methods.should eq({"Valera"=>[["doodle", 2, 9, 0, false, "#{test_file_path(12)}:2"]]})
+      method = analyzer.methods["Valera"].find { |m| m.name == "doodle" }
+
+      method.should have_attributes(
+        first_line: 2,
+        last_line: 9,
+        number_of_arguments: 0,
+        path: test_file_path(12)
+      )
     end
   end
 
@@ -236,15 +368,36 @@ describe SandiMeter::Analyzer do
     end
 
     it 'mark 4line methods good' do
-      methods.should include(["render4", 2, 7, 0, true, "#{test_file_path(14)}:2"])
+      method = analyzer.methods["TestClass"].find { |m| m.name == "render4" }
+
+      method.should have_attributes(
+        first_line: 2,
+        last_line: 7,
+        number_of_arguments: 0,
+        path: test_file_path(14)
+      )
     end
 
     it 'mark 5line methods good' do
-      methods.should include(["render5", 9, 15, 0, true, "#{test_file_path(14)}:9"])
+      method = analyzer.methods["TestClass"].find { |m| m.name == "render5" }
+
+      method.should have_attributes(
+        first_line: 9,
+        last_line: 15,
+        number_of_arguments: 0,
+        path: test_file_path(14)
+      )
     end
 
     it 'mark 6line methods bad' do
-      methods.should include(["render6", 17, 24, 0, false, "#{test_file_path(14)}:17"])
+      method = analyzer.methods["TestClass"].find { |m| m.name == "render6" }
+
+      method.should have_attributes(
+        first_line: 17,
+        last_line: 24,
+        number_of_arguments: 0,
+        path: test_file_path(14)
+      )
     end
   end
 end

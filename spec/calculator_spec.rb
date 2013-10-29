@@ -16,14 +16,14 @@ describe SandiMeter::Calculator do
 
     it 'counts class lines' do
       output = calculator.calculate!(true)
-      class_params = output[:first_rule][:log][:classes].find { |params| params.first == "User" }
-      class_params[1].should eq(109)
+      klass = output[:first_rule][:log][:classes].find { |params| params.first == "User" }
+      klass[1].should eq(109)
     end
 
     it 'counts method lines' do
       output = calculator.calculate!(true)
-      method_params = output[:second_rule][:log][:methods].find { |params| params.first == "User" && params[1] == "create" }
-      method_params[2].should eq(6)
+      method_params = output[:second_rule][:log][:methods].find { |method| method.name == "create" }
+      method_params.size.should eq(6)
     end
   end
 end

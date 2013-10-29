@@ -2,21 +2,19 @@ require 'ripper'
 require_relative 'warning_scanner'
 require_relative 'loc_checker'
 require_relative 'method_arguments_counter'
+require_relative 'sandi_meter/class'
+require_relative 'sandi_meter/method_call'
+require_relative 'sandi_meter/method'
 
 module SandiMeter
   class Analyzer
-    attr_reader :classes, :misindented_classes, :methods, :misindented_methods, :method_calls, :instance_variables
+    attr_accessor :parent_token, :private_or_protected
+    attr_reader :classes, :methods, :method_calls
 
     def initialize
       @classes = []
-      @misindented_classes = []
-      @misindented_methods = {}
       @methods = {}
       @method_calls = []
-      @instance_variables = {}
-
-      @parent_token = nil
-      @private_or_protected = false
     end
 
     def analyze(file_path)
@@ -26,7 +24,7 @@ module SandiMeter
       @indentation_warnings = indentation_warnings
       # TODO
       # add better determination wheter file is controller
-      @scan_instance_variables = !!(file_path =~ /\w+_controller.rb$/)
+      @controller = !!(file_path =~ /\w+_controller.rb$/)
 
       sexp = Ripper.sexp(@file_body)
       scan_sexp(sexp)
@@ -37,28 +35,6 @@ module SandiMeter
     private
     def output
       loc_checker = SandiMeter::LOCChecker.new(@file_lines)
-
-      @classes.map! do |klass_params|
-        klass_params << loc_checker.check(klass_params, 'class')
-        klass_params << "#{@file_path}:#{klass_params[1]}"
-      end
-
-      @misindented_classes.map! do |klass_params|
-        klass_params << "#{@file_path}:#{klass_params[1]}"
-      end
-
-      @methods.each_pair do |klass, methods|
-        methods.each do |method_params|
-          method_params << loc_checker.check(method_params, 'def')
-          method_params << "#{@file_path}:#{method_params[1]}"
-        end
-      end
-
-      @misindented_methods.each_pair do |klass, methods|
-        methods.each do |method_params|
-          method_params << "#{@file_path}:#{method_params[1]}"
-        end
-      end
 
       {
         classes: @classes,
@@ -79,7 +55,11 @@ module SandiMeter
       class_tokens.insert(0, current_namespace) unless current_namespace.empty?
       class_name = class_tokens.join('::')
 
-      [class_name, line_number]
+      {
+        name: class_name,
+        first_line: line_number,
+        path: @file_path
+      }
     end
 
     # MOVE
@@ -92,12 +72,15 @@ module SandiMeter
     end
 
     def find_method_params(sexp)
-      sexp[1].flatten[1,2]
+      name, first_line = sexp[1].flatten[1, 2]
+      {
+        name: name,
+        first_line: first_line,
+        path: @file_path
+      }
     end
 
-    def find_last_line(params, token = 'class')
-      token_name, line = params
-
+    def find_last_line(line, token = 'class')
       token_indentation = @file_lines[line - 1].index(token)
       # TODO
       # add check for trailing spaces
@@ -110,24 +93,21 @@ module SandiMeter
       case element.first
       when :module
         module_params = find_class_params(element, current_namespace)
-        module_params += [find_last_line(module_params, 'module')]
-        current_namespace = module_params.first
+
+        module_params[:last_line] = find_last_line(module_params[:first_line], 'module')
+        current_namespace = module_params[:name]
 
         scan_sexp(element, current_namespace)
       when :class
         class_params = find_class_params(element, current_namespace)
 
-        if @indentation_warnings['class'] && @indentation_warnings['class'].any? { |first_line, last_line| first_line == class_params.last }
-          class_params << nil
-          @misindented_classes << class_params
-        else
-          class_params += [find_last_line(class_params)]
-
-          # in case of one liner class last line will be nil
-          (class_params.last == nil ? @misindented_classes : @classes) << class_params
+        unless @indentation_warnings['class'] && @indentation_warnings['class'].any? { |first_line, last_line| first_line == class_params[:first_line] }
+          class_params[:last_line] = find_last_line(class_params[:first_line])
         end
 
-        current_namespace = class_params.first
+        @classes << SandiMeter::Class.new(class_params)
+
+        current_namespace = class_params[:name]
         scan_sexp(element, current_namespace)
       end
     end
@@ -142,7 +122,11 @@ module SandiMeter
           counter = SandiMeter::MethodArgumentsCounter.new
           arguments_count, line = counter.count(sexp)
 
-          @method_calls << [arguments_count, "#{@file_path}:#{line}"]
+          @method_calls << SandiMeter::MethodCall.new(
+            path: @file_path,
+            first_line: line,
+            number_of_arguments: arguments_count
+          )
 
           find_args_add_block(sexp)
         else
@@ -158,9 +142,8 @@ module SandiMeter
         next unless sexp.kind_of?(Array)
 
         if sexp.first == :assign
-          @instance_variables[current_namespace] ||= {}
-          @instance_variables[current_namespace][method_name] ||= []
-          @instance_variables[current_namespace][method_name] << sexp[1][1][1] if sexp[1][1][0] == :@ivar
+          method = @methods[current_namespace].find { |m| m.name == method_name }
+          method.ivars << sexp[1][1][1] if sexp[1][1][0] == :@ivar
         else
           scan_def_for_ivars(current_namespace, method_name, sexp)
         end
@@ -175,19 +158,16 @@ module SandiMeter
         case element.first
         when :def
           method_params = find_method_params(element)
-          if @indentation_warnings['def'] && @indentation_warnings['def'].any? { |first_line, last_line| first_line == method_params.last }
-            method_params << nil
-            method_params << number_of_arguments(element)
-            @misindented_methods[current_namespace] ||= []
-            @misindented_methods[current_namespace] << method_params
-          else
-            method_params += [find_last_line(method_params, 'def')]
-            method_params << number_of_arguments(element)
-            @methods[current_namespace] ||= []
-            @methods[current_namespace] << method_params
+          method_params[:number_of_arguments] = number_of_arguments(element)
+          unless @indentation_warnings['def'] && @indentation_warnings['def'].any? { |first_line, last_line| first_line == method_params[:first_line] }
+            method_params[:last_line] = find_last_line(method_params[:first_line], 'def')
           end
-          if @scan_instance_variables && !@private_or_protected
-            scan_def_for_ivars(current_namespace, method_params.first, element)
+
+          @methods[current_namespace] ||= []
+          @methods[current_namespace] << SandiMeter::Method.new(method_params) unless @private_or_protected
+
+          if @controller && !@private_or_protected
+            scan_def_for_ivars(current_namespace, method_params[:name], element)
           end
 
           find_args_add_block(element)
