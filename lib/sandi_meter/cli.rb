@@ -1,6 +1,7 @@
 require 'mixlib/cli'
 require 'sandi_meter/file_scanner'
 require 'sandi_meter/formatter'
+require 'sandi_meter/rules_checker'
 require 'sandi_meter/logger'
 require 'sandi_meter/html_generator'
 
@@ -75,6 +76,12 @@ module SandiMeter
         html_generator.generate_details!(cli.config[:path], data)
 
         system "open sandi_meter/index.html"
+      end
+      
+      if RulesChecker.new(data).ok?
+        exit 0
+      else
+        exit 1
       end
     end
 
