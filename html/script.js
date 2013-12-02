@@ -61,10 +61,10 @@ $(document).ready(function(){
 
   setHeader(last_report);
 
-  plotDonut(latest_report.r10, latest_report.r11, '1. Classes under 100 lines', '1. Classes more than 100 lines', 'pie1');
-  plotDonut(latest_report.r20, latest_report.r21, '2. Methods under 5 lines', '2. Methods more than 5 lines', 'pie2');
-  plotDonut(latest_report.r30, latest_report.r31, '3. Method calls with less than 4 params', '3. Method calls with more than 4 params', 'pie3');
-  plotDonut(latest_report.r40, latest_report.r41, '4. Controllers with one instance variable', '4. Controllers with many instance variables', 'pie4');
+  plotDonut(last_report.r10, last_report.r11, '1. Classes under 100 lines', '1. Classes more than 100 lines', 'pie1');
+  plotDonut(last_report.r20, last_report.r21, '2. Methods under 5 lines', '2. Methods more than 5 lines', 'pie2');
+  plotDonut(last_report.r30, last_report.r31, '3. Method calls with less than 4 params', '3. Method calls with more than 4 params', 'pie3');
+  plotDonut(last_report.r40, last_report.r41, '4. Controllers with one instance variable', '4. Controllers with many instance variables', 'pie4');
 
   plotLine('plot1', data, ['r10', 'r11'], ['under 100 lines', 'more than 100 lines.']);
   plotLine('plot2', data, ['r20', 'r21'], ['under 5 lines', 'more than 5 lines']);
