@@ -2,6 +2,7 @@
 require 'mixlib/cli'
 require 'sandi_meter/file_scanner'
 require 'sandi_meter/formatter'
+require 'sandi_meter/rules_checker'
 require 'sandi_meter/logger'
 require 'sandi_meter/version'
 require 'sandi_meter/html_generator'
@@ -102,6 +103,12 @@ module SandiMeter
         else
           puts "WARNING!!! HTML mode works only if you scan folder."
         end
+      end
+      
+      if RulesChecker.new(data).ok?
+        exit 0
+      else
+        exit 1
       end
     end
 
