@@ -22,7 +22,7 @@ module SandiMeter
 
     private
     def scan_dir(path)
-      Dir["#{path}/**/*.rb"].reject { |f| !@exclude_patterns.empty? && f =~ /#{@exclude_patterns}/ }.each do |file|
+      Dir["#{path}/**/*.rb"].reject { |f| !@exclude_patterns.to_s.empty? && f =~ /#{@exclude_patterns}/ }.each do |file|
         scan_file(file)
       end
     end

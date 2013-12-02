@@ -3,9 +3,6 @@ require 'fileutils'
 module SandiMeter
   class Logger
     def log!(path, data)
-      log_dir_path = File.join(path, 'sandi_meter')
-      FileUtils.mkdir(log_dir_path) unless Dir.exists?(log_dir_path)
-
       File.open(File.join(log_dir_path, 'sandi_meter.log'), 'a') do |file|
         file.puts(log_line(data))
       end
