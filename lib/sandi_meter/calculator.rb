@@ -31,16 +31,13 @@ module SandiMeter
     private
     def log_first_rule
       @output[:first_rule][:log] ||= {}
-      @output[:first_rule][:log][:classes] = @data[:classes].inject([]) do |log, class_params|
-        # TODO
-        # wrap each class params into class and get params with
-        # verbose name instead of array keys (class_params[2] should be klass.line_count)
-        log << [class_params.first, class_params[2] - class_params[1] - 1, class_params.last] if class_params[-2] == false
+      @output[:first_rule][:log][:classes] = @data[:classes].inject([]) do |log, klass|
+        log << [klass.name, klass.size, klass.path] if klass.last_line
         log
       end
 
-      @output[:first_rule][:log][:misindented_classes] = @data[:misindented_classes].inject([]) do |log, class_params|
-        log << [class_params.first, nil, class_params.last]
+      @output[:first_rule][:log][:misindented_classes] = @data[:classes].select { |c| c.last_line.nil? }.inject([]) do |log, klass|
+        log << [klass.name, nil, klass.path]
         log
       end
     end
@@ -51,25 +48,16 @@ module SandiMeter
       @output[:second_rule][:log][:misindented_methods] ||= []
 
       @data[:methods].each_pair do |klass, methods|
-        methods.select { |m| m[-2] == false }.each do |method_params|
-          params = [klass, method_params.first]
-          # TODO
-          # wrap method param to method class so method_params[1] becomes method.first_line
-          # and method_params[2] method.last_line
-          params << method_params[2] - method_params[1] - 1
-          params << method_params.last
-
-          @output[:second_rule][:log][:methods] << params
+        methods.select { |m| !m.misindented? && !m.small? }.each do |method|
+          @output[:second_rule][:log][:methods] << [klass, method.name, method.size, method.path]
         end
       end
 
-      @data[:misindented_methods].each_pair do |klass, methods|
-        methods.each do |method_params|
-          params = [klass, method_params.first]
-          params << nil
-          params << method_params.last
+      @data[:methods].each_pair do |klass, methods|
+        methods.each do |method|
+          next unless method.misindented?
 
-          @output[:second_rule][:log][:misindented_methods] << params
+          @output[:second_rule][:log][:misindented_methods] << [klass, method.name, method.size, method.path]
         end
       end
     end
@@ -80,8 +68,8 @@ module SandiMeter
 
       # TODO
       # add name of method being called
-      proper_method_calls = @data[:method_calls].inject(0) do |sum, params|
-        @output[:third_rule][:log][:method_calls] << params if params.first > 4
+      proper_method_calls = @data[:method_calls].inject(0) do |sum, method_call|
+        @output[:third_rule][:log][:method_calls] << [method_call.number_of_arguments, method_call.path] if method_call.number_of_arguments > 4
       end
     end
 
@@ -89,23 +77,20 @@ module SandiMeter
       @output[:fourth_rule][:log] ||={}
       @output[:fourth_rule][:log][:controllers] ||= []
 
-      @data[:instance_variables].each_pair do |controller, methods|
-        methods.each_pair do |method, instance_variables|
-          if instance_variables.size > 1
-            @output[:fourth_rule][:log][:controllers] << [controller, method, instance_variables]
-          end
+      @data[:classes].select { |c| c.controller }.each do |klass|
+        @data[:methods][klass].each do |method|
+          next if method.ivars.empty?
+
+          @output[:fourth_rule][:log][:controllers] << [klass.name, method.name, method.ivars]
         end
       end
     end
 
     def check_first_rule
       total_classes_amount = @data[:classes].size
-      small_classes_amount = @data[:classes].inject(0) do |sum, class_params|
-        sum += 1 if class_params[-2] == true
-        sum
-      end
+      small_classes_amount = @data[:classes].select(&:small?).size
 
-      misindented_classes_amount = @data[:misindented_classes].size
+      misindented_classes_amount = @data[:classes].select { |c| c.last_line.nil? }
 
       @output[:first_rule] ||= {}
       @output[:first_rule][:small_classes_amount] = small_classes_amount
@@ -120,13 +105,13 @@ module SandiMeter
       small_methods_amount = 0
 
       @data[:methods].each_pair do |klass, methods|
-        small_methods_amount += methods.select { |m| m[-2] == true }.size
+        small_methods_amount += methods.select { |m| m.small? }.size
         total_methods_amount += methods.size
       end
 
       misindented_methods_amount = 0
-      @data[:misindented_methods].each_pair do |klass, methods|
-        misindented_methods_amount += methods.size
+      @data[:methods].each_pair do |klass, methods|
+        misindented_methods_amount += methods.select { |m| m.last_line.nil? }.size
       end
 
       @output[:second_rule] ||= {}
@@ -142,8 +127,8 @@ module SandiMeter
     def check_third_rule
       total_method_calls = @data[:method_calls].size
 
-      proper_method_calls = @data[:method_calls].inject(0) do |sum, params|
-        sum += 1 unless params.first > 4
+      proper_method_calls = @data[:method_calls].inject(0) do |sum, method_call|
+        sum += 1 unless method_call.number_of_arguments > 4
         sum
       end
 
@@ -158,9 +143,9 @@ module SandiMeter
       proper_controllers_amount = 0
       total_controllers_amount = 0
 
-      @data[:instance_variables].each_pair do |controller, methods|
+      @data[:classes].select { |c| c.controller? }.each do |klass|
         total_controllers_amount += 1
-        proper_controllers_amount += 1 unless methods.values.map(&:size).any? { |v| v > 1 }
+        proper_controllers_amount += 1 unless @data[:methods][klass.name].select { |m| m.ivars.uniq.size > 1 }.empty?
       end
 
       @output[:fourth_rule] ||= {}
