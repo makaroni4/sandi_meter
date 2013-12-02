@@ -32,7 +32,7 @@ module SandiMeter
     def log_first_rule
       @output[:first_rule][:log] ||= {}
       @output[:first_rule][:log][:classes] = @data[:classes].inject([]) do |log, klass|
-        log << [klass.name, klass.size, klass.path] if klass.last_line
+        log << [klass.name, klass.size, klass.path] if klass.last_line && !klass.small?
         log
       end
 
