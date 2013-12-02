@@ -94,8 +94,8 @@ module SandiMeter
 
       if cli.config[:graph]
         if File.directory?(cli.config[:path])
-          logger = SandiMeter::Logger.new
-          logger.log!(cli.config[:path], data)
+          logger = SandiMeter::Logger.new(data)
+          logger.log!(cli.config[:path])
 
           html_generator = SandiMeter::HtmlGenerator.new
           html_generator.copy_assets!(cli.config[:path])

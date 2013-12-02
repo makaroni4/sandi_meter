@@ -1,31 +1,32 @@
 require 'fileutils'
 
 module SandiMeter
-  class Logger
-    def log!(path, data)
-      File.open(File.join(log_dir_path, 'sandi_meter.log'), 'a') do |file|
-        file.puts(log_line(data))
+  class Logger < Struct.new(:data)
+    def log!(path)
+      File.open(File.join(path, 'sandi_meter', 'sandi_meter.log'), 'a') do |file|
+        file.puts(log_line)
       end
     end
 
     private
-    def log_line(data)
-      log_line_data = []
-      log_line_data << data[:first_rule][:small_classes_amount]
-      log_line_data << data[:first_rule][:total_classes_amount] - data[:first_rule][:small_classes_amount]
+    def log_line
+      rules_log.join(';')
+    end
 
-      log_line_data << data[:second_rule][:small_methods_amount]
-      log_line_data << data[:second_rule][:total_methods_amount] - data[:second_rule][:small_methods_amount]
+    def log_rule(rule_key, proper_key, total_key)
+      [
+        data[rule_key][proper_key],
+        data[rule_key][total_key] - data[rule_key][proper_key]
+      ]
+    end
 
-      log_line_data << data[:third_rule][:proper_method_calls]
-      log_line_data << data[:third_rule][:total_method_calls] - data[:third_rule][:proper_method_calls]
-
-      log_line_data << data[:fourth_rule][:proper_controllers_amount]
-      log_line_data << data[:fourth_rule][:total_controllers_amount] - data[:fourth_rule][:proper_controllers_amount]
-
-      log_line_data << Time.now.to_i
-
-      log_line_data.join(';')
+    def rules_log
+      log_line_data = [log_rule(:first_rule, :small_classes_amount, :total_classes_amount)]
+      log_line_data += log_rule(:second_rule, :small_methods_amount, :total_methods_amount)
+      log_line_data += log_rule(:third_rule, :proper_method_calls, :total_method_calls)
+      log_line_data += log_rule(:fourth_rule, :proper_controllers_amount, :total_controllers_amount)
+      log_line_data += [Time.now.to_i]
     end
   end
 end
+
