@@ -35,7 +35,7 @@ function plotLine(id, data, ykeys, labels) {
   });
 }
 
-function latestReport(data) {
+function lastReport(data) {
   return data.sort(function(a, b){
     var keyA = new Date(a.timestamp),
     keyB = new Date(b.timestamp);
@@ -47,18 +47,19 @@ function latestReport(data) {
 }
 
 function dateHeader(last_report) {
-  var d = Date(last_report.timestamp).toString().split(' ');
+  var date = new Date(last_report.timestamp);
+  var d = date.toString().split(' ');
   return date_string = [d[3], d[1], d[2], d[4]].join(' ');
 }
 
 function setHeader(last_report) {
-  $('.js-report-date').text("Latest report from " + dateHeader(latest_report));
+  $('.js-report-date').text("Latest report from " + dateHeader(last_report));
 }
 
 $(document).ready(function(){
-  latest_report = latestReport(data);
+  last_report = lastReport(data);
 
-  setHeader();
+  setHeader(last_report);
 
   plotDonut(latest_report.r10, latest_report.r11, '1. Classes under 100 lines', '1. Classes more than 100 lines', 'pie1');
   plotDonut(latest_report.r20, latest_report.r21, '2. Methods under 5 lines', '2. Methods more than 5 lines', 'pie2');
