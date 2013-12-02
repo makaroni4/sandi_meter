@@ -11,11 +11,11 @@ module SandiMeter
     end
 
     def size
-      last_line - first_line - 1 if last_line
+      last_line and (last_line - first_line - 1)
     end
 
     def small?
-      size <= MAX_LOC if last_line
+      last_line && size <= MAX_LOC
     end
 
     def misindented?
@@ -23,7 +23,7 @@ module SandiMeter
     end
 
     def controller?
-      !!(controller)
+      !!(path =~ /\w+_controller.rb$/)
     end
   end
 end
