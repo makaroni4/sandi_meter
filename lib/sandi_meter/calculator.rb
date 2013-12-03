@@ -145,7 +145,7 @@ module SandiMeter
 
       @data[:classes].select { |c| c.controller? }.each do |klass|
         total_controllers_amount += 1
-        proper_controllers_amount += 1 unless @data[:methods][klass.name].select { |m| m.ivars.uniq.size > 1 }.empty?
+        proper_controllers_amount += 1 unless @data[:methods][klass.name] && @data[:methods][klass.name].select { |m| m.ivars.uniq.size > 1 }.any?
       end
 
       @output[:fourth_rule] ||= {}
