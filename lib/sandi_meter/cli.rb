@@ -86,7 +86,7 @@ module SandiMeter
       end
 
       scanner = SandiMeter::FileScanner.new(cli.config[:log])
-      data = scanner.scan(cli.config[:path], cli.config[:details] || cli.config[:graph])
+      data = scanner.scan(cli.config[:path], cli.config[:details] | cli.config[:graph])
 
       formatter = SandiMeter::Formatter.new
 
