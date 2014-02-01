@@ -1,4 +1,3 @@
-require 'pp'
 require 'test_helper'
 require_relative '../lib/sandi_meter/calculator'
 require_relative '../lib/sandi_meter/analyzer'
@@ -49,6 +48,7 @@ describe SandiMeter::Calculator do
         expect(action).to eq "index"
         expect(instance_variables).to include("@users")
         expect(instance_variables).to include("@excess_variable")
+        expect(instance_variables.length).to eq 2
       end
     end
     context "when there are no violations of the fourth rule" do
