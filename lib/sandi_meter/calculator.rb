@@ -77,13 +77,19 @@ module SandiMeter
       @output[:fourth_rule][:log] ||={}
       @output[:fourth_rule][:log][:controllers] ||= []
 
-      @data[:classes].select { |c| c.controller }.each do |klass|
-        @data[:methods][klass].each do |method|
-          next if method.ivars.empty?
-
-          @output[:fourth_rule][:log][:controllers] << [klass.name, method.name, method.ivars]
+      controllers.each do |controller|
+        methods_for(controller).select { |m| m.ivars.length > 1 }.each do |method|
+          @output[:fourth_rule][:log][:controllers] << [controller.name, method.name, method.ivars.uniq]
         end
       end
+    end
+
+    def controllers
+      @data[:classes].select { |c| c.controller? }
+    end
+
+    def methods_for(controller)
+      @data[:methods].fetch(controller.name) { [] }
     end
 
     def check_first_rule
@@ -154,5 +160,6 @@ module SandiMeter
 
       log_fourth_rule if @store_details
     end
+
   end
 end
