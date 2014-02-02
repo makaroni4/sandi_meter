@@ -6,6 +6,7 @@ require 'sandi_meter/rules_checker'
 require 'sandi_meter/logger'
 require 'sandi_meter/version'
 require 'sandi_meter/html_generator'
+require 'yaml'
 
 module SandiMeter
   class CommandParser
@@ -72,6 +73,13 @@ module SandiMeter
             file.write %w(db vendor).join("\n")
           end
         end
+
+        config_file_path = File.join(cli.config[:path], 'sandi_meter', 'config.yml')
+        if File.directory?(cli.config[:path]) && !File.exists?(config_file_path)
+          File.open(config_file_path, "w") do |file|
+            file.write YAML.dump({ threshold: 90 })
+          end
+        end
       end
 
       if cli.config[:version]
@@ -109,7 +117,14 @@ module SandiMeter
         end
       end
 
-      if RulesChecker.new(data).ok?
+      config_file_path = File.join(cli.config[:path], 'sandi_meter', 'config.yml')
+      config =  if File.exists?(config_file_path)
+                  YAML.load(File.read(config_file_path))
+                else
+                  { threshold: 90 }
+                end
+
+      if RulesChecker.new(data, config).ok?
         exit 0
       else
         exit 1
