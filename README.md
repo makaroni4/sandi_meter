@@ -65,8 +65,8 @@ Controllers with 1+ instance variables
 
 Try using gem with `-g (--graph)` option, so it will create a folder with beautiful html output and log file with results of any scan.
 
-![SandiMeter HTML mode pie charts](http://imageshack.us/a/img823/7653/hns3.png)
-![SandiMeter HTML mode details](http://imageshack.us/a/img820/8711/bygo.png)
+![SandiMeter HTML mode pie charts](http://cl.ly/image/1p142M3K1S2x/content)
+![SandiMeter HTML mode details](http://cl.ly/image/2R163v283V3Q/content)
 
 Add ignore files and folders in `sandi_meter/.sandi_meter` file.
 
