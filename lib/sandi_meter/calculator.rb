@@ -1,7 +1,7 @@
 module SandiMeter
   class Calculator
     def initialize
-      @data = {}
+      @data = {classes: [], methods: {}, method_calls: []}
       @output = {}
     end
 
