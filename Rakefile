@@ -10,3 +10,9 @@ Rake::TestTask.new do |test|
 end
 
 task default: :test
+
+task :debug do
+  require "sandi_meter/cli"
+
+  SandiMeter::CLI.execute
+end
