@@ -1,2 +1,6 @@
 ---
-:threshold: 80
+:threshold:
+- 90
+- 90
+- 90
+- 100

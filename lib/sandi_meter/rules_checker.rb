@@ -1,5 +1,7 @@
 module SandiMeter
   class RulesChecker
+    attr_reader :broken_rules
+
     def initialize(data, config)
       @config = config
       @rules = []
@@ -10,7 +12,22 @@ module SandiMeter
     end
 
     def ok?
-      @rules.reduce(:+) / 4 > @config[:threshold]
+      @broken_rules ||= []
+
+      @rules.each_with_index do |value, index|
+        @broken_rules << (index + 1) if @config[:threshold][index] > value
+      end
+
+      @broken_rules.empty?
+    end
+
+    def output_broken_rules
+      return if @broken_rules.empty?
+
+      puts "\n"
+      @broken_rules.each do |rule|
+        puts "#{rule} rule is broken."
+      end
     end
 
     private
