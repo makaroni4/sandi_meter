@@ -36,9 +36,9 @@ body {
 }
 
 .plot-charts-item {
-  width: 480px;
-  float: left;
+  width: 470px;
   height: 298px;
+  float: left;
   margin-bottom: 40px;
 }
 
@@ -49,7 +49,17 @@ body {
 }
 
 .plot-charts-item-graph {
+  width: 470px;
   height: 280px;
+}
+
+.progress {
+  text-align: center;
+}
+
+.progress .plot-charts-item {
+  float: none;
+  margin: 0 auto;
 }
 
 .toggle_report.current_tab {
@@ -91,6 +101,7 @@ body {
 .main-menu a {
   display: inline-block;
   padding: 4px 16px;
+  margin-left: -5px;
   font-size: 18px;
   text-decoration: none;
   color: black;

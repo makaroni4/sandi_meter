@@ -9,7 +9,6 @@ function plotDonut(value1, value2, label1, label2, id) {
     data.push({ value: value2, label: label2 });
   }
 
-  console.log(data);
   Morris.Donut({
     element: id,
     data: data,
@@ -20,9 +19,9 @@ function plotDonut(value1, value2, label1, label2, id) {
   })
 }
 
-function plotLine(id, data, ykeys, labels) {
-  Morris.Line({
-    element: id,
+function plotLine(selector, data, ykeys, labels) {
+  var graph = Morris.Line({
+    element: $(selector),
     data: data,
     xkey: 'timestamp',
     ykeys: ykeys,
@@ -31,7 +30,9 @@ function plotLine(id, data, ykeys, labels) {
       '#0C0',
       '#F00'
     ],
-    dateFormat: function (x) { return new Date(x).toDateString(); }
+    dateFormat: function (x) {
+      return new Date(x).toDateString();
+    }
   });
 }
 
@@ -56,8 +57,28 @@ function setHeader(last_report) {
   $('.js-report-date').text("Latest report from " + dateHeader(last_report));
 }
 
+function calculate_percentage(row) {
+  [1,2,3,4].forEach(function(rule) {
+    var green_index = "r" + rule + "0";
+    var red_index = "r" + rule + "1";
+    var total = row[green_index] + row[red_index];
+    row[green_index + "p"] = total == 0 ? 0 : Math.round(100 * row[green_index] / total, 0);
+    row[red_index + "p"] = total == 0 ? 0 : Math.round(100 * row[red_index] / total, 0);
+  })
+}
+
+function calculate_percentage_data(data) {
+  data.forEach(function(row){
+    calculate_percentage(row);
+    row["overall"] = Math.round((row["r10p"] + row["r20p"] + row["r30p"] + row["r40p"]) / 4, 0);
+  })
+}
+
 $(document).ready(function(){
   last_report = lastReport(data);
+  calculate_percentage_data(data);
+
+  $(".charts-percentage").html($(".plot-charts").html());
 
   setHeader(last_report);
 
@@ -66,10 +87,20 @@ $(document).ready(function(){
   plotDonut(last_report.r30, last_report.r31, '3. Method calls with less than 4 params', '3. Method calls with more than 4 params', 'pie3');
   plotDonut(last_report.r40, last_report.r41, '4. Controllers with one instance variable', '4. Controllers with many instance variables', 'pie4');
 
-  plotLine('plot1', data, ['r10', 'r11'], ['under 100 lines', 'more than 100 lines.']);
-  plotLine('plot2', data, ['r20', 'r21'], ['under 5 lines', 'more than 5 lines']);
-  plotLine('plot3', data, ['r30', 'r31'], ['less than 4 params', 'more than 4 params']);
-  plotLine('plot4', data, ['r40', 'r41'], ['one instance variable', 'many instance variables']);
+  plotLine('.plot-charts .plot1', data, ['r10', 'r11'], ['under 100 lines', 'more than 100 lines.']);
+  plotLine('.plot-charts .plot2', data, ['r20', 'r21'], ['under 5 lines', 'more than 5 lines']);
+  plotLine('.plot-charts .plot3', data, ['r30', 'r31'], ['less than 4 params', 'more than 4 params']);
+  plotLine('.plot-charts .plot4', data, ['r40', 'r41'], ['one instance variable', 'many instance variables']);
+
+  plotLine('.charts-percentage .plot1', data, ['r10p'], ['under 100 lines']);
+  plotLine('.charts-percentage .plot2', data, ['r20p'], ['under 5 lines']);
+  plotLine('.charts-percentage .plot3', data, ['r30p'], ['less than 4 params']);
+  plotLine('.charts-percentage .plot4', data, ['r40p'], ['one instance variable']);
+
+  plotLine('.progress .plot', data, ['overall'], ['Overall progress']);
+
+  $(".charts-percentage").hide();
+  $(".progress").hide();
 
   var $tabs = $(".js-tab-item");
   var $menuItems = $(".js-menu-item")

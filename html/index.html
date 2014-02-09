@@ -27,30 +27,42 @@
       <div class="clearfix"></div>
     </section>
     <nav class="main-menu">
-      <a href="#" class="main-menu-active js-menu-item" data-rel=".js-charts">Charts</a><a href="#" class="js-menu-item" data-rel=".js-details">Details</a>
+      <a href="#" class="main-menu-active js-menu-item" data-rel=".js-charts">Rules</a>
+      <a href="#" class="js-menu-item" data-rel=".js-charts-percentage">Rules %</a>
+      <a href="#" class="js-menu-item" data-rel=".js-progress">Progress %</a>
+      <a href="#" class="js-menu-item" data-rel=".js-details">Details</a>
     </nav>
     <section class="plot-charts js-charts js-tab-item">
       <div class="plot-charts-item">
         <div class="plot-charts-item-caption">Number of 100 line classes vs time</div>
-        <div class="plot-charts-item-graph" id="plot1"></div>
+        <div class="plot-charts-item-graph plot1"></div>
       </div>
       <div class="plot-charts-item">
         <div class="plot-charts-item-caption">Number of 5 line methods vs time</div>
-        <div class="plot-charts-item-graph" id="plot2"></div>
+        <div class="plot-charts-item-graph plot2"></div>
       </div>
       <div class="clearfix"></div>
       <div class="plot-charts-item">
         <div class="plot-charts-item-caption">Number of methods calls with 4 params vs time</div>
-        <div class="plot-charts-item-graph" id="plot3"></div>
+        <div class="plot-charts-item-graph plot3"></div>
       </div>
       <div class="plot-charts-item">
         <div class="plot-charts-item-caption">Number of controllers with 1 instance variable vs time</div>
-        <div class="plot-charts-item-graph" id="plot4"></div>
+        <div class="plot-charts-item-graph plot4"></div>
       </div>
       <div class="clearfix"></div>
     </section>
     <section class="details js-details js-tab-item">
       <% details %>
+    </section>
+    <section class="charts-percentage js-charts-percentage js-tab-item">
+    </section>
+    <section class="progress js-progress js-tab-item">
+      <div class="plot-charts-item">
+        <div class="plot-charts-item-caption">Overall progress</div>
+        <div class="plot-charts-item-graph plot"></div>
+        <div class="clearfix"></div>
+      </div>
     </section>
     <footer class="main-footer">
       Scanned with love by <a href="https://github.com/makaroni4/sandi_meter">sandi_meter</a> gem.
