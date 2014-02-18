@@ -19,12 +19,14 @@ function plotDonut(value1, value2, label1, label2, id) {
   })
 }
 
-function plotLine(selector, data, ykeys, labels) {
+function plotLine(selector, data, ykeys, labels, ymax_value) {
+  var ymax_value = typeof ymax_value !== 'undefined' ? ymax_value : 'auto';
   var graph = Morris.Line({
     element: $(selector),
     data: data,
     xkey: 'timestamp',
     ykeys: ykeys,
+    ymax: ymax_value,
     labels: labels,
     lineColors: [
       '#0C0',
@@ -87,17 +89,17 @@ $(document).ready(function(){
   plotDonut(last_report.r30, last_report.r31, '3. Method calls with less than 4 params', '3. Method calls with more than 4 params', 'pie3');
   plotDonut(last_report.r40, last_report.r41, '4. Controllers with one instance variable', '4. Controllers with many instance variables', 'pie4');
 
-  plotLine('.plot-charts .plot1', data, ['r10', 'r11'], ['under 100 lines', 'more than 100 lines.']);
-  plotLine('.plot-charts .plot2', data, ['r20', 'r21'], ['under 5 lines', 'more than 5 lines']);
-  plotLine('.plot-charts .plot3', data, ['r30', 'r31'], ['less than 4 params', 'more than 4 params']);
-  plotLine('.plot-charts .plot4', data, ['r40', 'r41'], ['one instance variable', 'many instance variables']);
+  plotLine('.plot-charts .plot1', data, ['r10', 'r11'], ['under 100 lines', 'more than 100 lines.'], 'auto');
+  plotLine('.plot-charts .plot2', data, ['r20', 'r21'], ['under 5 lines', 'more than 5 lines'], 'auto');
+  plotLine('.plot-charts .plot3', data, ['r30', 'r31'], ['less than 4 params', 'more than 4 params'], 'auto');
+  plotLine('.plot-charts .plot4', data, ['r40', 'r41'], ['one instance variable', 'many instance variables'], 'auto');
 
-  plotLine('.charts-percentage .plot1', data, ['r10p'], ['under 100 lines']);
-  plotLine('.charts-percentage .plot2', data, ['r20p'], ['under 5 lines']);
-  plotLine('.charts-percentage .plot3', data, ['r30p'], ['less than 4 params']);
-  plotLine('.charts-percentage .plot4', data, ['r40p'], ['one instance variable']);
+  plotLine('.charts-percentage .plot1', data, ['r10p'], ['under 100 lines'], 100);
+  plotLine('.charts-percentage .plot2', data, ['r20p'], ['under 5 lines'], 100);
+  plotLine('.charts-percentage .plot3', data, ['r30p'], ['less than 4 params'], 100);
+  plotLine('.charts-percentage .plot4', data, ['r40p'], ['one instance variable'], 100);
 
-  plotLine('.progress .plot', data, ['overall'], ['Overall progress']);
+  plotLine('.progress .plot', data, ['overall'], ['Overall progress'], 100);
 
   $(".charts-percentage").hide();
   $(".progress").hide();
