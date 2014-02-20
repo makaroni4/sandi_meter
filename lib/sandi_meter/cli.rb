@@ -74,8 +74,6 @@ module SandiMeter
         create_log_folder(cli.config[:path])
         create_config_file(cli.config[:path], 'sandi_meter/.sandi_meter', %w(db vendor).join("\n"))
 
-        #raise cli.config[:threshold].inspect
-
         if cli.config[:version]
           puts version_info
           exit 0
