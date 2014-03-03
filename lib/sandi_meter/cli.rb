@@ -56,6 +56,13 @@ module SandiMeter
       long: "--rules",
       description: "Show rules",
       boolean: 0
+
+    option :threshold,
+      short: "-t THRESHOLDS",
+      long: "--threshold THRESHOLDS",
+      description: "To brake CI build you can set percentage threshold for each rule -t 90,90,90,100",
+      required: false,
+      proc: Proc.new { |t| t.split(",").map(&:to_i) }
   end
 
   class CLI
@@ -64,13 +71,10 @@ module SandiMeter
         cli = CommandParser.new
         cli.parse_options
 
-        if cli.config[:graph]
-          log_dir_path = File.join(cli.config[:path], 'sandi_meter')
-          FileUtils.mkdir(log_dir_path) unless Dir.exists?(log_dir_path)
+        create_log_folder(cli.config[:path])
+        create_config_file(cli.config[:path], 'sandi_meter/.sandi_meter', %w(db vendor).join("\n"))
 
-          create_config_file(cli.config[:path], 'sandi_meter/.sandi_meter', %w(db vendor).join("\n"))
-          create_config_file(cli.config[:path], 'sandi_meter/config.yml', YAML.dump({ threshold: 90 }))
-        end
+        #raise cli.config[:threshold].inspect
 
         if cli.config[:version]
           puts version_info
@@ -105,16 +109,24 @@ module SandiMeter
           end
         end
 
-        config_file_path = File.join(cli.config[:path], 'sandi_meter', 'config.yml')
-        config =  if File.exists?(config_file_path)
-                    YAML.load(File.read(config_file_path))
-                  else
-                    { threshold: 90 }
-                  end
+        if cli.config[:threshold]
+          raise %(Provide threshould for each rule like this: "90,90,90,90") if cli.config[:threshold].size < 4
+          config = { threshold: cli.config[:threshold] }
+          create_config_file(cli.config[:path], 'sandi_meter/config.yml', YAML.dump(config))
+        else
+          config_file_path = File.join(cli.config[:path], 'sandi_meter', 'config.yml')
+          config =  if File.exists?(config_file_path)
+                      YAML.load(File.read(config_file_path))
+                    else
+                      { threshold: [90, 90, 90, 90] }
+                    end
+        end
 
-        if RulesChecker.new(data, config).ok?
+        rules_checker = RulesChecker.new(data, config)
+        if rules_checker.ok?
           exit 0
         else
+          rules_checker.output_broken_rules
           exit 1
         end
       end
@@ -129,6 +141,11 @@ module SandiMeter
       end
 
       private
+      def create_log_folder(path)
+        log_dir_path = File.join(path, 'sandi_meter')
+        FileUtils.mkdir(log_dir_path) unless Dir.exists?(log_dir_path)
+      end
+
       def create_config_file(path, relative_path, content)
         file_path = File.join(path, relative_path)
         if File.directory?(path) && !File.exists?(file_path)

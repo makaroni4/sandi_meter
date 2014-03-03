@@ -13,11 +13,17 @@ describe SandiMeter::RulesChecker do
 
   describe "#ok?" do
     it "returns false with 100 threshold" do
-      expect(SandiMeter::RulesChecker.new(conditions, {threshold: 100})).to_not be_ok
+      checker = SandiMeter::RulesChecker.new(conditions, {threshold: [100, 100, 100, 100]})
+
+      expect(checker).to_not be_ok
+      expect(checker.broken_rules).to eq([1])
     end
 
     it "returns true with threshold less than 100" do
-      expect(SandiMeter::RulesChecker.new(conditions, {threshold: 50})).to be_ok
+      checker = SandiMeter::RulesChecker.new(conditions, {threshold: [50, 50, 50, 50]})
+
+      expect(checker).to be_ok
+      expect(checker.broken_rules).to be_empty
     end
   end
 end
