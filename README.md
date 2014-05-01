@@ -37,7 +37,7 @@ Classes with 100+ lines
   SandiMeter::HtmlGenerator  | 135   | ./lib/sandi_meter/html_generator.rb:5
   Valera                     | 109   | ./spec/test_classes/12.rb:1
 
-Missindented classes
+Misindented classes
   Class name        | Path
   MyApp::TestClass  | ./spec/test_classes/1.rb:2
   OneLinerClass     | ./spec/test_classes/5.rb:1
@@ -47,7 +47,7 @@ Methods with 5+ lines
   SandiMeter::Analyzer                | initialize                    | 10    | ./lib/sandi_meter/analyzer.rb:10
   SandiMeter::Analyzer                | analyze                       | 13    | ./lib/sandi_meter/analyzer.rb:22
 
-Missindented methods
+Misindented methods
   Class name        | Method name  | Path
   MyApp::TestClass  | blah         | ./spec/test_classes/1.rb:3
 

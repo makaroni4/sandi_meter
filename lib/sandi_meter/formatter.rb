@@ -37,7 +37,7 @@ module SandiMeter
       end
 
       if data[:first_rule][:log][:misindented_classes].any?
-        puts "\nMissindented classes"
+        puts "\nMisindented classes"
         print_array_of_arrays [["Class name", "Path"]] + data[:first_rule][:log][:misindented_classes].map { |row| row.delete_at(1); row } # 1 – size, which nil for misindented_classes
       end
 
@@ -47,7 +47,7 @@ module SandiMeter
       end
 
       if data[:second_rule][:log][:misindented_methods].any?
-        puts "\nMissindented methods"
+        puts "\nMisindented methods"
         print_array_of_arrays [["Class name", "Method name", "Path"]] + data[:second_rule][:log][:misindented_methods].map { |row| row.delete_at(2); row } # 2 – size, which nil for misindented_methods
       end
 
