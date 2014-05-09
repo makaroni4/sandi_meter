@@ -96,7 +96,7 @@ module SandiMeter
       total_classes_amount = @data[:classes].size
       small_classes_amount = @data[:classes].select(&:small?).size
 
-      misindented_classes_amount = @data[:classes].select { |c| c.last_line.nil? }
+      misindented_classes_amount = @data[:classes].select { |c| c.last_line.nil? }.size
 
       @output[:first_rule] ||= {}
       @output[:first_rule][:small_classes_amount] = small_classes_amount
