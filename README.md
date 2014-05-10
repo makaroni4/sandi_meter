@@ -17,6 +17,7 @@ gem install sandi_meter
 sandi_meter --help
     -d, --details                    CLI mode. Show details (path, line number)
     -g, --graph                      HTML mode. Create folder, log data and output stats to HTML file.
+        --json                       Output as JSON
     -l, --log                        Show syntax error and indentation log output
     -p, --path PATH                  Path to folder or file to analyze (default is ".")
     -r, --rules                      Show rules

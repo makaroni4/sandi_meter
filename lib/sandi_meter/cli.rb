@@ -2,11 +2,13 @@
 require 'mixlib/cli'
 require 'sandi_meter/file_scanner'
 require 'sandi_meter/formatter'
+require 'sandi_meter/json_formatter'
 require 'sandi_meter/rules_checker'
 require 'sandi_meter/logger'
 require 'sandi_meter/version'
 require 'sandi_meter/html_generator'
 require 'yaml'
+require 'json'
 
 module SandiMeter
   class CommandParser
@@ -56,6 +58,11 @@ module SandiMeter
       long: "--rules",
       description: "Show rules",
       boolean: 0
+
+    option :json,
+      long: "--json",
+      description: "Output as JSON",
+      boolean: false
   end
 
   class CLI
@@ -85,7 +92,12 @@ module SandiMeter
         scanner = SandiMeter::FileScanner.new(cli.config[:log])
         data = scanner.scan(cli.config[:path], cli.config[:details] || cli.config[:graph])
 
-        formatter = SandiMeter::Formatter.new
+        if cli.config[:json]
+          formatter = SandiMeter::JsonFormatter.new
+        else
+          formatter = SandiMeter::Formatter.new
+        end
+
         formatter.print_data(data)
 
         if cli.config[:graph]
