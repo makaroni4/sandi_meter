@@ -66,7 +66,7 @@ describe SandiMeter::Calculator do
     end
   end
 
-  describe 'no matchig ruby files found' do
+  describe 'no matching ruby files found' do
     it 'counts class lines' do
       output = calculator.calculate!(false)
       output[:first_rule][:total_classes_amount].should eql(0)
