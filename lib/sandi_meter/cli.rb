@@ -9,6 +9,7 @@ require 'sandi_meter/version'
 require 'sandi_meter/html_generator'
 require 'yaml'
 require 'json'
+require 'launchy'
 
 module SandiMeter
   class CommandParser
@@ -111,7 +112,7 @@ module SandiMeter
             html_generator.generate_details!(cli.config[:path], data)
 
             index_html_path = File.join(cli.config[:path], 'sandi_meter/index.html')
-            system "open #{index_html_path}"
+            open_in_browser(index_html_path)
           else
             puts "WARNING!!! HTML mode works only if you scan folder."
           end
@@ -153,6 +154,10 @@ module SandiMeter
       def version_info
         # stolen from gem 'bubs' :)
         "SandiMeter ".tr('A-Za-z1-90', 'Ⓐ-Ⓩⓐ-ⓩ①-⑨⓪').split('').join(' ') + SandiMeter::VERSION
+      end
+
+      def open_in_browser(url)
+        Launchy.open(url)
       end
     end
   end
