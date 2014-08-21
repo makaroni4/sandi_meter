@@ -39,6 +39,12 @@ module SandiMeter
       description: "HTML mode. Create folder, log data and output stats to HTML file.",
       boolean: true
 
+    option :quiet,
+      short: "-q",
+      long: "--quiet",
+      description: "Do not open HTML report for graph option in browser.",
+      boolean: true
+
     option :version,
       short: "-v",
       long: "--version",
@@ -112,7 +118,9 @@ module SandiMeter
             html_generator.generate_details!(cli.config[:path], data)
 
             index_html_path = File.join(cli.config[:path], 'sandi_meter/index.html')
-            open_in_browser(index_html_path)
+            unless cli.config[:quiet]
+              open_in_browser(index_html_path)
+            end
           else
             puts "WARNING!!! HTML mode works only if you scan folder."
           end
