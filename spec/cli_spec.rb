@@ -24,5 +24,21 @@ describe SandiMeter::CLI do
         expect { cli.execute }.to raise_error(SystemExit)
       end
     end
+
+    context 'with the quiet flag passed in' do
+      before do
+        ARGV.push('-q')
+        ARGV.push('-g')
+      end
+      after do 
+        ARGV.pop 
+        ARGV.pop 
+      end
+      
+      it 'does not open the browser' do
+        cli.should_not_receive(:open_in_browser)
+        expect { cli.execute }.to raise_error(SystemExit)
+      end
+    end
   end
 end
