@@ -1,3 +1,4 @@
+require 'pry'
 require 'rspec/autorun'
 require 'ripper'
 
