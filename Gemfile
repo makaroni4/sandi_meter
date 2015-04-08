@@ -4,4 +4,7 @@ gemspec
 
 group :test do
   gem 'rspec'
+  gem 'pry' # standard debugger
+  gem 'pry-byebug' # debugger
+  gem 'fakefs', require: 'fakefs/safe' # stubs out FS to avoid creating files during testing
 end
