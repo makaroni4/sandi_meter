@@ -21,6 +21,11 @@ module SandiMeter
       description: "Path to folder or file to analyze",
       default: "."
 
+    option :output_path,
+      short: "-o PATH",
+      long: "--output-path PATH",
+      description: "Path for storing generated output files (default: ./sandi_meter/)"
+
     option :log,
       short: "-l",
       long: "--log",
@@ -79,11 +84,11 @@ module SandiMeter
         cli.parse_options
 
         if cli.config[:graph]
-          log_dir_path = File.join(cli.config[:path], 'sandi_meter')
-          FileUtils.mkdir(log_dir_path) unless Dir.exists?(log_dir_path)
+          cli.config[:output_path] ||= File.expand_path(File.join(cli.config[:path], 'sandi_meter'))
+          FileUtils.mkdir_p(cli.config[:output_path]) unless Dir.exists?(cli.config[:output_path])
 
-          create_config_file(cli.config[:path], 'sandi_meter/.sandi_meter', %w(db vendor).join("\n"))
-          create_config_file(cli.config[:path], 'sandi_meter/config.yml', YAML.dump({ threshold: 90 }))
+          create_config_file(cli.config[:output_path], '.sandi_meter', %w(db vendor).join("\n"))
+          create_config_file(cli.config[:output_path], 'config.yml', YAML.dump({ threshold: 90 }))
         end
 
         if cli.config[:version]
@@ -108,16 +113,16 @@ module SandiMeter
         formatter.print_data(data)
 
         if cli.config[:graph]
-          if File.directory?(cli.config[:path])
+          if File.directory?(cli.config[:output_path])
             logger = SandiMeter::Logger.new(data)
-            logger.log!(cli.config[:path])
+            logger.log!(cli.config[:output_path])
 
             html_generator = SandiMeter::HtmlGenerator.new
-            html_generator.copy_assets!(cli.config[:path])
-            html_generator.generate_data!(cli.config[:path])
-            html_generator.generate_details!(cli.config[:path], data)
+            html_generator.copy_assets!(cli.config[:output_path])
+            html_generator.generate_data!(cli.config[:output_path])
+            html_generator.generate_details!(cli.config[:output_path], data)
 
-            index_html_path = File.join(cli.config[:path], 'sandi_meter/index.html')
+            index_html_path = File.join(cli.config[:output_path], 'index.html')
             unless cli.config[:quiet]
               open_in_browser(index_html_path)
             end
@@ -126,7 +131,7 @@ module SandiMeter
           end
         end
 
-        config_file_path = File.join(cli.config[:path], 'sandi_meter', 'config.yml')
+        config_file_path = File.join(cli.config[:output_path], 'config.yml')
         config =  if File.exists?(config_file_path)
                     YAML.load(File.read(config_file_path))
                   else
