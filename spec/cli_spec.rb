@@ -2,8 +2,21 @@ require 'test_helper'
 require_relative '../lib/sandi_meter/cli'
 
 describe SandiMeter::CLI do
-  let(:cli) { SandiMeter::CLI }
+  include FakeFS::SpecHelpers
   
+  let(:cli) { SandiMeter::CLI }
+  let(:gem_root) { File.expand_path('../', File.dirname(__FILE__)) }
+  
+  before do
+    FakeFS.activate!
+
+    FakeFS::FileSystem.clone(gem_root)
+  end
+
+  after do
+    FakeFS.deactivate!
+  end
+
   describe '#execute' do
     before do 
       @original_argv = ARGV
