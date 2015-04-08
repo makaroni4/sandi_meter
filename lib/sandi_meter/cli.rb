@@ -82,9 +82,10 @@ module SandiMeter
       def execute
         cli = CommandParser.new
         cli.parse_options
+        
+        cli.config[:output_path] ||= File.expand_path(File.join(cli.config[:path], 'sandi_meter'))
 
         if cli.config[:graph]
-          cli.config[:output_path] ||= File.expand_path(File.join(cli.config[:path], 'sandi_meter'))
           FileUtils.mkdir_p(cli.config[:output_path]) unless Dir.exists?(cli.config[:output_path])
 
           create_config_file(cli.config[:output_path], '.sandi_meter', %w(db vendor).join("\n"))
