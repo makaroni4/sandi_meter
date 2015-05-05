@@ -21,7 +21,7 @@ module SandiMeter
 
     private
     def validate(source)
-      Open3.capture3('ruby -wc', stdin_data: source)
+      Open3.capture3("#{RUBY_ENGINE} -wc", stdin_data: source)
     end
 
     def check_syntax(status)
