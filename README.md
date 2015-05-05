@@ -20,6 +20,7 @@ sandi_meter --help
         --json                       Output as JSON
     -l, --log                        Show syntax error and indentation log output
     -p, --path PATH                  Path to folder or file to analyze (default is ".")
+    -o, --output_path PATH           Path to save output files (default is "./sandi_meter")
     -r, --rules                      Show rules
     -h, --help                       Help
 

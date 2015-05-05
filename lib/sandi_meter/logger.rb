@@ -3,7 +3,7 @@ require 'fileutils'
 module SandiMeter
   class Logger < Struct.new(:data)
     def log!(path)
-      File.open(File.join(path, 'sandi_meter', 'sandi_meter.log'), 'a') do |file|
+      File.open(File.join(path, 'sandi_meter.log'), 'a') do |file|
         file.puts(log_line)
       end
     end
