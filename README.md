@@ -7,7 +7,7 @@ Static analysis tool for checking your Ruby code for [Sandi Metz' four rules](ht
 * 100 lines per class
 * 5 lines per method
 * 4 params per method call (and don't even try cheating with hash params)
-* 1 instance variables per controller' action
+* 1 instance variable per controller action
 
 ## CLI mode
 
