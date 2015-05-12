@@ -12,15 +12,15 @@ describe SandiMeter::WarningScanner do
     end
 
     it 'finds indentation warnings for method' do
-      scanner.indentation_warnings['def'].should eq([[3, 4]])
+      expect(scanner.indentation_warnings['def']).to eq([[3, 4]])
     end
 
     it 'finds indentation warnings for class' do
-      scanner.indentation_warnings['class'].should eq([[2, 5]])
+      expect(scanner.indentation_warnings['class']).to eq([[2, 5]])
     end
 
     it 'finds indentation warnings for module' do
-      scanner.indentation_warnings['module'].should eq([[1, 6]])
+      expect(scanner.indentation_warnings['module']).to eq([[1, 6]])
     end
   end
 

@@ -17,13 +17,13 @@ describe SandiMeter::Calculator do
     it 'counts class lines' do
       output = calculator.calculate!(true)
       klass = output[:first_rule][:log][:classes].find { |params| params.first == "User" }
-      klass[1].should eq(109)
+      expect(klass[1]).to eq(109)
     end
 
     it 'counts method lines' do
       output = calculator.calculate!(true)
       method_params = output[:second_rule][:log][:methods].find { |method| method[1] == "create" }
-      method_params[2].should eq(6)
+      expect(method_params[2]).to eq(6)
     end
   end
 
@@ -69,12 +69,12 @@ describe SandiMeter::Calculator do
   describe 'no matching ruby files found' do
     it 'counts class lines' do
       output = calculator.calculate!(false)
-      output[:first_rule][:total_classes_amount].should eql(0)
+      expect(output[:first_rule][:total_classes_amount]).to eql(0)
     end
 
     it 'counts method lines' do
       output = calculator.calculate!(true)
-      output[:second_rule][:total_methods_amount].should eql(0)
+      expect(output[:second_rule][:total_methods_amount]).to eq(0)
     end
   end
 end

@@ -14,7 +14,7 @@ describe SandiMeter::Analyzer do
     it 'finds indentation warnings for method' do
       klass = analyzer.classes.find { |c| c.name == "TestClass" }
 
-      klass.should have_attributes(
+      expect(klass).to have_attributes(
         first_line: 1,
         last_line: 5,
         path: test_file_path(3)
@@ -24,7 +24,7 @@ describe SandiMeter::Analyzer do
     it 'finds methods' do
       method = analyzer.methods["TestClass"].find { |m| m.name == "blah" }
 
-      method.should have_attributes(
+      expect(method).to have_attributes(
         first_line: 2,
         last_line: 4,
         number_of_arguments: 0,
@@ -35,7 +35,7 @@ describe SandiMeter::Analyzer do
     it 'finds method calls that brakes third rule' do
       method_call = analyzer.method_calls.first
 
-      method_call.should have_attributes(
+      expect(method_call).to have_attributes(
         first_line: 3,
         number_of_arguments: 5,
         path: test_file_path(3)
@@ -53,7 +53,7 @@ describe SandiMeter::Analyzer do
     it 'finds indentation warnings for method' do
       klass = analyzer.classes.find { |c| c.name == "MyApp::TestClass" }
 
-      klass.should have_attributes(
+      expect(klass).to have_attributes(
         first_line: 2,
         last_line: nil,
         path: test_file_path(1)
@@ -63,7 +63,7 @@ describe SandiMeter::Analyzer do
     it 'finds methods' do
       method = analyzer.methods["MyApp::TestClass"].find { |m| m.name == "blah" }
 
-      method.should have_attributes(
+      expect(method).to have_attributes(
         first_line: 3,
         last_line: nil,
         number_of_arguments: 0,
@@ -82,7 +82,7 @@ describe SandiMeter::Analyzer do
     it 'finds classes' do
       klass = analyzer.classes.find { |c| c.name == "FirstTestClass" }
 
-      klass.should have_attributes(
+      expect(klass).to have_attributes(
         first_line: 1,
         last_line: 4,
         path: test_file_path(4)
@@ -90,7 +90,7 @@ describe SandiMeter::Analyzer do
 
       klass = analyzer.classes.find { |c| c.name == "SecondTestClass" }
 
-      klass.should have_attributes(
+      expect(klass).to have_attributes(
         first_line: 6,
         last_line: 9,
         path: test_file_path(4)
@@ -100,7 +100,7 @@ describe SandiMeter::Analyzer do
     it 'finds methods' do
       method = analyzer.methods["FirstTestClass"].find { |m| m.name == "first_meth" }
 
-      method.should have_attributes(
+      expect(method).to have_attributes(
         first_line: 2,
         last_line: 3,
         number_of_arguments: 1,
@@ -109,7 +109,7 @@ describe SandiMeter::Analyzer do
 
       method = analyzer.methods["SecondTestClass"].find { |m| m.name == "second_meth" }
 
-      method.should have_attributes(
+      expect(method).to have_attributes(
         first_line: 7,
         last_line: 8,
         number_of_arguments: 1,
@@ -128,7 +128,7 @@ describe SandiMeter::Analyzer do
     it 'finds classes' do
       klass = analyzer.classes.find { |c| c.name == "OneLinerClass" }
 
-      klass.should have_attributes(
+      expect(klass).to have_attributes(
         first_line: 1,
         last_line: nil,
         path: test_file_path(5)
@@ -136,7 +136,7 @@ describe SandiMeter::Analyzer do
     end
 
     it 'finds methods' do
-      analyzer.methods.should be_empty
+      expect(analyzer.methods).to be_empty
     end
   end
 
@@ -149,14 +149,14 @@ describe SandiMeter::Analyzer do
 
     it 'finds class and subclass' do
       klass = analyzer.classes.find { |c| c.name == "MyApp::Blah::User" }
-      klass.should have_attributes(
+      expect(klass).to have_attributes(
         first_line: 5,
         last_line: 13,
         path: test_file_path(7)
       )
 
       klass = analyzer.classes.find { |c| c.name == "MyApp::Blah::User::SubUser" }
-      klass.should have_attributes(
+      expect(klass).to have_attributes(
         first_line: 9,
         last_line: 12,
         path: test_file_path(7)
@@ -165,7 +165,7 @@ describe SandiMeter::Analyzer do
 
     it 'finds methods' do
       method = analyzer.methods["MyApp::Blah"].find { |m| m.name == "module_meth" }
-      method.should have_attributes(
+      expect(method).to have_attributes(
         first_line: 2,
         last_line: 3,
         number_of_arguments: 0,
@@ -173,7 +173,7 @@ describe SandiMeter::Analyzer do
       )
 
       method = analyzer.methods["MyApp::Blah::User"].find { |m| m.name == "class_meth" }
-      method.should have_attributes(
+      expect(method).to have_attributes(
         first_line: 6,
         last_line: 7,
         number_of_arguments: 0,
@@ -181,7 +181,7 @@ describe SandiMeter::Analyzer do
       )
 
       method = analyzer.methods["MyApp::Blah::User::SubUser"].find { |m| m.name == "sub_meth" }
-      method.should have_attributes(
+      expect(method).to have_attributes(
         first_line: 10,
         last_line: 11,
         number_of_arguments: 0,
@@ -199,7 +199,7 @@ describe SandiMeter::Analyzer do
 
     it 'finds class and subclass' do
       klass = analyzer.classes.find { |c| c.name == "RailsController" }
-      klass.should have_attributes(
+      expect(klass).to have_attributes(
         first_line: 1,
         last_line: 12,
         path: test_file_path(8)
@@ -208,7 +208,7 @@ describe SandiMeter::Analyzer do
 
     it 'finds methods' do
       method = analyzer.methods["RailsController"].find { |m| m.name == "index" }
-      method.should have_attributes(
+      expect(method).to have_attributes(
         first_line: 2,
         last_line: 3,
         number_of_arguments: 0,
@@ -216,7 +216,7 @@ describe SandiMeter::Analyzer do
       )
 
       method = analyzer.methods["RailsController"].find { |m| m.name == "destroy" }
-      method.should have_attributes(
+      expect(method).to have_attributes(
         first_line: 5,
         last_line: 6,
         number_of_arguments: 0,
@@ -224,7 +224,7 @@ describe SandiMeter::Analyzer do
       )
 
       method = analyzer.methods["RailsController"].find { |m| m.name == "private_meth" }
-      method.should be_nil
+      expect(method).to be_nil
     end
   end
 
@@ -238,7 +238,7 @@ describe SandiMeter::Analyzer do
 
       it 'finds instance variable' do
         method = analyzer.methods["UsersController"].find { |m| m.name == "index" }
-        method.ivars.should eq(["@users"])
+        expect(method.ivars).to eq(["@users"])
       end
     end
 
@@ -251,7 +251,7 @@ describe SandiMeter::Analyzer do
 
       it 'does not find instance variables' do
         method = analyzer.methods["GuestController"].find { |m| m.name == "create_guest_user" }
-        method.ivars.should be_empty
+        expect(method.ivars).to be_empty
       end
     end
 
@@ -264,10 +264,10 @@ describe SandiMeter::Analyzer do
 
       it 'does not find instance variable' do
         method = analyzer.methods["User"].find { |m| m.name == "initialize" }
-        method.ivars.should be_empty
+        expect(method.ivars).to be_empty
 
         method = analyzer.methods["User"].find { |m| m.name == "hi" }
-        method.ivars.should be_empty
+        expect(method.ivars).to be_empty
       end
     end
 
@@ -280,22 +280,22 @@ describe SandiMeter::Analyzer do
 
       it 'finds method defined after public keyword' do
         method = analyzer.methods["UsersController"].find { |m| m.name == "create" }
-        method.ivars.should eq(["@user"])
+        expect(method.ivars).to eq(["@user"])
       end
 
       it 'omits actions without instance variables' do
         method = analyzer.methods["UsersController"].find { |m| m.name == "show" }
-        method.ivars.should be_empty
+        expect(method.ivars).to be_empty
       end
 
       it 'omits private methods' do
         method = analyzer.methods["UsersController"].find { |m| m.name == "find_user" }
-        method.should be_nil
+        expect(method).to be_nil
       end
 
       it 'omits protected methods' do
         method = analyzer.methods["UsersController"].find { |m| m.name == "protected_find_user" }
-        method.should be_nil
+        expect(method).to be_nil
       end
     end
   end
@@ -310,7 +310,7 @@ describe SandiMeter::Analyzer do
     it 'counts arguments' do
       method_call = analyzer.method_calls.first
 
-      method_call.should have_attributes(
+      expect(method_call).to have_attributes(
         first_line: 3,
         number_of_arguments: 5,
         path: test_file_path(11)
@@ -328,7 +328,7 @@ describe SandiMeter::Analyzer do
     it 'are count for class definition' do
       klass = analyzer.classes.find { |c| c.name == "Valera" }
 
-      klass.should have_attributes(
+      expect(klass).to have_attributes(
         first_line: 1,
         last_line: 109,
         path: test_file_path(12)
@@ -338,7 +338,7 @@ describe SandiMeter::Analyzer do
     it 'are count for method definition' do
       method = analyzer.methods["Valera"].find { |m| m.name == "doodle" }
 
-      method.should have_attributes(
+      expect(method).to have_attributes(
         first_line: 2,
         last_line: 9,
         number_of_arguments: 0,
@@ -355,7 +355,7 @@ describe SandiMeter::Analyzer do
     end
 
     it 'is not scanned' do
-      analyzer.method_calls.should be_empty
+      expect(analyzer.method_calls).to be_empty
     end
   end
 
@@ -370,7 +370,7 @@ describe SandiMeter::Analyzer do
     it 'mark 4line methods good' do
       method = analyzer.methods["TestClass"].find { |m| m.name == "render4" }
 
-      method.should have_attributes(
+      expect(method).to have_attributes(
         first_line: 2,
         last_line: 7,
         number_of_arguments: 0,
@@ -381,7 +381,7 @@ describe SandiMeter::Analyzer do
     it 'mark 5line methods good' do
       method = analyzer.methods["TestClass"].find { |m| m.name == "render5" }
 
-      method.should have_attributes(
+      expect(method).to have_attributes(
         first_line: 9,
         last_line: 15,
         number_of_arguments: 0,
@@ -392,7 +392,7 @@ describe SandiMeter::Analyzer do
     it 'mark 6line methods bad' do
       method = analyzer.methods["TestClass"].find { |m| m.name == "render6" }
 
-      method.should have_attributes(
+      expect(method).to have_attributes(
         first_line: 17,
         last_line: 24,
         number_of_arguments: 0,

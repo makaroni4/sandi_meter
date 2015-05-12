@@ -10,7 +10,7 @@ RSpec::Matchers.define :have_attributes do |expected|
     result
   end
 
-  failure_message_for_should do |actual|
+  failure_message do |actual|
     wrong_fields = {}
     expected.each do |key, value|
       wrong_fields[key] = {

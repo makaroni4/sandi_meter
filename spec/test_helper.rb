@@ -1,5 +1,4 @@
 require 'pry'
-require 'rspec/autorun'
 require 'ripper'
 require 'fakefs/spec_helpers'
 
