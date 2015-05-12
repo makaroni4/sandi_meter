@@ -17,7 +17,7 @@ describe SandiMeter::CLI do
     FakeFS.deactivate!
   end
 
-  describe '#execute' do
+  describe '#execute', silent_cli: true do
     before do
       @original_argv = ARGV
       ARGV.clear

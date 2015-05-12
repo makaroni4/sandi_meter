@@ -10,12 +10,18 @@ module SandiMeter
     end
 
     def ok?
-      @rules.reduce(:+) / 4 > @config[:threshold]
+      if @config[:threshold]
+        puts "DEPRECATION WARNING: sandi_meter threshold will be deprecated. Set thresholds for each rule in sandi_meter config.yml"
+
+        @rules.reduce(:+) / 4 > @config[:threshold]
+      elsif @config[:thresholds]
+        @rules.each_with_index.map { |percentage, index| percentage >= @config[:thresholds][index].to_f }.reduce(:&)
+      end
     end
 
     private
     def percentage(amount, total)
-      total > 0 ? (amount / total.to_f)*100 : 100
+      total > 0 ? (amount / total.to_f) * 100 : 100
     end
   end
 end

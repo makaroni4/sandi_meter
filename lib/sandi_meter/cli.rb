@@ -82,7 +82,7 @@ module SandiMeter
       def execute
         cli = CommandParser.new
         cli.parse_options
-        
+
         cli.config[:output_path] ||= File.expand_path(File.join(cli.config[:path], 'sandi_meter'))
 
         if cli.config[:graph]
@@ -136,7 +136,7 @@ module SandiMeter
         config =  if File.exists?(config_file_path)
                     YAML.load(File.read(config_file_path))
                   else
-                    { threshold: 90 }
+                    { thresholds: [90, 90, 90, 90] }
                   end
 
         if RulesChecker.new(data, config).ok?
