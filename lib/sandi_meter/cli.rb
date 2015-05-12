@@ -97,7 +97,7 @@ module SandiMeter
           FileUtils.mkdir_p(cli.config[:output_path]) unless Dir.exists?(cli.config[:output_path])
 
           create_config_file(cli.config[:output_path], '.sandi_meter', %w(db vendor).join("\n"))
-          create_config_file(cli.config[:output_path], 'config.yml', YAML.dump({ threshold: 90 }))
+          create_config_file(cli.config[:output_path], 'config.yml', YAML.dump({ thresholds: [90, 90, 90, 90] }))
         end
 
         if cli.config[:version]
