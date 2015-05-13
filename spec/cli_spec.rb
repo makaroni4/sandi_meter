@@ -17,7 +17,7 @@ describe SandiMeter::CLI do
     FakeFS.deactivate!
   end
 
-  describe '#execute' do
+  describe '#execute', silent_cli: true do
     before do
       @original_argv = ARGV
       ARGV.clear
@@ -30,7 +30,6 @@ describe SandiMeter::CLI do
 
     context 'with the graph flag passed in' do
       before { ARGV.push('-g') }
-      after { ARGV.pop }
 
       it 'opens the graph in a web browser' do
         expect(cli).to receive(:open_in_browser)
@@ -42,10 +41,6 @@ describe SandiMeter::CLI do
       before do
         ARGV.push('-q')
         ARGV.push('-g')
-      end
-      after do
-        ARGV.pop
-        ARGV.pop
       end
 
       it 'does not open the browser' do
@@ -80,6 +75,30 @@ describe SandiMeter::CLI do
       it 'saves output files in sandi_meter folder relative to scanned path' do
         expect { cli.execute }.to raise_error(SystemExit)
         expect(File.directory?(File.expand_path('/sandi_meter'))).to eq(true)
+      end
+    end
+
+    context 'makes account for rules thresholds' do
+      context 'for low thresholds' do
+        before do
+          ARGV.push('-t')
+          ARGV.push("1,1,1,1")
+        end
+
+        it 'terminates with 0 code' do
+          expect { cli.execute }.to terminate.with_code(0)
+        end
+      end
+
+      context 'for high thresholds' do
+        before do
+          ARGV.push('-t')
+          ARGV.push("99,99,99,99")
+        end
+
+        it 'terminates with 1 code' do
+          expect { cli.execute }.to terminate.with_code(1)
+        end
       end
     end
   end

@@ -19,9 +19,12 @@ sandi_meter --help
     -g, --graph                      HTML mode. Create folder, log data and output stats to HTML file.
         --json                       Output as JSON
     -l, --log                        Show syntax error and indentation log output
-    -p, --path PATH                  Path to folder or file to analyze (default is ".")
-    -o, --output_path PATH           Path to save output files (default is "./sandi_meter")
+    -o, --output-path PATH           Path for storing generated output files (default: ./sandi_meter/)
+    -p, --path PATH                  Path to folder or file to analyze
+    -q, --quiet                      Do not open HTML report for graph option in browser.
+    -t, --thresholds THRESHOLD       Thresholds for each rule (default: "90,90,90,90" or in config.yml)
     -r, --rules                      Show rules
+    -v, --version                    Gem version
     -h, --help                       Help
 
 cd ~/your/ruby/or/rails/project

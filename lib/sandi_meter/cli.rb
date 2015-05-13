@@ -75,6 +75,12 @@ module SandiMeter
       long: "--json",
       description: "Output as JSON",
       boolean: false
+
+    option :rule_thresholds,
+      short: "-t THRESHOLD",
+      long: "--thresholds THRESHOLD",
+      description: "Thresholds for each rule (default: 90,90,90,90) or in config.yml",
+      default: "90,90,90,90"
   end
 
   class CLI
@@ -82,14 +88,16 @@ module SandiMeter
       def execute
         cli = CommandParser.new
         cli.parse_options
-        
+
         cli.config[:output_path] ||= File.expand_path(File.join(cli.config[:path], 'sandi_meter'))
+
+        cli.config[:rule_thresholds] = cli.config[:rule_thresholds].split(",").map(&:to_i)
 
         if cli.config[:graph]
           FileUtils.mkdir_p(cli.config[:output_path]) unless Dir.exists?(cli.config[:output_path])
 
           create_config_file(cli.config[:output_path], '.sandi_meter', %w(db vendor).join("\n"))
-          create_config_file(cli.config[:output_path], 'config.yml', YAML.dump({ threshold: 90 }))
+          create_config_file(cli.config[:output_path], 'config.yml', YAML.dump({ thresholds: [90, 90, 90, 90] }))
         end
 
         if cli.config[:version]
@@ -136,7 +144,7 @@ module SandiMeter
         config =  if File.exists?(config_file_path)
                     YAML.load(File.read(config_file_path))
                   else
-                    { threshold: 90 }
+                    { thresholds: cli.config[:rule_thresholds] }
                   end
 
         if RulesChecker.new(data, config).ok?
