@@ -19,8 +19,7 @@ module SandiMeter
 
     def analyze(file_path)
       @file_path = file_path
-      @file_body = File.read(file_path)
-      @file_lines = @file_body.split(/$/).map { |l| l.gsub("\n", '') }
+      @file_body, @file_lines = remove_disabled_sections(File.read(file_path))
       @indentation_warnings = indentation_warnings
       # TODO
       # add better determination wheter file is controller
@@ -33,6 +32,7 @@ module SandiMeter
     end
 
     private
+
     def output
       loc_checker = SandiMeter::LOCChecker.new(@file_lines)
 
@@ -195,6 +195,38 @@ module SandiMeter
     def indentation_warnings
       warning_scanner = SandiMeter::WarningScanner.new
       warning_scanner.scan(@file_body)
+    end
+
+    def remove_disabled_sections(raw_file_body)
+      file_body = ''
+      file_lines = []
+      include_lines = true
+      raw_file_body.split(/$/).each do |line|
+        if include_lines
+          if line_disables(line)
+            include_lines = false
+          else
+            file_body << line
+            file_lines << line
+          end
+        else
+          if line_enables(line)
+            include_lines = true
+          else
+            next
+          end
+        end
+      end
+      [file_body, file_lines.map { |l| l.gsub("\n", '') }]
+    end
+
+    def line_disables(line)
+      # reason for disabling must be at least 10 characters
+      line =~ /^\s*# ?sandi_meter:disable [^$]{10,}$/
+    end
+
+    def line_enables(line)
+      line =~ /^\s*# ?sandi_meter:enable\s*$/
     end
   end
 end
