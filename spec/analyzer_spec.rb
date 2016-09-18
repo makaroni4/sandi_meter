@@ -359,7 +359,7 @@ describe SandiMeter::Analyzer do
     end
   end
 
-  describe 'analazing complex methods' do
+  describe 'analyzing complex methods' do
     let(:test_class) { test_file_path(14) }
     let(:methods) { analyzer.methods["TestClass"] }
 
@@ -398,6 +398,26 @@ describe SandiMeter::Analyzer do
         number_of_arguments: 0,
         path: test_file_path(14)
       )
+    end
+  end
+
+  describe 'analyzing 1 line methods' do
+    let(:test_class) { test_file_path(16) }
+    let(:methods) { analyzer.methods['TestClass'] }
+
+    before do
+      analyzer.analyze(test_class)
+    end
+
+    it 'sets last_line to nil' do
+      method = analyzer.methods['TestClass'].find { |method| method.name == 'method1' }
+
+      expect(method).to have_attributes(
+                          first_line: 2,
+                          last_line: nil,
+                          number_of_arguments: 0,
+                          path: test_file_path(16)
+                        )
     end
   end
 end

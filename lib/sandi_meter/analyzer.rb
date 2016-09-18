@@ -5,11 +5,12 @@ require_relative 'method_arguments_counter'
 require_relative 'sandi_meter/class'
 require_relative 'sandi_meter/method_call'
 require_relative 'sandi_meter/method'
+require_relative 'last_line'
 
 module SandiMeter
   class Analyzer
     attr_accessor :parent_token, :private_or_protected
-    attr_reader :classes, :methods, :method_calls
+    attr_reader :classes, :methods, :method_calls, :file_lines
 
     def initialize
       @classes = []
@@ -80,13 +81,8 @@ module SandiMeter
       }
     end
 
-    def find_last_line(line, token = 'class')
-      token_indentation = @file_lines[line - 1].index(token)
-      # TODO
-      # add check for trailing spaces
-      last_line = @file_lines[line..-1].index { |l| l =~ %r(\A\s{#{token_indentation}}end\s*\z) }
-
-      last_line ? last_line + line + 1 : nil
+    def find_last_line(start_line_number, token = 'class')
+      SandiMeter::LastLine.find(start_line_number, token, file_lines)
     end
 
     def scan_class_sexp(element, current_namespace = '')
