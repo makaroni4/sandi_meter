@@ -27,6 +27,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec", "~> 2.13"
 
   spec.add_runtime_dependency "mixlib-cli"
-  spec.add_runtime_dependency "json"
+  spec.add_runtime_dependency "json", "~> 1.8.3"
   spec.add_runtime_dependency "launchy"
 end
