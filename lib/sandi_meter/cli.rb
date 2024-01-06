@@ -94,7 +94,7 @@ module SandiMeter
         cli.config[:rule_thresholds] = cli.config[:rule_thresholds].split(",").map(&:to_i)
 
         if cli.config[:graph]
-          FileUtils.mkdir_p(cli.config[:output_path]) unless Dir.exists?(cli.config[:output_path])
+          FileUtils.mkdir_p(cli.config[:output_path]) unless Dir.exist?(cli.config[:output_path])
 
           create_config_file(cli.config[:output_path], '.sandi_meter', %w(db vendor).join("\n"))
           create_config_file(cli.config[:output_path], 'config.yml', YAML.dump({ thresholds: [90, 90, 90, 90] }))
@@ -141,7 +141,7 @@ module SandiMeter
         end
 
         config_file_path = File.join(cli.config[:output_path], 'config.yml')
-        config =  if File.exists?(config_file_path)
+        config =  if File.exist?(config_file_path)
                     YAML.load(File.read(config_file_path))
                   else
                     { thresholds: cli.config[:rule_thresholds] }
@@ -166,7 +166,7 @@ module SandiMeter
       private
       def create_config_file(path, relative_path, content)
         file_path = File.join(path, relative_path)
-        if File.directory?(path) && !File.exists?(file_path)
+        if File.directory?(path) && !File.exist?(file_path)
           File.open(file_path, "w") do |file|
             file.write(content)
           end

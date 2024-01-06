@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.homepage      = "https://github.com/makaroni4/sandi_meter"
   spec.license       = "MIT"
 
-  spec.required_ruby_version = '>= 1.9.0'
+  spec.required_ruby_version = '>= 2.0.0'
 
   spec.files = %w(LICENSE README.md Rakefile sandi_meter.gemspec)
   spec.files += Dir.glob("html/*")
@@ -22,9 +22,9 @@ Gem::Specification.new do |spec|
   spec.executables   = ["sandi_meter"]
   spec.require_paths = ["lib"]
 
-  spec.add_development_dependency "bundler", "~> 1.3"
+  spec.add_development_dependency "bundler", "~> 2.3.26"
   spec.add_development_dependency "rake"
-  spec.add_development_dependency "rspec", "~> 2.13"
+  spec.add_development_dependency "rspec", "~> 3.12.0"
 
   spec.add_runtime_dependency "mixlib-cli"
   spec.add_runtime_dependency "json"

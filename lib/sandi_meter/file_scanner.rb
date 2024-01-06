@@ -29,7 +29,7 @@ module SandiMeter
 
     def read_ignore_file(path)
       ignore_file_path = File.join(path, 'sandi_meter', '.sandi_meter')
-      if File.exists?(ignore_file_path)
+      if File.exist?(ignore_file_path)
         @exclude_patterns ||= File.read(ignore_file_path).split("\n").join("|")
       end
     end

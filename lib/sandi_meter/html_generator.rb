@@ -5,7 +5,7 @@ module SandiMeter
   class HtmlGenerator
     def copy_assets!(path)
       asset_dir_path = File.join(path, 'assets')
-      FileUtils.mkdir(asset_dir_path) unless Dir.exists?(asset_dir_path)
+      FileUtils.mkdir(asset_dir_path) unless Dir.exist?(asset_dir_path)
       html_dir = File.expand_path('../../html', File.dirname(__FILE__))
 
       Dir[File.join(html_dir, "*.{js,css,png}")].each do |file|
