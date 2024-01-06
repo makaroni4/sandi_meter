@@ -9,6 +9,8 @@ Static analysis tool for checking your Ruby code for [Sandi Metz' four rules](ht
 * 4 params per method call (and don't even try cheating with hash params)
 * 1 instance variable per controller action
 
+!(Snapshot)[https://github.com/makaroni4/sandi_meter/blob/master/.README/snapshot.png?raw=true]
+
 ## CLI mode
 
 ~~~
