@@ -8,8 +8,6 @@ Static analysis tool for checking your Ruby code for [Sandi Metz' four rules](ht
 * 4 params per method call (and don't even try cheating with hash params)
 * 1 instance variable per controller action
 
-!(Snapshot)[https://github.com/makaroni4/sandi_meter/blob/master/.README/snapshot.png?raw=true]
-
 ## CLI mode
 
 ~~~
@@ -71,8 +69,13 @@ Controllers with 1+ instance variables
 
 Try using gem with `-g (--graph)` option, so it will create a folder with beautiful html output and log file with results of any scan.
 
-![SandiMeter HTML mode pie charts](http://cl.ly/image/1p142M3K1S2x/content)
-![SandiMeter HTML mode details](http://cl.ly/image/2R163v283V3Q/content)
+### Charts page example
+
+![SandiMeter HTML mode pie charts](https://github.com/makaroni4/sandi_meter/blob/master/.README/pie_charts.png?raw=true)
+
+### Details page example
+
+![SandiMeter HTML mode details](https://github.com/makaroni4/sandi_meter/blob/master/.README/details.png?raw=true)
 
 Add ignore files and folders in `sandi_meter/.sandi_meter` file.
 
