@@ -71,11 +71,11 @@ Try using gem with `-g (--graph)` option, so it will create a folder with beauti
 
 ### Charts page example
 
-![SandiMeter HTML mode pie charts](https://github.com/makaroni4/sandi_meter/blob/master/.README/pie_charts.png?raw=true)
+![SandiMeter HTML mode pie charts](https://github.com/makaroni4/sandi_meter/blob/main/.README/pie_charts.png?raw=true)
 
 ### Details page example
 
-![SandiMeter HTML mode details](https://github.com/makaroni4/sandi_meter/blob/master/.README/details.png?raw=true)
+![SandiMeter HTML mode details](https://github.com/makaroni4/sandi_meter/blob/main/.README/details.png?raw=true)
 
 Add ignore files and folders in `sandi_meter/.sandi_meter` file.
 
