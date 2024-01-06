@@ -1,5 +1,4 @@
 # SandiMeter
-[![Build Status](https://travis-ci.org/makaroni4/sandi_meter.png?branch=master)](https://travis-ci.org/makaroni4/sandi_meter)
 [![Gem Version](https://badge.fury.io/rb/sandi_meter.png)](http://badge.fury.io/rb/sandi_meter)
 
 Static analysis tool for checking your Ruby code for [Sandi Metz' four rules](http://robots.thoughtbot.com/post/50655960596/sandi-metz-rules-for-developers).
